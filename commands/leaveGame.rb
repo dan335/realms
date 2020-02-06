@@ -3,10 +3,10 @@ def command_leaveGame(event, mongo)
     users = mongo[:users]
 
     # check if user exists
-    if users.find(:userId => event.message.author.id).count > 0
+    if users.find(:discordId => event.message.author.id).count > 0
 
-        users.delete_one(:userId => event.message.author.id)
-        mongo[:commands].delete_many(:userId => event.message.author.id)
+        users.delete_one(:discordId => event.message.author.id)
+        mongo[:commands].delete_many(:discordId => event.message.author.id)
         
         event.respond event.message.author.mention + "'s realm has been destroyed."
     else

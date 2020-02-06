@@ -11,7 +11,7 @@ require './commands/leaveGame.rb'
 require './commands/about.rb'
 require './commands/buildFarm.rb'
 
-require './promises/buildFarm.rb'
+require './orders/buildFarm.rb'
 
 Mongo::Logger.logger.level = Logger::FATAL
 
@@ -37,24 +37,24 @@ bot.run true
 while true do
     loopStart = Time.now.to_i
 
-    # get promises that need to run
+    # get orders that need to run
     # things like farms that need to be built
-    mongo[:promises].find({:finishedAt => {'$lte' => Time.now}}).each do |promise|
+    mongo[:orders].find({:finishedAt => {'$lte' => Time.now}}).each do |order|
 
         # call function if it exists
-        if respond_to?(promise[:type], :include_private)
-            send(promise, mongo)
+        if respond_to?("order_"+order[:type].to_s, :include_private)
+            send("order_"+order[:type].to_s, order, mongo)
         end
 
-        # delete promise
-        mongo[:promises].delete_one(:_id => promise[:_id])
+        # delete order
+        mongo[:orders].delete_one(:_id => order[:_id])
     end
 
     loopEnd = Time.now.to_i
     sleepFor = loopStart + 60 - loopEnd
 
     if sleepFor < 0
-        sleepFor = 5
+        sleepFor = 60
     end
 
     sleep sleepFor
