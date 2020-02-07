@@ -1,4 +1,6 @@
 def command_realm(event, mongo)
+
+    # get data
     user = mongo[:users].find(:discordId => event.message.author.id).first
     
     if user == nil
@@ -10,26 +12,28 @@ def command_realm(event, mongo)
     orders = mongo[:orders].find(:discordId => event.message.author.id)
 
     str = "**"+user[:username]+"'s REALM**\n"
-    str += "\n"
 
-    str += "Wood: "+user[:wood].to_s+" "
-    str += "Ore: "+user[:ore].to_s+" "
-    str += "Wool: "+user[:wool].to_s+" "
-    str += "Clay: "+user[:clay].to_s
+    # resources
+    str += "wood: "+user[:wood].to_s+" "
+    str += "ore: "+user[:ore].to_s+" "
+    str += "wool: "+user[:wool].to_s+" "
+    str += "clay: "+user[:clay].to_s
     str += "\n\n"
 
+    # farms
     if farms.count > 0
         str += "__FARMS__\n"
 
         count = 1
         farms.each do |farm|
-            str += count.to_s+". wood:"+farm[:wood].to_s+" ore:"+farm[:ore].to_s+" wool:"+farm[:wool].to_s+" clay:"+farm[:clay].to_s+"\n"
+            str += count.to_s+". wood: "+farm[:wood].to_s+" ore: "+farm[:ore].to_s+" wool: "+farm[:wool].to_s+" clay: "+farm[:clay].to_s+"\n"
             count += 1
         end
 
         str += "\n"
     end
 
+    #orders
     if orders.count > 0
         str += "__CURRENTLY BUILDING__\n"
         
@@ -37,6 +41,7 @@ def command_realm(event, mongo)
         orders.each do |order|
             minLeft = (((order[:finishedAt] - Time.now) / 60.0 * 10.0).round) / 10.0
             str += count.to_s+". **"+order[:type].remove("build")+"** - "+minLeft.to_s+" minutes left.\n"
+            count += 1
         end
     end
 

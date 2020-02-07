@@ -41,12 +41,12 @@ def command_build(event, mongo)
         return
     end
 
-    # create command to build farm in the future
+    # create order to build farm in the future
     mongo[:orders].insert_one({
         :discordId => event.message.author.id,
         :type => orderType,
         :createdAt => Time.now,
-        :finishedAt => Time.now + $settings[:farmBuildSeconds]
+        :finishedAt => Time.now + $settings[timeToBuild]
     })
 
     event.respond "I'm building you a new "+type+" " + event.message.author.mention + ".  Check it's progress with __%realm__."
