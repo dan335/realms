@@ -15,7 +15,12 @@ def command_joinGame(event, mongo)
         :avatar_url => event.message.author.avatar_url,
         :mention => event.message.author.mention,
         :distinct => event.message.author.distinct,
-        :discriminator => event.message.author.discriminator
+        :discriminator => event.message.author.discriminator,
+        :wood => 0,
+        :ore => 0,
+        :wool => 0,
+        :clay => 0,
+        :createdAt => Time.now
     })
 
     event.respond "Welcome to REALMS " + event.message.author.mention

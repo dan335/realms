@@ -9,7 +9,8 @@ require './commands/help.rb'
 require './commands/joinGame.rb'
 require './commands/leaveGame.rb'
 require './commands/about.rb'
-require './commands/buildFarm.rb'
+require './commands/build.rb'
+require './commands/realm.rb'
 
 require './orders/buildFarm.rb'
 
@@ -22,7 +23,8 @@ bot.message(start_with: '%') do |event|
 
     # get function name from message
     cmd = event.message.content
-    cmd.slice!(0).strip!
+    cmd.slice!(0)
+    cmd = cmd.partition(" ").first
     cmd = 'command_'+cmd
 
     # call function if it exists
@@ -33,6 +35,8 @@ bot.message(start_with: '%') do |event|
 end
 
 bot.run true
+
+loopNum = 1
 
 while true do
     loopStart = Time.now.to_i
@@ -50,12 +54,28 @@ while true do
         mongo[:orders].delete_one(:_id => order[:_id])
     end
 
+    # give resources
+    if loopNum % 10 == 0
+        mongo[:farms].find().each do |farm|
+            mongo[:users].update_one({:discordId => farm[:discordId]}, {
+                    "$inc" => {
+                        :wood => farm[:wood],
+                        :ore => farm[:ore],
+                        :wool => farm[:wool],
+                        :clay => farm[:clay]
+                    }
+                })
+        end
+    end
+
     loopEnd = Time.now.to_i
     sleepFor = loopStart + 60 - loopEnd
 
-    if sleepFor < 0
+    if sleepFor < 20
         sleepFor = 60
     end
+
+    loopNum += 1
 
     sleep sleepFor
 end
