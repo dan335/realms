@@ -6,11 +6,15 @@ require './settings.rb'
 require './commonFunctions.rb'
 
 require './commands/help.rb'
+require './commands/commands.rb'
 require './commands/joinGame.rb'
 require './commands/leaveGame.rb'
 require './commands/about.rb'
 require './commands/build.rb'
+require './commands/destroy.rb'
 require './commands/realm.rb'
+require './commands/realms.rb'
+require './commands/hire.rb'
 
 require './orders/buildFarm.rb'
 

@@ -11,13 +11,21 @@ def command_realm(event, mongo)
     farms = mongo[:farms].find(:discordId => event.message.author.id).sort(:createdAt => 1)
     orders = mongo[:orders].find(:discordId => event.message.author.id)
 
-    str = "**"+user[:username]+"'s REALM**\n"
+    str = "-] **"+user[:username]+"'s REALM** [-\n"
 
     # resources
-    str += "wood: "+user[:wood].to_s+" "
-    str += "ore: "+user[:ore].to_s+" "
-    str += "wool: "+user[:wool].to_s+" "
-    str += "clay: "+user[:clay].to_s
+    str += "Gold: "+user[:gold].to_s+"  "
+    str += "Wood: "+user[:wood].to_s+"  "
+    str += "Ore: "+user[:ore].to_s+"  "
+    str += "Wool: "+user[:wool].to_s+"  "
+    str += "Clay: "+user[:clay].to_s
+    str += "\n"
+
+    #soldiers
+    $settings[:soldierTypes].each do |soldierType|
+        str += $settings[:soldiers][soldierType.to_sym][:name].pluralize+": "
+        str += user[soldierType.pluralize.to_sym].to_s+"  "
+    end
     str += "\n\n"
 
     # farms
@@ -26,7 +34,7 @@ def command_realm(event, mongo)
 
         count = 1
         farms.each do |farm|
-            str += count.to_s+". wood: "+farm[:wood].to_s+" ore: "+farm[:ore].to_s+" wool: "+farm[:wool].to_s+" clay: "+farm[:clay].to_s+"\n"
+            str += count.to_s+".  Wood: "+farm[:wood].to_s+"  Ore: "+farm[:ore].to_s+"  Wool: "+farm[:wool].to_s+"  Clay: "+farm[:clay].to_s+"\n"
             count += 1
         end
 

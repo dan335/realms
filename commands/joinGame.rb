@@ -20,8 +20,14 @@ def command_joinGame(event, mongo)
         :ore => 0,
         :wool => 0,
         :clay => 0,
-        :createdAt => Time.now
+        :gold => 0,
+        :createdAt => Time.now,
+        :footmen => 0,
+        :archers => 0,
+        :pikemen => 0,
+        :knights => 0,
+        :catapults => 0
     })
 
-    event.respond "Welcome to REALMS " + event.message.author.mention
+    event.respond "Welcome to REALMS " + event.message.author.mention+". Type __%realm__ to view your realm."
 end
