@@ -15,19 +15,19 @@ def command_sell(event, mongo)
 
     # check for wrong number of arguments
     if arr.length != 3
-        output_error_message(event)
+        output_sell_error_message(event)
         return
     end
 
     # make sure number is a number
     if arr[1].to_i == 0
-        output_error_message(event)
+        output_sell_error_message(event)
         return
     end
 
     # make sure resource type is valid
     if !$settings[:resourceTypes].include?(arr[2].singularize)
-        output_error_message(event)
+        output_sell_error_message(event)
         return
     end
 
@@ -43,7 +43,7 @@ def command_sell(event, mongo)
     # get gold amount from sell
     market = mongo[:market].find(:type => arr[2].singularize).first
     if !market
-        output_error_message(event)
+        output_sell_error_message(event)
         return
     end
     gold = totalOfSell(market[:value], arr[1].to_i)
@@ -59,11 +59,8 @@ def command_sell(event, mongo)
 end
 
 
-def output_error_message(event)
+def output_sell_error_message(event)
     event.respond "I don't understand that command "+event.message.author.mention+".  Try something like **%sell 3 wood**."
 end
 
 
-def totalOfSell(marketValue, quantity)
-    marketValue * (1.0 - ((1.0 - $settings[:marketIncrement]) ** quantity.to_f)) / $settings[:marketIncrement]
-end

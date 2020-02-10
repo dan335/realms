@@ -14,19 +14,19 @@ def command_buy(event, mongo)
 
     # check for wrong number of arguments
     if arr.length != 3
-        output_error_message(event)
+        output_buy_error_message(event)
         return
     end
 
     # make sure number is a number
     if arr[1].to_i == 0
-        output_error_message(event)
+        output_buy_error_message(event)
         return
     end
 
     # make sure resource type is valid
     if !$settings[:resourceTypes].include?(arr[2].singularize)
-        output_error_message(event)
+        output_buy_error_message(event)
         return
     end
 
@@ -36,13 +36,13 @@ def command_buy(event, mongo)
     # get gold amount from buy
     market = mongo[:market].find(:type => arr[2].singularize).first
     if !market
-        output_error_message(event)
+        output_buy_error_message(event)
         return
     end
     gold = totalOfBuy(market[:value], arr[1].to_i)
 
     # does user have enough gold?
-    if user[:gold] < gold
+    if user[:gold].to_f < gold
         event.respond "You do not have "+number_with_commas(gold.round(4)).to_s+" gold to buy "+number_with_commas(arr[1]).to_s+" "+arr[2]+" "+event.message.author.mention+"."
         return
     end
@@ -58,11 +58,8 @@ def command_buy(event, mongo)
 end
 
 
-def output_error_message(event)
+def output_buy_error_message(event)
     event.respond "I don't understand that command "+event.message.author.mention+".  Try something like **%buy 3 wood**."
 end
 
 
-def totalOfBuy(marketValue, quantity)
-    marketValue * (1.0 + $settings[:marketTax]) / $settings[:marketIncrement] * ((($settings[:marketIncrement] + 1.0) ** quantity) - 1.0)
-end

@@ -1,3 +1,6 @@
+require './commonFunctions.rb'
+
+
 def command_realms(event, mongo)
     str = "-] REALMS [-  "
 
@@ -23,15 +26,15 @@ def command_realms(event, mongo)
 
     str += "page "+(page+1).to_s+" of "+(numUsers.to_f / $settings[:perPage].to_f).ceil.to_s+"\n"
 
-    str += "Attacking soldiers are not included.\n\n"
+    str += "*Attacking soldiers are not included.*\n\n"
 
     # get users
     counter = page * $settings[:perPage] + 1
     mongo[:users].find().sort(:networth => -1).skip(page * $settings[:perPage]).limit($settings[:perPage]).each do |user|
-        str += counter.to_s+". **"+user[:username]+"** - networth: "+user[:networth].to_s+"  "
+        str += counter.to_s+". **"+user[:username]+"** - networth: "+number_with_commas(user[:networth].round(2)).to_s+"  "
 
         $settings[:soldierTypes].each do |soldierType|
-            str += soldierType.pluralize+": "+user[soldierType.pluralize.to_sym].to_s+"  "
+            str += soldierType.pluralize+": "+number_with_commas(user[soldierType.pluralize.to_sym]).to_s+"  "
         end
 
         str += "\n"

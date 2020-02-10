@@ -23,6 +23,8 @@ require './commands/sell.rb'
 
 require './orders/buildFarm.rb'
 
+require './attacks.rb'
+
 Mongo::Logger.logger.level = Logger::FATAL
 
 bot = Discordrb::Bot.new token: ENV['DISCORD_TOKEN']
@@ -53,7 +55,7 @@ if !isMarketValid
     $settings[:resourceTypes].each do |resourceType|
         mongo[:market].insert_one({
             :type => resourceType,
-            :value => 100
+            :value => 10
         })
     end
 end
@@ -113,8 +115,13 @@ while true do
     end
 
     ## attacks
-    mongo[:armies].find({:finishedAt => {'$lte' => Time.now}}).each do |attack|
-
+    mongo[:armies].find({:finishedAt => {'$lte' => Time.now}}).each do |army|
+        if army[:isAttacking]
+            doAttack(mongo, army)
+        else
+            returnToRealm(mongo, army)
+        end
+        mongo[:armies].delete_one(:_id => army[:_id])
     end
 
     loopEnd = Time.now.to_i
