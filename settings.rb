@@ -2,6 +2,12 @@ $settings = {
     :maxFarms => 5,
     :farmBuildSeconds => 60*10,
     :farmMaxResourcesPerInterval => 10,
+    :resourceTypes => [
+        "wood",
+        "ore",
+        "clay",
+        "wool"
+    ],
     :soldierTypes => [
         "footman",
         "archer",
@@ -69,5 +75,6 @@ $settings = {
             :defense => 0,
             :speed => 1
         }
-    }
+    },
+    :perPage => 15
 }

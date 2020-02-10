@@ -1,3 +1,5 @@
+require './commonFunctions.rb'
+
 def command_joinGame(event, mongo)
 
     users = mongo[:users]
@@ -26,7 +28,8 @@ def command_joinGame(event, mongo)
         :archers => 0,
         :pikemen => 0,
         :knights => 0,
-        :catapults => 0
+        :catapults => 0,
+        :networth => 0
     })
 
     event.respond "Welcome to REALMS " + event.message.author.mention+". Type __%realm__ to view your realm."

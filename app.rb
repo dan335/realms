@@ -15,6 +15,8 @@ require './commands/destroy.rb'
 require './commands/realm.rb'
 require './commands/realms.rb'
 require './commands/hire.rb'
+require './commands/attack.rb'
+require './commands/cancelAttack.rb'
 
 require './orders/buildFarm.rb'
 
@@ -41,7 +43,7 @@ end
 bot.run true
 
 loopNum = 1
-
+updateNetworth(mongo)
 while true do
     loopStart = Time.now.to_i
 
@@ -58,8 +60,10 @@ while true do
         mongo[:orders].delete_one(:_id => order[:_id])
     end
 
-    # give resources
+    # 10 minutes
     if loopNum % 10 == 0
+
+        # give resources
         mongo[:farms].find().each do |farm|
             mongo[:users].update_one({:discordId => farm[:discordId]}, {
                     "$inc" => {
@@ -70,6 +74,13 @@ while true do
                     }
                 })
         end
+
+        updateNetworth(mongo)
+    end
+
+    ## attacks
+    mongo[:armies].find({:finishedAt => {'$lte' => Time.now}}).each do |attack|
+
     end
 
     loopEnd = Time.now.to_i

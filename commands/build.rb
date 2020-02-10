@@ -16,7 +16,7 @@ def command_build(event, mongo)
 
     #make sure there is a type
     if arr.length < 2
-        event.respond "I don't understand that command "+event.message.author.mention+".  It's missing a type.  Try something like __%build farm__."
+        event.respond "I don't understand that command "+event.message.author.mention+".  Try something like __%build farm__."
         return
     end
 
