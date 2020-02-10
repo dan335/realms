@@ -75,7 +75,7 @@ def command_hire(event, mongo)
         return
     end
 
-    # make soldier type is valid
+    # make sure soldier type is valid
     if !$settings[:soldierTypes].include?(arr[2].singularize)
         output_error_message(event)
         return

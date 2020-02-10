@@ -14,5 +14,9 @@ def command_help(event, mongo)
     str += "**%attack** - Attacking help.\n"
     str += "**%attack Danimal 3 footman 2 archers** - Attack Danimal with 3 footman and 2 archers.  Name can be @name, %realms number or username. - **not finished**\n"
     str += "**%cancelAttack 1** - Return attacking army to your realm. - **not finished**\n"
+    str += "\n"
+    str += "**%market** - See market prices.\n"
+    str += "**%buy 3 wood** - Buy 3 wood.\n"
+    str += "**%sell 3 wood** - Sell 3 wood.\n"
     event.respond str
 end

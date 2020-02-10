@@ -76,5 +76,7 @@ $settings = {
             :speed => 1
         }
     },
-    :perPage => 15
+    :perPage => 15,
+    :marketIncrement => 0.00001,    # how much the market goes up or down
+    :marketTax => 0.05
 }

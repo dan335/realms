@@ -48,3 +48,24 @@ def calculateNetworthForUser(user)
 
     net
 end
+
+
+# resourceObject is market data for resource from mongo
+def updateMarketPrice(mongo, resourceObject, type, quantity, isBuy)
+    value = resourceObject[:value]
+
+    if !isBuy
+        quantity *= -1
+    end
+
+    value = value * (($settings[:marketIncrement] + 1) ** quantity)
+
+    mongo[:market].update_one({:_id => resourceObject[:_id]}, {"$set" => {value:value}})
+end
+
+
+def number_with_commas(number)
+    parts = number.to_s.split('.')
+    parts[0].gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1,")
+    parts.join('.')
+end

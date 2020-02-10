@@ -17,6 +17,9 @@ require './commands/realms.rb'
 require './commands/hire.rb'
 require './commands/attack.rb'
 require './commands/cancelAttack.rb'
+require './commands/market.rb'
+require './commands/buy.rb'
+require './commands/sell.rb'
 
 require './orders/buildFarm.rb'
 
@@ -25,6 +28,37 @@ Mongo::Logger.logger.level = Logger::FATAL
 bot = Discordrb::Bot.new token: ENV['DISCORD_TOKEN']
 mongo = Mongo::Client.new([ ENV['MONGO_URL'] ], :database => ENV['MONGO_DB'])
 
+# maker sure market exists
+market = mongo[:market].find()
+
+isMarketValid = true
+$settings[:resourceTypes].each do |resourceType|
+    exists = false
+
+    market.each do |m|
+        if m[:type] == resourceType
+            exists = true
+        end
+    end
+
+    if !exists
+        isMarketValid = false
+    end
+end
+
+# create market if not valid
+if !isMarketValid
+    mongo[:market].drop
+
+    $settings[:resourceTypes].each do |resourceType|
+        mongo[:market].insert_one({
+            :type => resourceType,
+            :value => 100
+        })
+    end
+end
+
+# handle incoming messages
 bot.message(start_with: '%') do |event|
 
     # get function name from message

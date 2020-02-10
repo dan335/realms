@@ -14,7 +14,7 @@ def command_realm(event, mongo)
     str = "-] **"+user[:username]+"'s REALM** [-\n"
 
     # resources
-    str += "Gold: "+user[:gold].to_s+"  "
+    str += "Gold: "+user[:gold].round(2).to_s+"  "
     str += "Wood: "+user[:wood].to_s+"  "
     str += "Ore: "+user[:ore].to_s+"  "
     str += "Wool: "+user[:wool].to_s+"  "
