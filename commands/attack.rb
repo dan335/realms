@@ -43,6 +43,12 @@ def command_attack(event, mongo)
 
     # get user
     user = mongo[:users].find(:discordId => event.message.author.id).first
+
+    # maker sure you're not attack yourself
+    if user[:_id] == otherUser[:_id]
+        event.respond "Attacking yourself? "+event.message.author.mention
+        return
+    end
     
     # get soldiers
     i = 2

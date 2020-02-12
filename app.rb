@@ -115,7 +115,7 @@ while true do
     end
 
     ## attacks
-    mongo[:armies].find({:finishedAt => {'$lte' => Time.now}}).each do |army|
+    mongo[:armies].find({:arriveAt => {'$lte' => Time.now}}).each do |army|
         if army[:isAttacking]
             doAttack(mongo, army)
         else

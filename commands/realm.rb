@@ -65,10 +65,6 @@ def command_realm(event, mongo)
         armies.each do |army|
             str += count.to_s+". "
 
-            otherUser = mongo[:users].find(:_id => army[:otherUserId]).first
-
-            str += "Attacking "+otherUser[:username]+" with "
-
             s = 0
             army[:soldiers].each do |soldier|
                 str += number_with_commas(soldier[:num]).to_s+" "
@@ -76,9 +72,16 @@ def command_realm(event, mongo)
                 if s < army[:soldiers].length - 1
                     str += ",  "
                 else
-                    str += ".  "
+                    str += " "
                 end
                 s += 1
+            end
+
+            if army[:isAttacking]
+                otherUser = mongo[:users].find(:_id => army[:otherUserId]).first
+                str += "attacking "+otherUser[:username]+".  "
+            else
+                str += "returning.  "
             end
 
             str += "Arrives in "+((army[:arriveAt] - Time.now) / 60.0).round(1).to_s+" minutes."
