@@ -77,7 +77,7 @@ $settings = {
         }
     },
     :perPage => 15,
-    :marketIncrement => 0.00001,    # how much the market goes up or down
+    :marketIncrement => 0.00005,    # how much the market goes up or down
     :marketTax => 0.05,
     :battleBonusMultiplier => 1.5,
     :battlePowerLostPerBattle => 500.0,

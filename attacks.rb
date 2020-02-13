@@ -359,7 +359,7 @@ def createReport(army, name, isAttacker, winnings)
         str += winnings[:gold].round.to_s+" gold  "
         $settings[:resourceTypes].each do |resourceType|
             if winnings[resourceType.to_sym] > 0
-                str += winnings[resourceType.to_sym]+" "+resourceType+"  "
+                str += winnings[resourceType.to_sym].to_i.to_s+" "+resourceType+"  "
             end
         end
         str += "\n"
