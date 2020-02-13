@@ -7,4 +7,4 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 gem 'discordrb'
 gem 'dotenv'
 gem 'mongo'
-gem 'active_support'
+gem 'activesupport'
