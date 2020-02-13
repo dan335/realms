@@ -36,6 +36,11 @@ def command_attack(event, mongo)
         otherUser = mongo[:users].find(:username => arr[1]).first
     end
 
+    # search by display_name
+    if otherUser == nil
+        otherUser = mongo[:users].find(:display_name => arr[1]).first
+    end
+
     if otherUser == nil
         event.respond "Could not find user "+arr[1]+" "+event.message.author.mention+"."
         return
@@ -45,10 +50,10 @@ def command_attack(event, mongo)
     user = mongo[:users].find(:discordId => event.message.author.id).first
 
     # maker sure you're not attack yourself
-    if user[:_id] == otherUser[:_id]
-        event.respond "Attacking yourself? "+event.message.author.mention
-        return
-    end
+    # if user[:_id] == otherUser[:_id]
+    #     event.respond "Attacking yourself? "+event.message.author.mention
+    #     return
+    # end
     
     # get soldiers
     i = 2

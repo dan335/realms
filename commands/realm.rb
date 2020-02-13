@@ -15,7 +15,7 @@ def command_realm(event, mongo)
     orders = mongo[:orders].find(:discordId => event.message.author.id).sort(:createdAt => 1)
     armies = mongo[:armies].find(:discordId => event.message.author.id).sort(:createdAt => 1)
 
-    str = "-] **"+user[:username]+"'s REALM** [-\n"
+    str = "-] **"+user[:display_name]+"'s REALM** [-\n"
 
     # resources
     str += "Gold: "+number_with_commas(user[:gold].to_f.round(2)).to_s+"  "
@@ -52,9 +52,11 @@ def command_realm(event, mongo)
         count = 1
         orders.each do |order|
             minLeft = (((order[:finishedAt] - Time.now) / 60.0 * 10.0).round) / 10.0
-            str += count.to_s+". **"+order[:type].remove("build")+"** - "+minLeft.to_s+" minutes left.\n"
+            str += count.to_s+". **"+order[:type].remove("build")+"** - "+[minLeft, 0.0].max.to_s+" minutes left.\n"
             count += 1
         end
+
+        str += "\n"
     end
 
     # armies
@@ -79,12 +81,12 @@ def command_realm(event, mongo)
 
             if army[:isAttacking]
                 otherUser = mongo[:users].find(:_id => army[:otherUserId]).first
-                str += "attacking "+otherUser[:username]+".  "
+                str += "attacking "+otherUser[:display_name]+".  "
             else
                 str += "returning.  "
             end
 
-            str += "Arrives in "+((army[:arriveAt] - Time.now) / 60.0).round(1).to_s+" minutes."
+            str += "Arrives in "+[((army[:arriveAt] - Time.now) / 60.0).round(1), 0.0].max.to_s+" minutes."
             str += "\n"
 
             count += 1

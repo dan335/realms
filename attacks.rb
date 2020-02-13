@@ -3,7 +3,7 @@ require './commonFunctions.rb'
 
 def doAttack(mongo, army)
 
-    # get defender
+    user = mongo[:users].find(:_id => army[:userId]).first
     otherUser = mongo[:users].find(:_id => army[:otherUserId]).first
 
     # get attacking soldiers
@@ -14,11 +14,6 @@ def doAttack(mongo, army)
 
     # calculate attack
     processAttack(soldiers, otherUser)
-    puts "----"
-    puts soldiers
-    puts "----"
-    puts otherUser
-    puts "----"
 
     # get winnings
     winnings = {:gold => 0} # for winner
@@ -46,6 +41,8 @@ def doAttack(mongo, army)
     end
     mongo[:users].update_one({_id: otherUser[:_id]}, {"$set": set, "$inc": inc})
     updateNetworthFor(mongo, otherUser[:discordId])
+
+    sendAttackReport(user, soldiers, otherUser, winnings)
 
     # check if army is dead
     if soldiers[:numLoses] == soldiers[:numSoldiers]
@@ -81,6 +78,26 @@ end
 
 
 def returnToRealm(mongo, army)
+    user = mongo[:users].find(:_id => army[:userId]).first
+puts army
+    str = "Your army returned from battle.\n\n"
+
+    str += "__Soldiers:__ "
+    army[:soldiers].each do |soldier|
+        str += soldier[:num].to_i.to_s+ " "+soldier[:type].pluralize+"  "
+    end
+    str += "\n"
+
+    str += "__Stole:__ "
+    str += army[:winnings][:gold].round.to_s+" gold  "
+    $settings[:resourceTypes].each do |resourceType|
+        if army[:winnings][resourceType.to_sym] > 0
+            str += winnings[resourceType.to_sym]+" "+resourceType+"  "
+        end
+    end
+    str += "\n"
+
+    sendPM(user[:pmChannelId], str)
 
     # add army back to user
     inc = {}
@@ -262,4 +279,91 @@ def findLoses(army)
             end
         end
     end
+end
+
+
+def sendAttackReport(user, soldiers, otherUser, winnings)
+    str = "-] **ATTACK REPORT** [-\n\n"
+
+    str += "__ATTACKING ARMY__\n"
+    str += createReport(soldiers, user[:display_name], true, winnings)
+    str += "\n"
+    str += "__DEFENDING REALM__\n"
+    str += createReport(otherUser, otherUser[:display_name], false, nil)
+
+    sendPM(user[:pmChannelId], str)
+    sendPM(otherUser[:pmChannelId], str)
+end
+
+
+def createReport(army, name, isAttacker, winnings)
+    # sent
+    str = "**"+name+"**"
+    if isAttacker
+        str += " sent "
+    else
+        str += " defended with "
+    end
+    
+    $settings[:soldierTypes].each do |soldierType|
+        if army[soldierType.pluralize.to_sym].to_i > 0
+            str += army[soldierType.pluralize.to_sym].to_i.to_s+ " "+soldierType.pluralize+" "
+        end
+    end
+    str += "\n"
+
+    str += "__Power:__ "
+    $settings[:soldierTypes].each do |soldierType|
+        if army[:power][soldierType.to_sym].to_i > 0
+            str += soldierType.pluralize+": "+army[:power][soldierType.to_sym].round(1).to_f.to_s+"  "
+        end
+    end
+    str += "\n"
+
+    str += "__Bonus:__ "
+    if army[:totalBonus] > 0
+        $settings[:soldierTypes].each do |soldierType|
+            if army[:bonus][soldierType.to_sym].to_i > 0
+                str += soldierType.pluralize+": "+army[:bonus][soldierType.to_sym].round(1).to_f.to_s+"  "
+            end
+        end
+    else
+        str += "none"
+    end
+    str += "\n"
+
+    str += army[:totalPower].round(1).to_s+" power + "+army[:totalBonus].round(1).to_s+" bonus = "+army[:finalPower].round(1).to_s+" final power\n"
+    if army[:isWinner]
+        str += "**Won Battle**\n"
+    else
+        str += "**Lost Battle**\n"
+    end
+
+    if army[:numLoses] > 0
+        if army[:numLoses] == army[:numSoldiers]
+            str += "Lost all soldiers."
+        else
+            str += "Lost "
+            $settings[:soldierTypes].each do |soldierType|
+                if army[:loses][soldierType.to_sym].to_i > 0
+                    str += army[:loses][soldierType.to_sym].to_i.to_s+ " "+soldierType.pluralize+" "
+                end
+            end
+        end
+        
+        str += "\n"
+    end
+
+    if isAttacker && army[:isWinner]
+        str += "__Stole:__ "
+        str += winnings[:gold].round.to_s+" gold  "
+        $settings[:resourceTypes].each do |resourceType|
+            if winnings[resourceType.to_sym] > 0
+                str += winnings[resourceType.to_sym]+" "+resourceType+"  "
+            end
+        end
+        str += "\n"
+    end
+
+    return str
 end

@@ -31,7 +31,7 @@ def command_realms(event, mongo)
     # get users
     counter = page * $settings[:perPage] + 1
     mongo[:users].find().sort(:networth => -1).skip(page * $settings[:perPage]).limit($settings[:perPage]).each do |user|
-        str += counter.to_s+". **"+user[:username]+"** - networth: "+number_with_commas(user[:networth].round(2)).to_s+"  "
+        str += counter.to_s+". **"+user[:display_name]+"** - networth: "+number_with_commas(user[:networth].round(2)).to_s+"  "
 
         $settings[:soldierTypes].each do |soldierType|
             str += soldierType.pluralize+": "+number_with_commas(user[soldierType.pluralize.to_sym]).to_s+"  "

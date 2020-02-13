@@ -110,3 +110,8 @@ end
 def totalOfBuy(marketValue, quantity)
     marketValue * (1.0 + $settings[:marketTax]) / $settings[:marketIncrement] * ((($settings[:marketIncrement] + 1.0) ** quantity) - 1.0)
 end
+
+
+def sendPM(channelId, message)
+    Discordrb::API::Channel.create_message("Bot "+ENV['DISCORD_TOKEN'], channelId, message)
+end
