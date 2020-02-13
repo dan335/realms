@@ -2,6 +2,8 @@ FROM ruby:slim
 
 RUN echo "Etc/UTC" > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata
 
+RUN apt-get update && apt-get install -y build-essential
+
 RUN mkdir /app
 WORKDIR /app
 
