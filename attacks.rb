@@ -92,7 +92,7 @@ puts army
     str += army[:winnings][:gold].round.to_s+" gold  "
     $settings[:resourceTypes].each do |resourceType|
         if army[:winnings][resourceType.to_sym] > 0
-            str += winnings[resourceType.to_sym]+" "+resourceType+"  "
+            str += army[:winnings][resourceType.to_sym]+" "+resourceType+"  "
         end
     end
     str += "\n"
