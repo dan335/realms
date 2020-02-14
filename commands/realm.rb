@@ -14,6 +14,7 @@ def command_realm(event, mongo)
     farms = mongo[:farms].find(:discordId => event.message.author.id).sort(:createdAt => 1)
     orders = mongo[:orders].find(:discordId => event.message.author.id).sort(:createdAt => 1)
     armies = mongo[:armies].find(:discordId => event.message.author.id).sort(:createdAt => 1)
+    attackers = mongo[:armies].find({:otherDiscordId => event.message.author.id, :isAttacking => true}).sort(:createdAt => 1)
 
     str = "-] **"+user[:display_name]+"'s REALM** [-\n"
 
@@ -84,6 +85,36 @@ def command_realm(event, mongo)
                 str += "attacking "+otherUser[:display_name]+".  "
             else
                 str += "returning.  "
+            end
+
+            str += "Arrives in "+[((army[:arriveAt] - Time.now) / 60.0).round(1), 0.0].max.to_s+" minutes."
+            str += "\n"
+
+            count += 1
+        end
+    end
+
+    # attacking armies
+    if armies.count > 0
+        str += "__ATTACKING ARMIES__\n"
+
+        count = 1
+        attackers.each do |army|
+            str += count.to_s+". "
+
+            otherUser = mongo[:users].find(:_id => army[:otherUserId]).first
+            str += otherUser[:display_name]+" is attacking with "
+
+            s = 0
+            army[:soldiers].each do |soldier|
+                str += number_with_commas(soldier[:num]).to_s+" "
+                str += soldier[:type].pluralize
+                if s < army[:soldiers].length - 1
+                    str += ",  "
+                else
+                    str += ".  "
+                end
+                s += 1
             end
 
             str += "Arrives in "+[((army[:arriveAt] - Time.now) / 60.0).round(1), 0.0].max.to_s+" minutes."

@@ -76,7 +76,7 @@ def command_hire(event, mongo)
     end
 
     # make sure soldier type is valid
-    if !$settings[:soldierTypes].include?(arr[2].singularize)
+    if !$settings[:soldierTypes].include?(arr[2].singularize.downcase)
         output_error_message(event)
         return
     end
@@ -87,7 +87,7 @@ def command_hire(event, mongo)
         cost[t.to_sym] = 0
     end
 
-    soldierInfo = $settings[:soldiers][arr[2].singularize.to_sym]
+    soldierInfo = $settings[:soldiers][arr[2].singularize.downcase.to_sym]
 
     soldierInfo[:cost].each do |t|
         cost[t[:type].to_sym] = arr[1].to_i * t[:num]
@@ -115,7 +115,7 @@ def command_hire(event, mongo)
     end
 
     # soldiers
-    inc[arr[2].pluralize.to_sym] = arr[1].to_i
+    inc[arr[2].pluralize.downcase.to_sym] = arr[1].to_i
 
     # udpate db
     mongo[:users].update_one({_id: user[:_id]}, {"$inc" => inc})
