@@ -8,6 +8,9 @@ $settings = {
         "clay",
         "wool"
     ],
+    :buildingTypes => [
+        "farm"
+    ],
     :soldierTypes => [
         "footman",
         "archer",

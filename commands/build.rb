@@ -20,6 +20,12 @@ def command_build(event, mongo)
         return
     end
 
+    # make sure type is a valid building
+    if !$settings[:buildingTypes].include?(arr[1].singularize)
+        event.respond "I don't understand that command "+event.message.author.mention+".  Try something like __%build farm__."
+        return
+    end
+
     type = arr[1]
     dbName = type.pluralize.to_sym
     max = ("max"+type.pluralize.camelize).to_sym
