@@ -92,6 +92,8 @@ def command_realm(event, mongo)
 
             count += 1
         end
+
+        str += "\n"
     end
 
     # attacking armies
@@ -102,7 +104,7 @@ def command_realm(event, mongo)
         attackers.each do |army|
             str += count.to_s+". "
 
-            otherUser = mongo[:users].find(:_id => army[:otherUserId]).first
+            otherUser = mongo[:users].find(:_id => army[:userId]).first
             str += otherUser[:display_name]+" is attacking with "
 
             s = 0
