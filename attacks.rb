@@ -52,10 +52,11 @@ def doAttack(mongo, army)
     # put soldiers back into army
     army[:soldiers] = army[:soldiers].map do |s|
         s[:num] = soldiers[s[:type].pluralize.to_sym].to_i - soldiers[:loses][s[:type]].to_i
+        s
     end
 
     # get army travel time
-    slowest = 99999
+    slowest = 99999.0
     army[:soldiers].each do |soldier|
         s = $settings[:soldiers][soldier[:type].to_sym][:speed]
         if s < slowest
@@ -104,7 +105,7 @@ puts army
     army[:soldiers].each do |s|
         inc[s[:type].pluralize.to_sym] = s[:num]
     end
-    
+
     inc[:gold] = army[:winnings][:gold]
 
     $settings[:resourceTypes].each do |resourceType|
@@ -176,7 +177,7 @@ def processAttack(attackingArmy, defendingArmy)
         else
             attackingArmy[:percentage][soldierType.to_sym] = attackingArmy[soldierType.pluralize.to_sym].to_f / attackingArmy[:numSoldiers].to_f
         end
-        
+
         if defendingArmy[:numSoldiers] == 0
             defendingArmy[:percentage][soldierType.to_sym] = 0.0
         else
@@ -304,7 +305,7 @@ def createReport(army, name, isAttacker, winnings)
     else
         str += " defended with "
     end
-    
+
     $settings[:soldierTypes].each do |soldierType|
         if army[soldierType.pluralize.to_sym].to_i > 0
             str += army[soldierType.pluralize.to_sym].to_i.to_s+ " "+soldierType.pluralize+" "
@@ -350,7 +351,7 @@ def createReport(army, name, isAttacker, winnings)
                 end
             end
         end
-        
+
         str += "\n"
     end
 

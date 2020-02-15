@@ -25,9 +25,9 @@ $settings = {
                 {:type => "ore", :num => 1}
             ],
             :bonusAgainst => [],
-            :attack => 5,
-            :defense => 5,
-            :speed => 5
+            :attack => 5.0,
+            :defense => 5.0,
+            :speed => 5.0
         },
         :archer => {
             :name => "Archer",
@@ -38,9 +38,9 @@ $settings = {
                 "footman",
                 "pikeman"
             ],
-            :attack => 3,
-            :defense => 7,
-            :speed => 5
+            :attack => 3.0,
+            :defense => 7.0,
+            :speed => 5.0
         },
         :pikeman => {
             :name => "Pikeman",
@@ -50,9 +50,9 @@ $settings = {
             :bonusAgainst => [
                 "knight"
             ],
-            :attack => 1,
-            :defense => 10,
-            :speed => 3
+            :attack => 1.0,
+            :defense => 10.0,
+            :speed => 3.0
         },
         :knight => {
             :name => "Knight",
@@ -64,9 +64,9 @@ $settings = {
                 "footman",
                 "archer"
             ],
-            :attack => 10,
-            :defense => 3,
-            :speed => 20
+            :attack => 10.0,
+            :defense => 3.0,
+            :speed => 20.0
         },
         :catapult => {
             :name => "Catapult",
@@ -74,9 +74,9 @@ $settings = {
                 {:type => "wood", :num => 10}
             ],
             :bonusAgainst => [],
-            :attack => 50,
-            :defense => 0,
-            :speed => 1
+            :attack => 50.0,
+            :defense => 0.0,
+            :speed => 1.0
         }
     },
     :perPage => 15,
