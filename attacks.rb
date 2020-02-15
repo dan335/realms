@@ -50,7 +50,7 @@ def doAttack(mongo, army)
     end
 
     # put soldiers back into army
-    army[:soldiers].map do |s|
+    army[:soldiers] = army[:soldiers].map do |s|
         s[:num] = soldiers[s[:type].pluralize.to_sym].to_i - soldiers[:loses][s[:type]].to_i
     end
 

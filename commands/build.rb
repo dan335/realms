@@ -55,5 +55,5 @@ def command_build(event, mongo)
         :finishedAt => Time.now + $settings[timeToBuild]
     })
 
-    event.respond "I'm building you a new "+type+" " + event.message.author.mention + ".  Check it's progress with __%realm__."
+    event.respond "I'm building you a new "+type+" " + event.message.author.mention + ".  Check its progress with __%realm__."
 end
