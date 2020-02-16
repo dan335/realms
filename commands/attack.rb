@@ -54,10 +54,14 @@ def command_attack(event, mongo)
     #     event.respond "Attacking yourself? "+event.message.author.mention
     #     return
     # end
-    
+
     # get soldiers
+    army = {}
+    $settings[:soldierTypes].each do |soldierType|
+      army[soldierType.pluralize.to_sym] = 0
+    end
+
     i = 2
-    soldiers = []
     while i < arr.length do
 
         # check for correct number of parameters
@@ -84,10 +88,7 @@ def command_attack(event, mongo)
             return
         end
 
-        soldiers << {
-            :type => arr[i+1].singularize,
-            :num => arr[i].to_i
-        }
+        army[arr[i+1].pluralize.to_sym] = arr[i].to_i
 
         i += 2
     end
@@ -103,22 +104,22 @@ def command_attack(event, mongo)
     durationSeconds = $settings[:armyTravelDistance] / slowest.to_f * 60.0
 
     # create army
-    mongo[:armies].insert_one({
-        :discordId => user[:discordId],
-        :userId => user[:_id],
-        :createdAt => Time.now,
-        :arriveAt => Time.now + durationSeconds,
-        :soldiers => soldiers,
-        :otherDiscordId => otherUser[:discordId],
-        :otherUserId => otherUser[:_id],
-        :isAttacking => true    # false if army is returning from battle
-    })
+    army[:discordId] = user[:discordId]
+    army[:userId] = user[:_id]
+    army[:createdAt] = Time.now
+    army[:arriveAt] = Time.now + durationSeconds
+    army[:otherDiscordId] = otherUser[:discordId]
+    army[:otherUserId] = otherUser[:_id]
+    army[:isAttacking] = true
+
+    mongo[:armies].insert_one(army)
 
     # remove soldiers from user
     inc = {}
-    soldiers.each do |s|
-        inc[s[:type].pluralize.to_sym] = s[:num] * -1
+    $settings[:soldierTypes].each do |soldierType|
+      inc[soldierType.pluralize.to_sym] = army[soldierType.pluralize.to_sym] * -1
     end
+
     mongo[:users].update_one({_id: user[:_id]}, {"$inc" => inc})
 
     updateNetworthFor(mongo, event.message.author.id)
