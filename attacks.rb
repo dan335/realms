@@ -27,8 +27,8 @@ def doAttack(mongo, army)
 
     getPowerToLose(attackingArmy, defendingArmy)
 
-    findLoses(attackingArmy)
-    findLoses(defendingArmy)
+    getLoses(attackingArmy)
+    getLoses(defendingArmy)
 
     # get winnings
     winnings = {:gold => 0} # for winner
