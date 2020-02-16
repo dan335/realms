@@ -95,11 +95,13 @@ def command_attack(event, mongo)
 
     # get army travel time
     slowest = 99999
-    soldiers.each do |soldier|
-        s = $settings[:soldiers][soldier[:type].to_sym][:speed]
+    $settings[:soldierTypes].each do |soldierType|
+      if army[soldierType.pluralize.to_sym].to_i > 0
+        s = $settings[:soldiers][soldierType.to_sym][:speed]
         if s < slowest
             slowest = s
         end
+      end
     end
     durationSeconds = $settings[:armyTravelDistance] / slowest.to_f * 60.0
 
