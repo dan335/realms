@@ -5,7 +5,7 @@ def command_realm(event, mongo)
 
     # get data
     user = mongo[:users].find(:discordId => event.message.author.id).first
-    
+
     if user == nil
         event.respond "I can't find a realm for you " + event.message.author.mention + ".  Use __%joinGame__ to create one."
         return
@@ -49,7 +49,7 @@ def command_realm(event, mongo)
     # orders
     if orders.count > 0
         str += "__CURRENTLY BUILDING__\n"
-        
+
         count = 1
         orders.each do |order|
             minLeft = (((order[:finishedAt] - Time.now) / 60.0 * 10.0).round) / 10.0
@@ -69,15 +69,13 @@ def command_realm(event, mongo)
             str += count.to_s+". "
 
             s = 0
-            army[:soldiers].each do |soldier|
-                str += number_with_commas(soldier[:num]).to_s+" "
-                str += soldier[:type].pluralize
-                if s < army[:soldiers].length - 1
-                    str += ",  "
-                else
-                    str += " "
-                end
+            $settings[:soldierTypes].each do |soldierType|
+              if army[soldierType.pluralize.to_sym] > 0
+                str += number_with_commas(army[soldierType.pluralize.to_sym]).to_s+" "
+                str += soldierType.pluralize
+                str += ",  "
                 s += 1
+              end
             end
 
             if army[:isAttacking]
