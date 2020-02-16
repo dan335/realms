@@ -95,7 +95,7 @@ def command_realm(event, mongo)
     end
 
     # attacking armies
-    if armies.count > 0
+    if attackers.count > 0
         str += "__ATTACKING ARMIES__\n"
 
         count = 1
