@@ -5,7 +5,7 @@ def command_attack(event, mongo)
 
     # make sure user exists
     if !isUserPlaying(mongo, event.message.author.id)
-        event.respond "I can't find your realm " + event.message.author.mention + ".  Use __%joinGame__ to create one."
+        event.respond "I can't find your realm " + event.message.author.mention + ".  Use **%joinGame** to create one."
         return
     end
 

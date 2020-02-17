@@ -31,8 +31,8 @@ def doAttack(bot, mongo, army)
     getLoses(defendingArmy)
 
     # get winnings
-    winnings = {:gold => 0} # for winner
-    inc = {:gold => 0}  # for loser
+    winnings = {:gold => 0.0} # for winner
+    inc = {:gold => 0.0}  # for loser
 
     if attackingArmy[:isWinner] && attackingArmy[:numLoses] < attackingArmy[:numSoldiers]
         winnings[:gold] = defendingArmy[:gold] * $settings[:battleWinnings]
@@ -42,10 +42,10 @@ def doAttack(bot, mongo, army)
     $settings[:resourceTypes].each do |resourceType|
         if attackingArmy[:isWinner] && attackingArmy[:numLoses] < attackingArmy[:numSoldiers]
             winnings[resourceType.to_sym] = (defendingArmy[resourceType.to_sym].to_f * $settings[:battleWinnings]).floor
-            inc[resourceType.to_sym] = winnings[resourceType.to_sym] * -1
+            inc[resourceType.to_sym] = winnings[resourceType.to_sym] * -1.0
         else
-            winnings[resourceType.to_sym] = 0
-            inc[resourceType.to_sym] = 0
+            winnings[resourceType.to_sym] = 0.0
+            inc[resourceType.to_sym] = 0.0
         end
     end
 
@@ -115,8 +115,8 @@ def returnToRealm(bot, mongo, army)
     str += "__Stole:__ "
     str += army[:winnings][:gold].round.to_s+" gold  "
     $settings[:resourceTypes].each do |resourceType|
-        if army[:winnings][resourceType.to_sym] > 0
-            str += number_with_commas(army[:winnings][resourceType.to_sym]).to_s+" "+resourceType+"  "
+        if army[:winnings][resourceType.to_sym] > 0.0
+            str += number_with_commas(army[:winnings][resourceType.to_sym].round(1)).to_s+" "+resourceType+"  "
         end
     end
     str += "\n"
@@ -132,7 +132,7 @@ def returnToRealm(bot, mongo, army)
     inc[:gold] = army[:winnings][:gold].to_f
 
     $settings[:resourceTypes].each do |resourceType|
-        inc[resourceType.to_sym] = army[:winnings][resourceType.to_sym].to_i
+        inc[resourceType.to_sym] = army[:winnings][resourceType.to_sym].to_f
     end
 
     mongo[:users].update_one({:_id => army[:userId]}, {'$inc' => inc})
@@ -382,10 +382,10 @@ def createReport(army, isAttacker, winnings)
 
     if isAttacker && army[:isWinner]
         str += "__Stole:__ "
-        str += winnings[:gold].round.to_s+" gold  "
+        str += number_with_commas(winnings[:gold].round(1)).to_s+" gold  "
         $settings[:resourceTypes].each do |resourceType|
             if winnings[resourceType.to_sym] > 0
-                str += number_with_commas(winnings[resourceType.to_sym].to_i).to_s+" "+resourceType+"  "
+                str += number_with_commas(winnings[resourceType.to_sym].to_f.round(1)).to_s+" "+resourceType+"  "
             end
         end
         str += "\n"

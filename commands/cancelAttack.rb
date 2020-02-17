@@ -1,3 +1,3 @@
-def command_cancelAttack(event, mongo)
+def command_cancelattack(event, mongo)
 
 end

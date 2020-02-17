@@ -2,7 +2,7 @@ require './commonFunctions.rb'
 
 
 def command_realms(event, mongo)
-    str = "-] REALMS [-  "
+    str = "-] **REALMS** [-  "
 
     # find page number
     page = 0

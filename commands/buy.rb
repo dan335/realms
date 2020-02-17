@@ -19,7 +19,7 @@ def command_buy(event, mongo)
     end
 
     # make sure number is a number
-    if arr[1].to_i == 0
+    if arr[1].to_f == 0.0
         output_buy_error_message(event)
         return
     end
@@ -39,22 +39,22 @@ def command_buy(event, mongo)
         output_buy_error_message(event)
         return
     end
-    gold = totalOfBuy(market[:value], arr[1].to_i)
+    gold = totalOfBuy(market[:value], arr[1].to_f)
 
     # does user have enough gold?
     if user[:gold].to_f < gold
-        event.respond "You do not have "+number_with_commas(gold.round(4)).to_s+" gold to buy "+number_with_commas(arr[1]).to_s+" "+arr[2]+" "+event.message.author.mention+"."
+        event.respond "You do not have "+number_with_commas(gold.round(4)).to_s+" gold to buy "+number_with_commas(arr[1].to_f).to_s+" "+arr[2]+" "+event.message.author.mention+"."
         return
     end
 
     # update user
-    mongo[:users].update_one({:_id => user[:_id]}, {"$inc" => {:gold => gold * -1.0, arr[2].singularize.to_sym => arr[1].to_i}})
+    mongo[:users].update_one({:_id => user[:_id]}, {"$inc" => {:gold => gold * -1.0, arr[2].singularize.to_sym => arr[1].to_f}})
 
     # update market
-    updateMarketPrice(mongo, market, arr[2].singularize, arr[1].to_i, true)
+    updateMarketPrice(mongo, market, arr[2].singularize, arr[1].to_f, true)
 
     # respond
-    event.respond event.message.author.mention+" bought "+number_with_commas(arr[1].to_i).to_s+" "+arr[2].singularize+" for "+number_with_commas(gold.round(2)).to_s+" gold."
+    event.respond event.message.author.mention+" bought "+number_with_commas(arr[1].to_f).to_s+" "+arr[2].singularize+" for "+number_with_commas(gold.round(2)).to_s+" gold."
 end
 
 

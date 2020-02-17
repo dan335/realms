@@ -1,4 +1,5 @@
 require './commonFunctions.rb'
+require 'active_support/core_ext/string'
 
 
 def command_realm(event, mongo)
@@ -20,10 +21,9 @@ def command_realm(event, mongo)
 
     # resources
     str += "Gold: "+number_with_commas(user[:gold].to_f.round(2)).to_s+"  "
-    str += "Wood: "+number_with_commas(user[:wood]).to_s+"  "
-    str += "Ore: "+number_with_commas(user[:ore]).to_s+"  "
-    str += "Wool: "+number_with_commas(user[:wool]).to_s+"  "
-    str += "Clay: "+number_with_commas(user[:clay]).to_s
+    $settings[:resourceTypes].each do |resourceType|
+        str += resourceType.camelize+": "+number_with_commas(user[resourceType.to_sym].to_f.round(2)).to_s+"  "
+    end
     str += "\n"
 
     #soldiers
@@ -39,7 +39,11 @@ def command_realm(event, mongo)
 
         count = 1
         farms.each do |farm|
-            str += count.to_s+".  Wood: "+farm[:wood].to_s+"  Ore: "+farm[:ore].to_s+"  Wool: "+farm[:wool].to_s+"  Clay: "+farm[:clay].to_s+"\n"
+            str += count.to_s+".  "
+            $settings[:resourceTypes].each do |resourceType|
+                str += resourceType.camelize+": "+farm[resourceType.to_sym].round.to_s+"  "
+            end
+            str += "\n"
             count += 1
         end
 
@@ -58,6 +62,10 @@ def command_realm(event, mongo)
         end
 
         str += "\n"
+    end
+
+    if farms.count == 0 && orders.count == 0
+        str += "Type **%build farm** to build your first farm.\n\n"
     end
 
     # armies

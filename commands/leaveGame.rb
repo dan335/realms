@@ -1,4 +1,4 @@
-def command_leaveGame(event, mongo)
+def command_leavegame(event, mongo)
 
     users = mongo[:users]
 

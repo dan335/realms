@@ -7,6 +7,7 @@
 - send DM when someone attacks you
 - change all commands to lowercase and allow any case
 - bug: %realm message is too long if you send lots of armies
+- limit number of amries per player
 
 
 ## ideas

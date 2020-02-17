@@ -20,7 +20,7 @@ def command_sell(event, mongo)
     end
 
     # make sure number is a number
-    if arr[1].to_i == 0
+    if arr[1].to_f == 0.0
         output_sell_error_message(event)
         return
     end
@@ -35,8 +35,8 @@ def command_sell(event, mongo)
     user = mongo[:users].find(:discordId => event.message.author.id).first
 
     # does user have enough
-    if user[arr[2].singularize.to_sym] < arr[1].to_i
-        event.respond "You do not have "+number_with_commas(arr[1]).to_s+" "+arr[2]+" "+event.message.author.mention+"."
+    if user[arr[2].singularize.to_sym] < arr[1].to_f
+        event.respond "You do not have "+number_with_commas(arr[1].to_f).to_s+" "+arr[2]+" "+event.message.author.mention+"."
         return
     end
 
@@ -46,16 +46,16 @@ def command_sell(event, mongo)
         output_sell_error_message(event)
         return
     end
-    gold = totalOfSell(market[:value], arr[1].to_i)
+    gold = totalOfSell(market[:value], arr[1].to_f)
 
     # update user
-    mongo[:users].update_one({:_id => user[:_id]}, {"$inc" => {:gold => gold, arr[2].singularize.to_sym => arr[1].to_i * -1}})
+    mongo[:users].update_one({:_id => user[:_id]}, {"$inc" => {:gold => gold, arr[2].singularize.to_sym => arr[1].to_f * -1.0}})
 
     # update market
-    updateMarketPrice(mongo, market, arr[2].singularize, arr[1].to_i, false)
+    updateMarketPrice(mongo, market, arr[2].singularize, arr[1].to_f, false)
 
     # respond
-    event.respond event.message.author.mention+" sold "+number_with_commas(arr[1].to_i).to_s+" "+arr[2].singularize+" for "+number_with_commas(gold.round(2)).to_s+" gold."
+    event.respond event.message.author.mention+" sold "+number_with_commas(arr[1].to_f).to_s+" "+arr[2].singularize+" for "+number_with_commas(gold.round(2)).to_s+" gold."
 end
 
 

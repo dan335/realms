@@ -1,6 +1,8 @@
 require './commonFunctions.rb'
+require 'active_support/core_ext/string'
 
-def command_joinGame(event, mongo)
+
+def command_joingame(event, mongo)
 
     if !event.server
         event.respond "Enter **%joinGame** in a guild channel not a private message to join the game."
@@ -11,12 +13,12 @@ def command_joinGame(event, mongo)
 
     # check if user exists
     if users.find(:discordId => event.message.author.id).count > 0
-        event.respond "I already have a realm for you " + event.message.author.mention + ".  Cannot create another one."
+        event.respond "I already have a realm for you " + event.message.author.mention + ".  Cannot create another one.  Type **%realm** to view your realm."
         return
     end
 
     # save user to db
-    users.insert_one({
+    user = {
         :discordId => event.message.author.id,
         :username => event.message.author.username,
         :display_name => event.message.author.display_name,
@@ -28,19 +30,20 @@ def command_joinGame(event, mongo)
         :pmChannelId => event.message.author.pm.id,
         :serverId => event.server.id,
         :serverName => event.server.name,
-        :wood => 0,
-        :ore => 0,
-        :wool => 0,
-        :clay => 0,
         :gold => 0.0,
         :createdAt => Time.now,
-        :footmen => 0,
-        :archers => 0,
-        :pikemen => 5,
-        :knights => 0,
-        :catapults => 0,
         :networth => 0.0
-    })
+    }
+
+    $settings[:resourceTypes].each do |resourceType|
+        user[resourceType.to_sym] = 0.0
+    end
+
+    $settings[:soldierTypes].each do |soldierType|
+        user[soldierType.pluralize.to_sym] = 0
+    end
+
+    users.insert_one(user)
 
     event.respond "Welcome to REALMS " + event.message.author.mention+". Type **%realm** to view your realm."
 end

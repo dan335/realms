@@ -26,8 +26,8 @@ def command_hire(event, mongo)
             str += "    cost: "
 
             counter = 0
-            $settings[:soldiers][type.to_sym][:cost].each do |res|
-                str += res[:num].to_s+" "+res[:type]
+            $settings[:soldiers][type.to_sym][:cost].each do |cost|
+                str += cost[:num].to_s+" "+cost[:type]
                 if counter < $settings[:soldiers][type.to_sym][:cost].length - 1
                     str += ","
                 end
@@ -57,6 +57,20 @@ def command_hire(event, mongo)
             str += "  speed: "+$settings[:soldiers][type.to_sym][:speed].to_s
 
             str += "\n"
+
+            str += "    consumes every 10 minutes: "
+
+            counter = 0
+            $settings[:soldiers][type.to_sym][:consumes].each do |consume|
+                str += consume[:num].to_s+" "+consume[:type]
+                if counter < $settings[:soldiers][type.to_sym][:consumes].length - 1
+                    str += ","
+                end
+                str += "  "
+                counter += 1
+            end
+
+            str += "\n"
         end
 
         event.respond str
@@ -83,23 +97,21 @@ def command_hire(event, mongo)
 
     # get cost
     cost = {}
-    $settings[:resourceTypes].each do |t|
-        cost[t.to_sym] = 0
+    $settings[:resourceTypes].each do |resourceType|
+        cost[resourceType.to_sym] = 0.0
     end
 
-    soldierInfo = $settings[:soldiers][arr[2].singularize.downcase.to_sym]
-
-    soldierInfo[:cost].each do |t|
-        cost[t[:type].to_sym] = arr[1].to_i * t[:num]
+    $settings[:soldiers][arr[2].singularize.downcase.to_sym][:cost].each do |c|
+        cost[c[:type].to_sym] = arr[1].to_f * c[:num]
     end
 
     # get user
     user = mongo[:users].find(:discordId => event.message.author.id).first
 
     # does player have enough
-    $settings[:resourceTypes].each do |t|
-        if user[t.to_sym] < cost[t.to_sym]
-            event.respond "You do not have enough "+t+" to buy "+number_with_commas(arr[1].to_i).to_s+" "+arr[2].pluralize+" "+event.message.author.mention+"."
+    $settings[:resourceTypes].each do |resourceType|
+        if user[resourceType.to_sym] < cost[resourceType.to_sym]
+            event.respond "You need "+cost[resourceType.to_sym].round(2).to_s+" "+resourceType+" to buy "+number_with_commas(arr[1].to_i).to_s+" "+arr[2].pluralize+" "+event.message.author.mention+"."
             return
         end
     end
@@ -108,9 +120,9 @@ def command_hire(event, mongo)
     inc = {}
 
     # resources
-    $settings[:resourceTypes].each do |r|
-        if cost.key?(r.to_sym) && cost[r.to_sym] > 0
-            inc[r.to_sym] = cost[r.to_sym] * -1
+    $settings[:resourceTypes].each do |resourceType|
+        if cost.key?(resourceType.to_sym) && cost[resourceType.to_sym] > 0.0
+            inc[resourceType.to_sym] = cost[resourceType.to_sym] * -1.0
         end
     end
 

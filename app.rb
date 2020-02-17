@@ -4,6 +4,7 @@ require 'discordrb'
 
 require './settings.rb'
 require './commonFunctions.rb'
+require 'active_support/core_ext/string'
 
 require './commands/help.rb'
 require './commands/commands.rb'
@@ -55,7 +56,7 @@ if !isMarketValid
     $settings[:resourceTypes].each do |resourceType|
         mongo[:market].insert_one({
             :type => resourceType,
-            :value => 10
+            :value => 10.0
         })
     end
 end
@@ -66,7 +67,7 @@ bot.message(start_with: '%') do |event|
     # get function name from message
     cmd = event.message.content
     cmd.slice!(0)
-    cmd = cmd.partition(" ").first
+    cmd = cmd.partition(" ").first.downcase
     cmd = 'command_'+cmd
 
     # call function if it exists
@@ -89,7 +90,7 @@ while true do
 
         # call function if it exists
         if respond_to?("order_"+order[:type].to_s, :include_private)
-            send("order_"+order[:type].to_s, order, mongo)
+            send("order_"+order[:type].to_s, bot, order, mongo)
         end
 
         # delete order
@@ -98,19 +99,8 @@ while true do
 
     # 10 minutes
     if loopNum % 10 == 0
-
-        # give resources
-        mongo[:farms].find().each do |farm|
-            mongo[:users].update_one({:discordId => farm[:discordId]}, {
-                    "$inc" => {
-                        :wood => farm[:wood],
-                        :ore => farm[:ore],
-                        :wool => farm[:wool],
-                        :clay => farm[:clay]
-                    }
-                })
-        end
-
+        giveResources(mongo)
+        feedArmies(mongo)
         updateNetworth(mongo)
     end
 
@@ -134,4 +124,85 @@ while true do
     loopNum += 1
 
     sleep sleepFor
+end
+
+
+
+def giveResources(mongo)
+    mongo[:farms].find().each do |farm|
+        inc = {}
+
+        $settings[:resourceTypes].each do |resourceType|
+            inc[resourceType.to_sym] = farm[resourceType.to_sym]
+        end
+
+        mongo[:users].update_one({:discordId => farm[:discordId]}, {"$inc" => inc})
+    end
+end
+
+
+
+def feedArmies(mongo)
+    mongo[:users].find().each do |user|
+
+        inc = {}
+
+        # zero out
+        $settings[:soldierTypes].each do |soldierType|
+            inc [soldierType.pluralize.to_sym] = 0
+        end
+
+        # zero out
+        $settings[:resourceTypes].each do |resourceType|
+            inc[resourceType.to_sym] = 0.0
+        end
+
+
+        $settings[:soldierTypes].each do |soldierType|
+            cost = {}
+
+            # zero out
+            $settings[:resourceTypes].each do |resourceType|
+                cost[resourceType.to_sym] = 0.0
+            end
+
+            # get cost
+            $settings[:soldiers][soldierType.to_sym][:consumes].each do |consume|
+                cost[consume[:type].to_sym] += consume[:num] * user[soldierType.pluralize.to_sym].to_f
+            end
+
+            # have enough?
+            enough = true
+            $settings[:resourceTypes].each do |resourceType|
+                if cost[resourceType.to_sym] > user[resourceType.to_sym]
+                    enough = false
+                end
+            end
+
+            if enough
+                # remove from user
+                $settings[:resourceTypes].each do |resourceType|
+                    inc[resourceType.to_sym] += cost[resourceType.to_sym] * -1.0
+                end
+            else
+                # destroy some soldiers
+
+                # get lowest percentage
+                percentage = 1.0
+                $settings[:resourceTypes].each do |resourceType|
+                    p = user[resourceType.to_sym] / cost[resourceType.to_sym]
+                    if p < percentage
+                        percentage = p
+                    end
+                end
+
+                # clamp
+                killPercentage = [1.0 - percentage, 0.01].max
+
+                inc[soldierType.pluralize.to_sym] = (user[soldierType.pluralize.to_sym].to_f * killPercentage).round.to_i * -1
+            end
+        end
+
+        mongo[:users].update_one({:_id => user[:_id]}, {"$inc" => inc})
+    end
 end

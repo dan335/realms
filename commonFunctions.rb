@@ -35,11 +35,11 @@ end
 
 
 def calculateNetworthForUser(markets, user)
-    net = user[:gold].to_i
+    net = user[:gold]
 
     # resources
-    $settings[:resourceTypes].each do |res|
-        gold = resourceToGold(markets, res, user[res.to_sym].to_i)
+    $settings[:resourceTypes].each do |resourceType|
+        gold = resourceToGold(markets, resourceType, user[resourceType.to_sym].to_f)
 
         if gold != nil
             net += gold
@@ -47,12 +47,12 @@ def calculateNetworthForUser(markets, user)
     end
 
     # soldiers
-    $settings[:soldierTypes].each do |st|
-        $settings[:soldiers][st.to_sym][:cost].each do |c|
-            gold = resourceToGold(markets, c[:type], c[:num])
+    $settings[:soldierTypes].each do |soldierType|
+        $settings[:soldiers][soldierType.to_sym][:cost].each do |cost|
+            gold = resourceToGold(markets, cost[:type], cost[:num])
 
             if gold != nil
-                net += user[st.pluralize.to_sym].to_i * gold
+                net += user[soldierType.pluralize.to_sym].to_i * gold
             end
         end
     end
@@ -83,10 +83,10 @@ def updateMarketPrice(mongo, resourceObject, type, quantity, isBuy)
     value = resourceObject[:value]
 
     if !isBuy
-        quantity *= -1
+        quantity *= -1.0
     end
 
-    value = value * (($settings[:marketIncrement] + 1) ** quantity)
+    value = value * (($settings[:marketIncrement] + 1.0) ** quantity)
 
     mongo[:market].update_one({:_id => resourceObject[:_id]}, {"$set" => {value:value}})
 end
@@ -108,13 +108,12 @@ end
 
 
 def totalOfBuy(marketValue, quantity)
-    marketValue * (1.0 + $settings[:marketTax]) / $settings[:marketIncrement] * ((($settings[:marketIncrement] + 1.0) ** quantity) - 1.0)
+    marketValue * (1.0 + $settings[:marketTax]) / $settings[:marketIncrement] * ((($settings[:marketIncrement] + 1.0) ** quantity.to_f) - 1.0)
 end
 
 
 def sendPM(bot, channelId, message)
   begin
-    #Discordrb::API::Channel.create_message("Bot "+ENV['DISCORD_TOKEN'], channelId, message)
     channel = bot.channel(channelId)
     channel.send_message(message)
   rescue Exception => error
