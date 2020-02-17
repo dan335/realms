@@ -113,7 +113,11 @@ end
 
 
 def sendPM(bot, channelId, message)
+  begin
     #Discordrb::API::Channel.create_message("Bot "+ENV['DISCORD_TOKEN'], channelId, message)
     channel = bot.channel(channelId)
     channel.send_message(message)
+  rescue RestClient::Forbidden => error
+    puts "Bot received an error 403 from Discord"
+  end
 end
