@@ -158,7 +158,7 @@ def returnToRealm(bot, mongo, army)
       inc[:gold] = army[:winnings][:gold].to_f
 
       $settings[:resourceTypes].each do |resourceType|
-          inc[resourceType.to_sym] = army[:winnings][resourceType.to_sym].to_
+          inc[resourceType.to_sym] = army[:winnings][resourceType.to_sym].to_f
       end
     end
 
