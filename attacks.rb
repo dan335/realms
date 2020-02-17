@@ -240,15 +240,12 @@ end
 
 
 def getPowerToLose(attackingArmy, defendingArmy)
-  # find power to lose
   if attackingArmy[:isWinner]
-      attackingArmy[:powerToLose] = $settings[:battlePowerLostPerBattle] + ((attackingArmy[:finalPower] + defendingArmy[:finalPower]) / 500.0)
-      attackingArmy[:powerToLose] = [attackingArmy[:powerToLose], defendingArmy[:finalPower]].min * $settings[:battlePowerLostWinnerRatio]
-      defendingArmy[:powerToLose] = $settings[:battlePowerLostPerBattle] + ((attackingArmy[:finalPower] + defendingArmy[:finalPower]) / 500.0)
+      attackingArmy[:powerToLose] = defendingArmy[:totalPower] * 0.1
+      defendingArmy[:powerToLose] = defendingArmy[:totalPower] * 0.1
   else
-      defendingArmy[:powerToLose] = $settings[:battlePowerLostPerBattle] + ((defendingArmy[:finalPower] + attackingArmy[:finalPower]) / 500.0)
-      defendingArmy[:powerToLose] = [defendingArmy[:powerToLose], attackingArmy[:finalPower]].min * $settings[:battlePowerLostWinnerRatio]
-      attackingArmy[:powerToLose] = $settings[:battlePowerLostPerBattle] + ((defendingArmy[:finalPower] + attackingArmy[:finalPower]) / 500.0)
+      attackingArmy[:powerToLose] = attackingArmy[:totalPower] * 0.5
+      defendingArmy[:powerToLose] = [attackingArmy[:totalPower] * 0.05, defendingArmy[:totalPower] * 0.05].min
   end
 end
 
