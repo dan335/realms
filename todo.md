@@ -11,6 +11,7 @@
 ## ideas
 
 - need a way to win game
+- population, happiness and taxes.  another source of income
 
 
 ## done
