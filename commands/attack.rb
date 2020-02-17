@@ -135,6 +135,10 @@ def command_attack(bot, event, mongo)
 
     # spit out message
     event.respond "Your army is on it's way "+event.message.author.mention+"."
+
+    # send message to defender
+    message = user[:display_name]+"'s army is headed towards your realm.  Use **%realm** to see how big it is."
+    sendPM(bot, otherUser[:pmChannelId], message)
 end
 
 
