@@ -107,7 +107,7 @@ def returnToRealm(bot, mongo, army)
     str += "__Soldiers:__ "
     $settings[:soldierTypes].each do |soldierType|
       if army[soldierType.pluralize.to_sym].to_i > 0
-        str += army[soldierType.pluralize.to_sym].to_i.to_s+ " "+soldierType.pluralize+"  "
+        str += number_with_commas(army[soldierType.pluralize.to_sym].to_i).to_s+ " "+soldierType.pluralize+"  "
       end
     end
     str += "\n"
@@ -116,7 +116,7 @@ def returnToRealm(bot, mongo, army)
     str += army[:winnings][:gold].round.to_s+" gold  "
     $settings[:resourceTypes].each do |resourceType|
         if army[:winnings][resourceType.to_sym] > 0
-            str += army[:winnings][resourceType.to_sym].to_s+" "+resourceType+"  "
+            str += number_with_commas(army[:winnings][resourceType.to_sym]).to_s+" "+resourceType+"  "
         end
     end
     str += "\n"
@@ -332,7 +332,7 @@ def createReport(army, isAttacker, winnings)
 
     $settings[:soldierTypes].each do |soldierType|
         if army[soldierType.pluralize.to_sym].to_i > 0
-            str += army[soldierType.pluralize.to_sym].to_i.to_s+ " "+soldierType.pluralize+" "
+            str += number_with_commas(army[soldierType.pluralize.to_sym]).to_i.to_s+ " "+soldierType.pluralize+" "
         end
     end
     str += "\n"
@@ -340,7 +340,7 @@ def createReport(army, isAttacker, winnings)
     str += "__Power:__ "
     $settings[:soldierTypes].each do |soldierType|
         if army[:power][soldierType.to_sym].to_i > 0
-            str += soldierType.pluralize+": "+army[:power][soldierType.to_sym].round(1).to_f.to_s+"  "
+            str += soldierType.pluralize+": "+number_with_commas(army[:power][soldierType.to_sym].round(1).to_f).to_s+"  "
         end
     end
     str += "\n"
@@ -349,7 +349,7 @@ def createReport(army, isAttacker, winnings)
     if army[:totalBonus] > 0
         $settings[:soldierTypes].each do |soldierType|
             if army[:bonus][soldierType.to_sym].to_i > 0
-                str += soldierType.pluralize+": "+army[:bonus][soldierType.to_sym].round(1).to_f.to_s+"  "
+                str += soldierType.pluralize+": "+number_with_commas(army[:bonus][soldierType.to_sym].round(1).to_f).to_s+"  "
             end
         end
     else
@@ -357,7 +357,7 @@ def createReport(army, isAttacker, winnings)
     end
     str += "\n"
 
-    str += army[:totalPower].round(1).to_s+" power + "+army[:totalBonus].round(1).to_s+" bonus = "+army[:finalPower].round(1).to_s+" final power\n"
+    str += number_with_commas(army[:totalPower].round(1)).to_s+" power + "+number_with_commas(army[:totalBonus].round(1)).to_s+" bonus = "+number_with_commas(army[:finalPower].round(1)).to_s+" final power\n"
     if army[:isWinner]
         str += "**Won Battle**\n"
     else
@@ -371,20 +371,21 @@ def createReport(army, isAttacker, winnings)
             str += "Lost "
             $settings[:soldierTypes].each do |soldierType|
                 if army[:loses][soldierType.to_sym].to_i > 0
-                    str += army[:loses][soldierType.to_sym].to_i.to_s+ " "+soldierType.pluralize+" "
+                    str += number_with_commas(army[:loses][soldierType.to_sym].to_i).to_s+ " "+soldierType.pluralize+" "
                 end
             end
         end
-
-        str += "\n"
+    else
+      str += "Lost no soldiers."
     end
+    str += "\n"
 
     if isAttacker && army[:isWinner]
         str += "__Stole:__ "
         str += winnings[:gold].round.to_s+" gold  "
         $settings[:resourceTypes].each do |resourceType|
             if winnings[resourceType.to_sym] > 0
-                str += winnings[resourceType.to_sym].to_i.to_s+" "+resourceType+"  "
+                str += number_with_commas(winnings[resourceType.to_sym].to_i).to_s+" "+resourceType+"  "
             end
         end
         str += "\n"
