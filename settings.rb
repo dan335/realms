@@ -27,7 +27,7 @@ $settings = {
             :bonusAgainst => [],
             :attack => 5.0,
             :defense => 5.0,
-            :speed => 5.0
+            :speed => 8.0
         },
         :archer => {
             :name => "Archer",
@@ -40,7 +40,7 @@ $settings = {
             ],
             :attack => 3.0,
             :defense => 7.0,
-            :speed => 5.0
+            :speed => 8.0
         },
         :pikeman => {
             :name => "Pikeman",
@@ -52,7 +52,7 @@ $settings = {
             ],
             :attack => 1.0,
             :defense => 10.0,
-            :speed => 3.0
+            :speed => 5.0
         },
         :knight => {
             :name => "Knight",
