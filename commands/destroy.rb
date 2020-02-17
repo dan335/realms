@@ -1,7 +1,7 @@
 require './commonFunctions.rb'
 require 'active_support/core_ext/string'
 
-def command_destroy(event, mongo)
+def command_destroy(bot, event, mongo)
 
     # make sure user exists
     if !isUserPlaying(mongo, event.message.author.id)

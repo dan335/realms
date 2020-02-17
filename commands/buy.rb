@@ -1,7 +1,7 @@
 require './commonFunctions.rb'
 
 
-def command_buy(event, mongo)
+def command_buy(bot, event, mongo)
     # make sure user exists
     if !isUserPlaying(mongo, event.message.author.id)
         event.respond "I can't find your realm " + event.message.author.mention + ".  Use __%joinGame__ to create one."
@@ -61,5 +61,3 @@ end
 def output_buy_error_message(event)
     event.respond "I don't understand that command "+event.message.author.mention+".  Try something like **%buy 3 wood**."
 end
-
-

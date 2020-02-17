@@ -1,7 +1,7 @@
 require './commonFunctions.rb'
 
 
-def command_hire(event, mongo)
+def command_hire(bot, event, mongo)
 
     # make sure user exists
     if !isUserPlaying(mongo, event.message.author.id)
@@ -16,7 +16,7 @@ def command_hire(event, mongo)
 
     # print help message
     if arr.length == 1
-        
+
         str = "-] HIRE SOLDIERS [-\n\n"
 
         str += "example: **%hire 2 footman**\n\n"
@@ -137,7 +137,7 @@ def command_hire(event, mongo)
     else
         event.respond event.message.author.mention+" hired "+number_with_commas(arr[1].to_i).to_s+" "+arr[2].pluralize+"."
     end
-    
+
     updateNetworthFor(mongo, event.message.author.id)
 end
 

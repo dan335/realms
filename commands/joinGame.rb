@@ -2,7 +2,7 @@ require './commonFunctions.rb'
 require 'active_support/core_ext/string'
 
 
-def command_joingame(event, mongo)
+def command_joingame(bot, event, mongo)
 
     if !event.server
         event.respond "Enter **%joinGame** in a guild channel not a private message to join the game."

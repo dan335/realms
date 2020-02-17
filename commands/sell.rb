@@ -1,7 +1,7 @@
 require './commonFunctions.rb'
 
 
-def command_sell(event, mongo)
+def command_sell(bot, event, mongo)
 
     # make sure user exists
     if !isUserPlaying(mongo, event.message.author.id)
@@ -62,5 +62,3 @@ end
 def output_sell_error_message(event)
     event.respond "I don't understand that command "+event.message.author.mention+".  Try something like **%sell 3 wood**."
 end
-
-

@@ -2,7 +2,7 @@ require './commonFunctions.rb'
 require 'active_support/core_ext/string'
 
 
-def command_realm(event, mongo)
+def command_realm(bot, event, mongo)
 
     # get data
     user = mongo[:users].find(:discordId => event.message.author.id).first

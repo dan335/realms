@@ -94,28 +94,38 @@ def doAttack(bot, mongo, army)
     end
     durationSeconds = $settings[:armyTravelDistance] / slowest.to_f * 60.0
 
-    returningArmy = {
-      :discordId => attackingArmy[:discordId],
-      :userId => attackingArmy[:userId],
-      :createdAt => Time.now,
-      :arriveAt => Time.now + durationSeconds,
-      :isAttacking => false,    # false if army is returning from battle
-      :winnings => winnings
-    }
-
-    $settings[:soldierTypes].each do |soldierType|
-      returningArmy[soldierType.pluralize.to_sym] = attackingArmy[soldierType.pluralize.to_sym]
-    end
-
-    # create returning army
-    mongo[:armies].insert_one(returningArmy)
+    sendArmyToRealm(mongo, attackingArmy, winnings, durationSeconds)
 end
 
 
+
+
+# used when attack is over and in %cancelattack
+def sendArmyToRealm(mongo, army, winnings, durationSeconds)
+  returningArmy = {
+    :discordId => army[:discordId],
+    :userId => army[:userId],
+    :createdAt => Time.now,
+    :arriveAt => Time.now + durationSeconds,
+    :isAttacking => false,    # false if army is returning from battle
+    :winnings => winnings
+  }
+
+  $settings[:soldierTypes].each do |soldierType|
+    returningArmy[soldierType.pluralize.to_sym] = army[soldierType.pluralize.to_sym]
+  end
+
+  # create returning army
+  mongo[:armies].insert_one(returningArmy)
+end
+
+
+
+# army has arrived at realm.  insert into realm
 def returnToRealm(bot, mongo, army)
     user = mongo[:users].find(:_id => army[:userId]).first
 
-    str = "Your army returned from battle.\n\n"
+    str = "**Your army returned from battle.**\n"
 
     str += "__Soldiers:__ "
     $settings[:soldierTypes].each do |soldierType|
@@ -125,14 +135,16 @@ def returnToRealm(bot, mongo, army)
     end
     str += "\n"
 
-    str += "__Stole:__ "
-    str += army[:winnings][:gold].round.to_s+" gold  "
-    $settings[:resourceTypes].each do |resourceType|
-        if army[:winnings][resourceType.to_sym] > 0.0
-            str += number_with_commas(army[:winnings][resourceType.to_sym].round(1)).to_s+" "+resourceType+"  "
-        end
+    if army[:winnings]  # winnings can be nil
+      str += "__Stole:__ "
+      str += army[:winnings][:gold].round.to_s+" gold  "
+      $settings[:resourceTypes].each do |resourceType|
+          if army[:winnings][resourceType.to_sym] > 0.0
+              str += number_with_commas(army[:winnings][resourceType.to_sym].round(1)).to_s+" "+resourceType+"  "
+          end
+      end
+      str += "\n"
     end
-    str += "\n"
 
     sendPM(bot, user[:pmChannelId], str)
 
@@ -142,10 +154,12 @@ def returnToRealm(bot, mongo, army)
       inc[soldierType.pluralize.to_sym] = army[soldierType.pluralize.to_sym].to_i
     end
 
-    inc[:gold] = army[:winnings][:gold].to_f
+    if army[:winnings]
+      inc[:gold] = army[:winnings][:gold].to_f
 
-    $settings[:resourceTypes].each do |resourceType|
-        inc[resourceType.to_sym] = army[:winnings][resourceType.to_sym].to_f
+      $settings[:resourceTypes].each do |resourceType|
+          inc[resourceType.to_sym] = army[:winnings][resourceType.to_sym].to_
+      end
     end
 
     mongo[:users].update_one({:_id => army[:userId]}, {'$inc' => inc})

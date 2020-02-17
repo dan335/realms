@@ -37,14 +37,14 @@ validateMarket(mongo)
 bot.message(start_with: '%') do |event|
 
     # get function name from message
-    cmd = event.message.content
+    cmd = event.message.content.downcase
     cmd.slice!(0)
-    cmd = cmd.partition(" ").first.downcase
+    cmd = cmd.partition(" ").first
     cmd = 'command_'+cmd
 
     # call function if it exists
     if respond_to?(cmd, :include_private)
-        send(cmd, event, mongo)
+        send(cmd, bot, event, mongo)
     end
 
 end

@@ -1,4 +1,4 @@
-def command_about(event, mongo)
+def command_about(bot, event, mongo)
     str = "-] **ABOUT REALMS** [-\n"
     str += "\n"
     str += "Add REALMS to your Discord channel with <https://discordapp.com/oauth2/authorize?client_id=677394191013380116&&scope=bot>\n"

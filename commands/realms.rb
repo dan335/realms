@@ -1,7 +1,7 @@
 require './commonFunctions.rb'
 
 
-def command_realms(event, mongo)
+def command_realms(bot, event, mongo)
     str = "-] **REALMS** [-  "
 
     # find page number
@@ -20,7 +20,7 @@ def command_realms(event, mongo)
 
         page = t - 1
     end
-    
+
     # find number of pages
     numUsers = mongo[:users].find().count
 

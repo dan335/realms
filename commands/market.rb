@@ -1,7 +1,7 @@
 require './commonFunctions.rb'
 
 
-def command_market(event, mongo)
+def command_market(bot, event, mongo)
     str = "-] **REALMS MARKET** [-\n"
     str += "*"+($settings[:marketTax] * 100.0).to_s+"% tax when buying*\n\n"
 

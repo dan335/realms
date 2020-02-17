@@ -1,7 +1,7 @@
 require './commonFunctions.rb'
 
 
-def command_attack(event, mongo)
+def command_attack(bot, event, mongo)
 
     # make sure user exists
     if !isUserPlaying(mongo, event.message.author.id)
