@@ -7,6 +7,7 @@ def command_help(bot, event, mongo)
     str += "\n"
     str += "**%realm** - View your realm.\n"
     str += "**%realms <page number>** - View all of the realms in the land.  Page number is optional\n"
+    str += "**%build** - Build help.\n"
     str += "**%build farm** - Build a farm.\n"
     str += "**%destroy farm 1** - Destroy farm number 1.\n"
     str += "**%hire** - Hiring help.\n"

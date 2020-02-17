@@ -1,3 +1,25 @@
+require './orders/buildFarm.rb'
+require './orders/buildShrine.rb'
+
+
+# called when someone wins the game
+def resetGame(mongo)
+
+    # drop buildings
+    $settings[:buildingTypes].each do |buildingType|
+        mongo[buildingType.pluralize.to_sym].drop()
+    end
+
+    mongo[:market].drop()
+    mongo[:armies].drop()
+    mongo[:orders].drop()
+    mongo[:users].drop()
+
+    validateMarket(mongo)
+end
+
+
+
 def isUserPlaying(mongo, discordId)
     if mongo[:users].find(:discordId => discordId).count == 0
         return false

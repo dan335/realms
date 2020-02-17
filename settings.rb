@@ -11,8 +11,26 @@ $settings = {
         "grain"
     ],
     :buildingTypes => [
-        "farm"
+        "farm",
+        "shrine"
     ],
+    :buildings => {
+      :farm => {
+        :cost => [],
+        :max => 5,
+        :description => "Farms produce resources every 10 minutes.",
+        :buildSeconds => 60 * 10,
+        :maxResourcesPerInterval => 10
+      },
+      :shrine => {
+        :cost => [
+          {:type => "gold", :num => 100000},
+        ],
+        :max => 5,
+        :description => "A large structure for people to gather.  Build 5 to win the game.",
+        :buildSeconds => 60 * 60 * 6
+      }
+    },
     :soldierTypes => [
         "footman",
         "archer",

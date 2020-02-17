@@ -8,6 +8,7 @@ def command_leavegame(bot, event, mongo)
         users.delete_one(:discordId => event.message.author.id)
         mongo[:orders].delete_many(:discordId => event.message.author.id)
         mongo[:farms].delete_many(:discordId => event.message.author.id)
+        mongo[:shrines].delete_many(:discordId => event.message.author.id)
         mongo[:armies].delete_many(:discordId => event.message.author.id)
 
         event.respond event.message.author.mention + "'s realm has been destroyed."

@@ -16,6 +16,7 @@ def command_realm(bot, event, mongo)
     orders = mongo[:orders].find(:discordId => event.message.author.id).sort(:createdAt => 1)
     armies = mongo[:armies].find(:discordId => event.message.author.id).sort(:createdAt => 1)
     attackers = mongo[:armies].find({:otherDiscordId => event.message.author.id, :isAttacking => true}).sort(:createdAt => 1)
+    numShrines = mongo[:shrines].find(:discordId => event.message.author.id).count
 
     str = "-] **"+user[:display_name]+"'s REALM** [-\n"
 
@@ -25,6 +26,10 @@ def command_realm(bot, event, mongo)
         str += resourceType.camelize+": "+number_with_commas(user[resourceType.to_sym].to_f.round(2)).to_s+"  "
     end
     str += "\n"
+
+    str += "Shrines: "+numShrines.to_s
+
+    str += "\n\n"
 
     #soldiers
     $settings[:soldierTypes].each do |soldierType|

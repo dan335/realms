@@ -22,8 +22,6 @@ require './commands/market.rb'
 require './commands/buy.rb'
 require './commands/sell.rb'
 
-require './orders/buildFarm.rb'
-
 require './attacks.rb'
 
 Mongo::Logger.logger.level = Logger::FATAL
@@ -52,6 +50,11 @@ mongo[:orders].indexes.create_many([
 mongo[:orders].indexes.create_one({:finishedAt => 1})
 mongo[:farms].indexes.create_one({:discordId => 1})
 mongo[:farms].indexes.create_many([
+  {:key => {:discordId => 1}},
+  {:key => {:createdAt => 1}}
+])
+mongo[:shrines].indexes.create_one({:discordId => 1})
+mongo[:shrines].indexes.create_many([
   {:key => {:discordId => 1}},
   {:key => {:createdAt => 1}}
 ])
