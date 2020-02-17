@@ -119,6 +119,6 @@ def sendPM(bot, channelId, message)
     channel.send_message(message)
   rescue Exception => error
     puts "Bot received an error 403 from Discord"
-    puts error.response.body
+    puts error
   end
 end
