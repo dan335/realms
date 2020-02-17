@@ -82,7 +82,7 @@ $settings = {
     :perPage => 15,
     :marketIncrement => 0.00003,    # how much the market goes up or down
     :marketTax => 0.05,
-    :battleBonusMultiplier => 1.5,
+    :battleBonusMultiplier => 2.0,
     :battleWinnings => 0.05,    # how much does winner of battle get from loser
     :armyTravelDistance => 1.0#200.0      # higher number makes army travel times longer
 }

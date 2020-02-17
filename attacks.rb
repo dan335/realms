@@ -202,8 +202,17 @@ def getBonus(attackingArmy, defendingArmy)
 
   $settings[:soldierTypes].each do |soldierType|
       $settings[:soldiers][soldierType.to_sym][:bonusAgainst].each do |bonusAgainst|
-          attackBonus = attackingArmy[soldierType.pluralize.to_sym].to_f * defendingArmy[:percentage][bonusAgainst.to_sym] * $settings[:battleBonusMultiplier]
-          defendBonus = defendingArmy[soldierType.pluralize.to_sym].to_f * attackingArmy[:percentage][bonusAgainst.to_sym] * $settings[:battleBonusMultiplier]
+          if defendingArmy[bonusAgainst.pluralize.to_sym] == 0
+            attackBonus = 0.0
+          else
+            attackBonus = attackingArmy[soldierType.pluralize.to_sym].to_f * [attackingArmy[soldierType.pluralize.to_sym].to_f / defendingArmy[bonusAgainst.pluralize.to_sym].to_f, $settings[:battleBonusMultiplier]].min
+          end
+
+          if attackingArmy[bonusAgainst.pluralize.to_sym] == 0
+            defendBonus = 0.0
+          else
+            defendBonus = defendingArmy[soldierType.pluralize.to_sym].to_f * [defendingArmy[soldierType.pluralize.to_sym].to_f / attackingArmy[bonusAgainst.pluralize.to_sym].to_f, $settings[:battleBonusMultiplier]].min
+          end
 
           attackingArmy[:bonus][soldierType.to_sym] += attackBonus
           defendingArmy[:bonus][soldierType.to_sym] += defendBonus
@@ -242,10 +251,10 @@ end
 def getPowerToLose(attackingArmy, defendingArmy)
   if attackingArmy[:isWinner]
       attackingArmy[:powerToLose] = defendingArmy[:totalPower] * 0.1
-      defendingArmy[:powerToLose] = defendingArmy[:totalPower] * 0.1
+      defendingArmy[:powerToLose] = defendingArmy[:totalPower] * 0.01
   else
       attackingArmy[:powerToLose] = attackingArmy[:totalPower] * 0.5
-      defendingArmy[:powerToLose] = [attackingArmy[:totalPower] * 0.05, defendingArmy[:totalPower] * 0.05].min
+      defendingArmy[:powerToLose] = [attackingArmy[:totalPower] * 0.01, defendingArmy[:totalPower] * 0.01].min
   end
 end
 
