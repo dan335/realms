@@ -3,11 +3,9 @@
 - allow short soldier names
 - finish cancel attack
 - send gold to someone
-- bug: loser always says lost all soldiers?
 - send DM when someone attacks you
 - change all commands to lowercase and allow any case
-- bug: %realm message is too long if you send lots of armies
-- limit number of amries per player
+- fire soldiers
 
 
 ## ideas
@@ -17,6 +15,9 @@
 
 ## done
 
+- bug: %realm message is too long if you send lots of armies
+- limit number of amries per player
+- bug: loser always says lost all soldiers?
 - allow uppercase soldier names when hiring
 - show incoming armies
 - icon

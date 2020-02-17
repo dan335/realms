@@ -31,7 +31,43 @@ def command_realm(event, mongo)
         str += $settings[:soldiers][soldierType.to_sym][:name].pluralize+": "
         str += number_with_commas(user[soldierType.pluralize.to_sym]).to_s+"  "
     end
-    str += "\n\n"
+    str += "\n"
+
+    # soldiers consuming
+    # get amounts
+    cost = []
+    isConsuming = false
+    $settings[:soldierTypes].each do |soldierType|
+        $settings[:soldiers][soldierType.to_sym][:consumes].each do |consume|
+            if user[soldierType.pluralize.to_sym] > 0
+                isConsuming = true
+                index = cost.find_index do |i|
+                    i[:type] == consume[:type]
+                end
+                if index
+                    cost[index][:num] += consume[:num] * user[soldierType.pluralize.to_sym].to_f
+                else
+                    cost << {:type => consume[:type], :num => consume[:num] * user[soldierType.pluralize.to_sym].to_f}
+                end
+            end
+        end
+    end
+    # output
+    if isConsuming
+        str += "Soldiers consuming "
+        counter = 1
+        cost.each do |c|
+            str += c[:num].round(2).to_s+" "+c[:type]
+            if counter < cost.length
+                str += ","
+            end
+            str += " "
+            counter += 1
+        end
+        str += "every 10 minutes.\n"
+    end
+
+    str += "\n"
 
     # farms
     if farms.count > 0

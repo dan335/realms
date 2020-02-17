@@ -43,6 +43,9 @@ def command_joingame(event, mongo)
         user[soldierType.pluralize.to_sym] = 0
     end
 
+    user[:grain] = 5.0
+    user[:pikemen] = 5
+
     users.insert_one(user)
 
     event.respond "Welcome to REALMS " + event.message.author.mention+". Type **%realm** to view your realm."

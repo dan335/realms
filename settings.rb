@@ -1,6 +1,7 @@
 $settings = {
     :maxFarms => 5,
-    :farmBuildSeconds => 60,#*10,
+    :maxArmiesPerPlayer => 8,
+    :farmBuildSeconds => 60*10,
     :farmMaxResourcesPerInterval => 10,
     :resourceTypes => [
         "wood",
@@ -31,7 +32,7 @@ $settings = {
             :defense => 6.0,
             :speed => 8.0,
             :consumes => [
-                {:type => "grain", :num => 0.01},
+                {:type => "grain", :num => 0.05},
             ]
         },
         :archer => {
@@ -48,7 +49,7 @@ $settings = {
             :defense => 7.0,
             :speed => 8.0,
             :consumes => [
-                {:type => "grain", :num => 0.01}
+                {:type => "grain", :num => 0.05}
             ]
         },
         :pikeman => {
@@ -64,7 +65,7 @@ $settings = {
             :defense => 10.0,
             :speed => 5.0,
             :consumes => [
-                {:type => "grain", :num => 0.01}
+                {:type => "grain", :num => 0.05}
             ]
         },
         :knight => {
@@ -82,7 +83,7 @@ $settings = {
             :defense => 3.0,
             :speed => 20.0,
             :consumes => [
-                {:type => "grain", :num => 0.01}
+                {:type => "grain", :num => 0.05}
             ]
         },
         :catapult => {
@@ -96,7 +97,7 @@ $settings = {
             :defense => 0.0,
             :speed => 1.0,
             :consumes => [
-                {:type => "wood", :num => 0.01}
+                {:type => "wood", :num => 0.05}
             ]
         }
     },

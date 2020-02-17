@@ -2,6 +2,19 @@ require './commonFunctions.rb'
 require 'active_support/core_ext/string'
 
 
+# called every minute from app.rb
+def attackInterval(bot, mongo)
+    mongo[:armies].find({:arriveAt => {'$lte' => Time.now}}).each do |army|
+        if army[:isAttacking]
+            doAttack(bot, mongo, army)
+        else
+            returnToRealm(bot, mongo, army)
+        end
+        mongo[:armies].delete_one(:_id => army[:_id])
+    end
+end
+
+
 def doAttack(bot, mongo, army)
 
     user = mongo[:users].find(:_id => army[:userId]).first

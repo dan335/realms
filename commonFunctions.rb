@@ -121,3 +121,137 @@ def sendPM(bot, channelId, message)
     puts error
   end
 end
+
+
+def giveResources(mongo)
+    mongo[:farms].find().each do |farm|
+        inc = {}
+
+        $settings[:resourceTypes].each do |resourceType|
+            inc[resourceType.to_sym] = farm[resourceType.to_sym]
+        end
+
+        mongo[:users].update_one({:discordId => farm[:discordId]}, {"$inc" => inc})
+    end
+end
+
+
+
+def feedArmies(mongo)
+    mongo[:users].find().each do |user|
+
+        inc = {}
+
+        # zero out
+        $settings[:soldierTypes].each do |soldierType|
+            inc [soldierType.pluralize.to_sym] = 0
+        end
+
+        # zero out
+        $settings[:resourceTypes].each do |resourceType|
+            inc[resourceType.to_sym] = 0.0
+        end
+
+
+        $settings[:soldierTypes].each do |soldierType|
+            cost = {}
+
+            # zero out
+            $settings[:resourceTypes].each do |resourceType|
+                cost[resourceType.to_sym] = 0.0
+            end
+
+            # get cost
+            $settings[:soldiers][soldierType.to_sym][:consumes].each do |consume|
+                cost[consume[:type].to_sym] += consume[:num] * user[soldierType.pluralize.to_sym].to_f
+            end
+
+            # have enough?
+            enough = true
+            $settings[:resourceTypes].each do |resourceType|
+                if cost[resourceType.to_sym] > user[resourceType.to_sym]
+                    enough = false
+                end
+            end
+
+            if enough
+                # remove from user
+                $settings[:resourceTypes].each do |resourceType|
+                    inc[resourceType.to_sym] += cost[resourceType.to_sym] * -1.0
+                end
+            else
+                # destroy some soldiers
+
+                # get lowest percentage
+                percentage = 1.0
+                $settings[:resourceTypes].each do |resourceType|
+                    p = user[resourceType.to_sym] / cost[resourceType.to_sym]
+                    if p < percentage
+                        percentage = p
+                    end
+                end
+
+                # clamp
+                killPercentage = [1.0 - percentage, 0.01].max
+
+                inc[soldierType.pluralize.to_sym] = (user[soldierType.pluralize.to_sym].to_f * killPercentage).round.to_i * -1
+            end
+        end
+
+        mongo[:users].update_one({:_id => user[:_id]}, {"$inc" => inc})
+    end
+end
+
+
+
+# make sure market exists and create if it doesn't
+# runs when bot starts
+def validateMarket(mongo)
+    market = mongo[:market].find()
+
+    isMarketValid = true
+    $settings[:resourceTypes].each do |resourceType|
+        exists = false
+
+        market.each do |m|
+            if m[:type] == resourceType
+                exists = true
+            end
+        end
+
+        if !exists
+            isMarketValid = false
+        end
+    end
+
+    # create market if not valid
+    if !isMarketValid
+        mongo[:market].drop
+
+        $settings[:resourceTypes].each do |resourceType|
+            mongo[:market].insert_one({
+                :type => resourceType,
+                :value => 10.0
+            })
+        end
+    end
+end
+
+
+
+# get orders that need to run
+# things like farms that need to be built
+# called from app.rb every minute
+def ordersInterval(bot, mongo)
+    
+    mongo[:orders].find({:finishedAt => {'$lte' => Time.now}}).each do |order|
+
+        # call function if it exists
+        if respond_to?("order_"+order[:type].to_s, :include_private)
+            send("order_"+order[:type].to_s, bot, order, mongo)
+        end
+
+        # delete order
+        mongo[:orders].delete_one(:_id => order[:_id])
+    end
+end

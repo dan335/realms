@@ -9,6 +9,13 @@ def command_attack(event, mongo)
         return
     end
 
+    # limit number of armies
+    numArmies = mongo[:armies].find(:discordId => event.message.author.id).count
+    if numArmies >= $settings[:maxArmiesPerPlayer]
+        event.respond "You cannot create any more armies until one returns "+event.message.author.mention+".  "+$settings[:maxArmiesPerPlayer]+" armies max."
+        return
+    end
+
     msg = event.message.content
     msg.slice!(0)
     arr = msg.split
