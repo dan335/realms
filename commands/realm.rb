@@ -106,15 +106,13 @@ def command_realm(event, mongo)
             str += otherUser[:display_name]+" is attacking with "
 
             s = 0
-            army[:soldiers].each do |soldier|
-                str += number_with_commas(soldier[:num]).to_s+" "
-                str += soldier[:type].pluralize
-                if s < army[:soldiers].length - 1
-                    str += ",  "
-                else
-                    str += ".  "
-                end
+            $settings[:soldierTypes].each do |soldierType|
+              if army[soldierType.pluralize.to_sym] > 0
+                str += number_with_commas(army[soldierType.pluralize.to_sym]).to_s+" "
+                str += soldierType.pluralize
+                str += ",  "
                 s += 1
+              end
             end
 
             str += "Arrives in "+[((army[:arriveAt] - Time.now) / 60.0).round(1), 0.0].max.to_s+" minutes."

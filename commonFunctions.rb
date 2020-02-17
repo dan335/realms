@@ -112,6 +112,13 @@ def totalOfBuy(marketValue, quantity)
 end
 
 
-def sendPM(channelId, message)
-    Discordrb::API::Channel.create_message("Bot "+ENV['DISCORD_TOKEN'], channelId, message)
+def sendPM(bot, channelId, message)
+  begin
+    #Discordrb::API::Channel.create_message("Bot "+ENV['DISCORD_TOKEN'], channelId, message)
+    channel = bot.channel(channelId)
+    channel.send_message(message)
+  rescue Exception => error
+    puts "Bot received an error 403 from Discord"
+    puts error
+  end
 end
