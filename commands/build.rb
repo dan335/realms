@@ -60,7 +60,7 @@ def command_build(bot, event, mongo)
     end
 
     # check cost
-    if $settings[:buildings][type.singularize.to_sym][:cost].length
+    if $settings[:buildings][type.singularize.to_sym][:cost].length > 0
         # get user
         user = mongo[:users].find(:discordId => event.message.author.id).first
 

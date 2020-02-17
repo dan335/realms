@@ -9,13 +9,13 @@
 
 ## ideas
 
-- need a way to win game
 - population, happiness and taxes.  another source of income
 - honor.  stop people from attacking small realms
 
 
 ## done
 
+- shrines
 - mongo indexes
 - send DM when someone attacks you
 - cancel attack
