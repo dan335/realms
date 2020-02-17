@@ -15,6 +15,7 @@
 
 ## done
 
+- mongo indexes
 - send DM when someone attacks you
 - cancel attack
 - bug: %realm message is too long if you send lots of armies

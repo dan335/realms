@@ -31,6 +31,32 @@ Mongo::Logger.logger.level = Logger::FATAL
 bot = Discordrb::Bot.new token: ENV['DISCORD_TOKEN']
 mongo = Mongo::Client.new([ ENV['MONGO_URL'] ], :database => ENV['MONGO_DB'])
 
+mongo[:users].indexes.create_one({:discordId => 1}, unique: true )
+mongo[:users].indexes.create_one({:networth => -1})
+mongo[:armies].indexes.create_one({:arriveAt => 1})
+mongo[:armies].indexes.create_one({:discordId => 1})
+mongo[:armies].indexes.create_many([
+  {:key => {:discordId => 1}},
+  {:key => {:createdAt => 1}}
+])
+mongo[:armies].indexes.create_many([
+  {:key => {:discordId => 1}},
+  {:key => {:createdAt => 1}},
+  {:key => {:isAttacking => 1}}
+])
+mongo[:orders].indexes.create_one({:discordId => 1})
+mongo[:orders].indexes.create_many([
+  {:key => {:discordId => 1}},
+  {:key => {:type => 1}}
+])
+mongo[:orders].indexes.create_one({:finishedAt => 1})
+mongo[:farms].indexes.create_one({:discordId => 1})
+mongo[:farms].indexes.create_many([
+  {:key => {:discordId => 1}},
+  {:key => {:createdAt => 1}}
+])
+mongo[:market].indexes.create_one({:type => 1})
+
 validateMarket(mongo)
 
 # handle incoming messages

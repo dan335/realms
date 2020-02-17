@@ -243,7 +243,7 @@ end
 # things like farms that need to be built
 # called from app.rb every minute
 def ordersInterval(bot, mongo)
-    
+
     mongo[:orders].find({:finishedAt => {'$lte' => Time.now}}).each do |order|
 
         # call function if it exists
