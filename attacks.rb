@@ -2,7 +2,7 @@ require './commonFunctions.rb'
 require 'active_support/core_ext/string'
 
 
-def doAttack(mongo, army)
+def doAttack(bot, mongo, army)
 
     user = mongo[:users].find(:_id => army[:userId]).first
     attackingArmy = user.merge army
@@ -57,7 +57,7 @@ def doAttack(mongo, army)
     mongo[:users].update_one({_id: defendingArmy[:_id]}, {"$set": set, "$inc": inc})
     updateNetworthFor(mongo, defendingArmy[:discordId])
 
-    sendAttackReport(attackingArmy, defendingArmy, winnings)
+    sendAttackReport(bot, attackingArmy, defendingArmy, winnings)
 
     # check if army is dead
     if attackingArmy[:numLoses] == attackingArmy[:numSoldiers]
@@ -99,7 +99,7 @@ def doAttack(mongo, army)
 end
 
 
-def returnToRealm(mongo, army)
+def returnToRealm(bot, mongo, army)
     user = mongo[:users].find(:_id => army[:userId]).first
 
     str = "Your army returned from battle.\n\n"
@@ -121,7 +121,7 @@ def returnToRealm(mongo, army)
     end
     str += "\n"
 
-    sendPM(user[:pmChannelId], str)
+    sendPM(bot, user[:pmChannelId], str)
 
     # add army back to user
     inc = {}
@@ -301,7 +301,7 @@ end
 
 
 
-def sendAttackReport(attackingArmy, defendingArmy, winnings)
+def sendAttackReport(bot, attackingArmy, defendingArmy, winnings)
     str = "-] **ATTACK REPORT** [-\n\n"
 
     str += "__ATTACKING ARMY__\n"
@@ -310,8 +310,8 @@ def sendAttackReport(attackingArmy, defendingArmy, winnings)
     str += "__DEFENDING REALM__\n"
     str += createReport(defendingArmy, false, nil)
 
-    sendPM(attackingArmy[:pmChannelId], str)
-    sendPM(defendingArmy[:pmChannelId], str)
+    sendPM(bot, attackingArmy[:pmChannelId], str)
+    sendPM(bot, defendingArmy[:pmChannelId], str)
 end
 
 

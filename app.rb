@@ -117,9 +117,9 @@ while true do
     ## attacks
     mongo[:armies].find({:arriveAt => {'$lte' => Time.now}}).each do |army|
         if army[:isAttacking]
-            doAttack(mongo, army)
+            doAttack(bot, mongo, army)
         else
-            returnToRealm(mongo, army)
+            returnToRealm(bot, mongo, army)
         end
         mongo[:armies].delete_one(:_id => army[:_id])
     end

@@ -86,5 +86,5 @@ $settings = {
     :battlePowerLostPerBattle => 500.0,
     :battlePowerLostWinnerRatio => 0.4,
     :battleWinnings => 0.05,    # how much does winner of battle get from loser
-    :armyTravelDistance => 200.0      # higher number makes army travel times longer
+    :armyTravelDistance => 1.0#200.0      # higher number makes army travel times longer
 }

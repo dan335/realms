@@ -112,6 +112,8 @@ def totalOfBuy(marketValue, quantity)
 end
 
 
-def sendPM(channelId, message)
-    Discordrb::API::Channel.create_message("Bot "+ENV['DISCORD_TOKEN'], channelId, message)
+def sendPM(bot, channelId, message)
+    #Discordrb::API::Channel.create_message("Bot "+ENV['DISCORD_TOKEN'], channelId, message)
+    channel = bot.channel(channelId)
+    channel.send_message(message)
 end
