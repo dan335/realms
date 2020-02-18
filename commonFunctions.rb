@@ -207,9 +207,11 @@ def feedArmies(mongo)
                 # get lowest percentage
                 percentage = 1.0
                 $settings[:resourceTypes].each do |resourceType|
-                    p = user[resourceType.to_sym] / cost[resourceType.to_sym]
-                    if p < percentage
-                        percentage = p
+                    if cost[resourceType.to_sym] > 0.0
+                        p = user[resourceType.to_sym] / cost[resourceType.to_sym]
+                        if p < percentage
+                            percentage = p
+                        end
                     end
                 end
 
