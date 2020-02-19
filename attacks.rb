@@ -68,6 +68,7 @@ def doAttack(bot, mongo, army)
         set[soldierType.pluralize.to_sym] = defendingArmy[soldierType.pluralize.to_sym].to_i - defendingArmy[:loses][soldierType.to_sym]
     end
     mongo[:users].update_one({_id: defendingArmy[:_id]}, {"$set": set, "$inc": inc})
+    validateUser(mongo, defendingArmy[:discordId])
     updateNetworthFor(mongo, defendingArmy[:discordId])
 
     sendAttackReport(bot, attackingArmy, defendingArmy, winnings)
@@ -163,6 +164,7 @@ def returnToRealm(bot, mongo, army)
     end
 
     mongo[:users].update_one({:_id => army[:userId]}, {'$inc' => inc})
+    validateUser(mongo, army[:discordId])
 
     updateNetworthFor(mongo, user[:discordId])
 end
@@ -299,16 +301,16 @@ def getLoses(army)
     end
 
     # find which soldier is worth the least
-    smallestSoldierPower = 999999
+    smallestSoldierPower = 999999.0
     $settings[:soldierTypes].each do |soldierType|
-        if army[:finalPowerPerSoldier][soldierType.to_sym] > 0 && army[:finalPowerPerSoldier][soldierType.to_sym] < smallestSoldierPower
+        if army[:finalPowerPerSoldier][soldierType.to_sym] > 0.0 && army[:finalPowerPerSoldier][soldierType.to_sym] < smallestSoldierPower
             smallestSoldierPower = army[:finalPowerPerSoldier][soldierType.to_sym]
         end
     end
 
     # take away until powerToLose is less than smallestSoldierPower
     fails = 0
-    maxFails = $settings[:soldierTypes].length
+    maxFails = $settings[:soldierTypes].length * 2
     powerLeft = army[:powerToLose]
     numSoldiers = army[:numSoldiers]
 

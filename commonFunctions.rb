@@ -2,6 +2,37 @@ require './orders/buildFarm.rb'
 require './orders/buildShrine.rb'
 
 
+def validateUser(mongo, discordId)
+    user = mongo[:users].find(:discordId => discordId).first
+    if user
+        $settings[:soldierTypes].each do |soldierType|
+            if user[soldierType.pluralize.to_sym] < 0
+                puts "---] REALMS ERROR [---"
+                puts "Soldiers in user are negative"
+                puts user
+                puts caller.inspect
+            end
+        end
+
+        $settings[:resourceTypes].each do |resourceType|
+            if user[resourceType.to_sym] < 0.0
+                puts "---] REALMS ERROR [---"
+                puts "Resource in user is negative"
+                puts user
+                puts caller.inspect
+            end
+        end
+
+        if user[:gold] < 0.0
+            puts "---] REALMS ERROR [---"
+            puts "Gold in user is negative"
+            puts user
+            puts caller.inspect
+        end
+    end
+end
+
+
 # called when someone wins the game
 def resetGame(mongo)
 
@@ -52,6 +83,7 @@ def updateNetworthFor(mongo, discordId)
 
     if user
         mongo[:users].update_one({:_id => user[:_id]}, {'$set' => {:networth => calculateNetworthForUser(markets, user)}})
+        validateUser(mongo, user[:discordId])
     end
 end
 
@@ -154,6 +186,7 @@ def giveResources(mongo)
         end
 
         mongo[:users].update_one({:discordId => farm[:discordId]}, {"$inc" => inc})
+        validateUser(mongo, farm[:discordId])
     end
 end
 
@@ -225,6 +258,7 @@ def feedArmies(bot, mongo)
         end
 
         mongo[:users].update_one({:_id => user[:_id]}, {"$inc" => inc})
+        validateUser(mongo, user[:discordId])
     end
 end
 

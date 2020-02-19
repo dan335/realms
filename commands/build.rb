@@ -88,6 +88,7 @@ def command_build(bot, event, mongo)
             inc[cost[:type].to_sym] = cost[:num] * -1.0
         end
         mongo[:users].update_one({_id: user[:_id]}, {"$inc": inc})
+        validateUser(mongo, user[:discordId])
     end
 
     # create order to build farm in the future

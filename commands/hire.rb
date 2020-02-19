@@ -131,6 +131,7 @@ def command_hire(bot, event, mongo)
 
     # udpate db
     mongo[:users].update_one({_id: user[:_id]}, {"$inc" => inc})
+    validateUser(mongo, user[:discordId])
 
     if arr[1].to_i == 1
         event.respond event.message.author.mention+" hired "+number_with_commas(arr[1].to_i).to_s+" "+arr[2].singularize+"."
