@@ -24,7 +24,7 @@ def command_cancelattack(bot, event, mongo)
   num = arr[1].to_i
 
   # make sure it's a number
-  if num == 0
+  if num <= 0
     event.respond "I don't understand that command "+event.message.author.mention+".  Try something like __%cancelAttack 1__."
     return
   end

@@ -62,6 +62,15 @@ mongo[:market].indexes.create_one({:type => 1})
 
 validateMarket(mongo)
 
+mongo[:users].find().each do |user|
+  $settings[:soldierTypes].each do |soldierType|
+    if user[soldierType.pluralize.to_sym] < 0
+      mongo[:users].update_one({:_id => user[:_id]}, {"$set" => {soldierType.pluralize.to_sym => 0}})
+    end
+  end
+end
+
+
 # handle incoming messages
 bot.message(start_with: '%') do |event|
 
@@ -90,7 +99,7 @@ while true do
     # 10 minutes
     if loopNum % 10 == 0
         giveResources(mongo)
-        feedArmies(mongo)
+        feedArmies(bot, mongo)
         updateNetworth(mongo)
     end
 

@@ -20,7 +20,7 @@ def command_sell(bot, event, mongo)
     end
 
     # make sure number is a number
-    if arr[1].to_f == 0.0
+    if arr[1].to_f <= 0.0
         output_sell_error_message(event)
         return
     end

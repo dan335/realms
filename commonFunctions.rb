@@ -159,7 +159,7 @@ end
 
 
 
-def feedArmies(mongo)
+def feedArmies(bot, mongo)
     mongo[:users].find().each do |user|
 
         inc = {}
@@ -219,6 +219,8 @@ def feedArmies(mongo)
                 killPercentage = [1.0 - percentage, 0.01].max
 
                 inc[soldierType.pluralize.to_sym] = (user[soldierType.pluralize.to_sym].to_f * killPercentage).round.to_i * -1
+
+                sendPM(bot, user[:pmChannelId], "Your soldiers are dying from starvation.")
             end
         end
 

@@ -84,7 +84,7 @@ def command_hire(bot, event, mongo)
     end
 
     # make sure number is a number
-    if arr[1].to_i == 0
+    if arr[1].to_i <= 0
         output_error_message(event)
         return
     end

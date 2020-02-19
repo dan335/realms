@@ -57,10 +57,12 @@ def command_attack(bot, event, mongo)
     user = mongo[:users].find(:discordId => event.message.author.id).first
 
     # maker sure you're not attack yourself
-    # if user[:_id] == otherUser[:_id]
-    #     event.respond "Attacking yourself? "+event.message.author.mention
-    #     return
-    # end
+    if ENV['MODE'] == 'production'
+        if user[:_id] == otherUser[:_id]
+            event.respond "Stop attacking yourself "+event.message.author.mention+"?"
+            return
+        end
+    end
 
     # get soldiers
     army = {}
@@ -78,7 +80,7 @@ def command_attack(bot, event, mongo)
         end
 
         # make sure number is a number
-        if arr[i].to_i == 0
+        if arr[i].to_i <= 0
             output_attack_syntax_message(event)
             return
         end
