@@ -10,7 +10,7 @@
 ## ideas
 
 - population, happiness and taxes.  another source of income
-- honor.  stop people from attacking small realms
+- honor.  stop people from attacking small realms.  lowers happiness
 - record winner of game in db.  show with %winners
 
 

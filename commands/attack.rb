@@ -114,6 +114,35 @@ def command_attack(bot, event, mongo)
     end
     durationSeconds = $settings[:armyTravelDistance] / slowest.to_f * 60.0
 
+    # get resources to feed army
+    cost = {}
+    $settings[:resourceTypes].each do |resourceType|
+        cost[resourceType.to_sym] = 0.0
+    end
+    $settings[:soldierTypes].each do |soldierType|
+        $settings[:soldiers][soldierType.to_sym][:consumes].each do |c|
+            cost[c[:type].to_sym] += c[:num] * army[soldierType.pluralize.to_sym].to_f * durationSeconds / (60 * 10)
+        end
+    end
+
+    # does user have enough resources to feed army
+    enough = true
+    $settings[:resourceTypes].each do |resourceType|
+        if user[resourceType.to_sym] < cost[resourceType.to_sym]
+            enough = false
+        end
+    end
+    if !enough
+        str = "You do not have enough resources to feed this army while it travels "+event.message.author.mention+".  Requires"
+        $settings[:resourceTypes].each do |resourceType|
+            if cost[resourceType.to_sym] > 0.0
+                str += " "+cost[resourceType.to_sym].to_s+" "+resourceType
+            end
+        end
+        event.respond str
+        return
+    end
+
     # create army
     army[:discordId] = user[:discordId]
     army[:userId] = user[:_id]
@@ -125,10 +154,15 @@ def command_attack(bot, event, mongo)
 
     mongo[:armies].insert_one(army)
 
-    # remove soldiers from user
+    # remove soldiers and resources from user
     inc = {}
     $settings[:soldierTypes].each do |soldierType|
       inc[soldierType.pluralize.to_sym] = army[soldierType.pluralize.to_sym] * -1
+    end
+    $settings[:resourceTypes].each do |resourceType|
+        if cost[resourceType.to_sym] > 0.0
+            inc[resourceType.to_sym] = cost[resourceType.to_sym] * -1.0
+        end
     end
 
     mongo[:users].update_one({_id: user[:_id]}, {"$inc" => inc})
