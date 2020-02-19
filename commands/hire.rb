@@ -111,7 +111,7 @@ def command_hire(bot, event, mongo)
     # does player have enough
     $settings[:resourceTypes].each do |resourceType|
         if user[resourceType.to_sym] < cost[resourceType.to_sym]
-            event.respond "You need "+cost[resourceType.to_sym].round(2).to_s+" "+resourceType+" to buy "+number_with_commas(arr[1].to_i).to_s+" "+arr[2].pluralize+" "+event.message.author.mention+"."
+            event.respond "You need "+cost[resourceType.to_sym].round(2).to_s+" "+resourceType+" to buy "+number_with_commas(arr[1].to_i)+" "+arr[2].pluralize+" "+event.message.author.mention+"."
             return
         end
     end
@@ -133,9 +133,9 @@ def command_hire(bot, event, mongo)
     mongo[:users].update_one({_id: user[:_id]}, {"$set" => set})
 
     if arr[1].to_i == 1
-        event.respond event.message.author.mention+" hired "+number_with_commas(arr[1].to_i).to_s+" "+arr[2].singularize+"."
+        event.respond event.message.author.mention+" hired "+number_with_commas(arr[1].to_i)+" "+arr[2].singularize+"."
     else
-        event.respond event.message.author.mention+" hired "+number_with_commas(arr[1].to_i).to_s+" "+arr[2].pluralize+"."
+        event.respond event.message.author.mention+" hired "+number_with_commas(arr[1].to_i)+" "+arr[2].pluralize+"."
     end
 
     updateNetworthFor(mongo, event.message.author.id)

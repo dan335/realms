@@ -43,7 +43,7 @@ def command_buy(bot, event, mongo)
 
     # does user have enough gold?
     if user[:gold].to_f < gold
-        event.respond "You do not have "+number_with_commas(gold.round(4)).to_s+" gold to buy "+number_with_commas(arr[1].to_f).to_s+" "+arr[2]+" "+event.message.author.mention+"."
+        event.respond "You do not have "+number_with_commas(gold.round(4))+" gold to buy "+number_with_commas(arr[1].to_f)+" "+arr[2]+" "+event.message.author.mention+"."
         return
     end
 
@@ -58,7 +58,7 @@ def command_buy(bot, event, mongo)
     updateMarketPrice(mongo, market, arr[2].singularize, arr[1].to_f, true)
 
     # respond
-    event.respond event.message.author.mention+" bought "+number_with_commas(arr[1].to_f).to_s+" "+arr[2].singularize+" for "+number_with_commas(gold.round(2)).to_s+" gold."
+    event.respond event.message.author.mention+" bought "+number_with_commas(arr[1].to_f).to_s+" "+arr[2].singularize+" for "+number_with_commas(gold.round(2))+" gold."
 end
 
 

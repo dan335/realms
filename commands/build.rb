@@ -24,7 +24,7 @@ def command_build(bot, event, mongo)
         str += "    "+$settings[:buildings][:shrine][:description]+"  Cost: "
 
         $settings[:buildings][:shrine][:cost].each do |c|
-            str += number_with_commas(c[:num]).to_s+" "+c[:type]+", "
+            str += number_with_commas(c[:num])+" "+c[:type]+", "
         end
         
         str += "\n"

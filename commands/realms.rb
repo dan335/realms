@@ -33,12 +33,12 @@ def command_realms(bot, event, mongo)
     mongo[:users].find().sort(:networth => -1).skip(page * $settings[:perPage]).limit($settings[:perPage]).each do |user|
         numShrines = mongo[:shrines].find(:userId => user[:_id]).count
 
-        str += counter.to_s+". **"+user[:display_name]+"** - networth: "+number_with_commas(user[:networth].round(2)).to_s+"  "
+        str += counter.to_s+". **"+user[:display_name]+"** - networth: "+number_with_commas(user[:networth].round(2))+"  "
 
         str += "shrines: "+numShrines.to_s+"  "
 
         $settings[:soldierTypes].each do |soldierType|
-            str += soldierType.pluralize+": "+number_with_commas(user[soldierType.pluralize.to_sym]).to_s+"  "
+            str += soldierType.pluralize+": "+number_with_commas(user[soldierType.pluralize.to_sym])+"  "
         end
 
         str += "\n"

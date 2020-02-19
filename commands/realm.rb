@@ -21,9 +21,9 @@ def command_realm(bot, event, mongo)
     str = "-] **"+user[:display_name]+"'s REALM** [-\n"
 
     # resources
-    str += "Gold: "+number_with_commas(user[:gold].to_f.round(2)).to_s+"  "
+    str += "Gold: "+number_with_commas(user[:gold].to_f.round(2))+"  "
     $settings[:resourceTypes].each do |resourceType|
-        str += resourceType.camelize+": "+number_with_commas(user[resourceType.to_sym].to_f.round(2)).to_s+"  "
+        str += resourceType.camelize+": "+number_with_commas(user[resourceType.to_sym].to_f.round(2))+"  "
     end
     str += "\n"
 
@@ -34,7 +34,7 @@ def command_realm(bot, event, mongo)
     #soldiers
     $settings[:soldierTypes].each do |soldierType|
         str += $settings[:soldiers][soldierType.to_sym][:name].pluralize+": "
-        str += number_with_commas(user[soldierType.pluralize.to_sym]).to_s+"  "
+        str += number_with_commas(user[soldierType.pluralize.to_sym])+"  "
     end
     str += "\n"
 
@@ -120,7 +120,7 @@ def command_realm(bot, event, mongo)
             s = 0
             $settings[:soldierTypes].each do |soldierType|
               if army[soldierType.pluralize.to_sym] > 0
-                str += number_with_commas(army[soldierType.pluralize.to_sym]).to_s+" "
+                str += number_with_commas(army[soldierType.pluralize.to_sym])+" "
                 str += soldierType.pluralize
                 str += ",  "
                 s += 1
@@ -157,7 +157,7 @@ def command_realm(bot, event, mongo)
             s = 0
             $settings[:soldierTypes].each do |soldierType|
               if army[soldierType.pluralize.to_sym] > 0
-                str += number_with_commas(army[soldierType.pluralize.to_sym]).to_s+" "
+                str += number_with_commas(army[soldierType.pluralize.to_sym])+" "
                 str += soldierType.pluralize
                 str += ",  "
                 s += 1

@@ -36,7 +36,7 @@ def command_sell(bot, event, mongo)
 
     # does user have enough
     if user[arr[2].singularize.to_sym] < arr[1].to_f
-        event.respond "You do not have "+number_with_commas(arr[1].to_f).to_s+" "+arr[2]+" "+event.message.author.mention+"."
+        event.respond "You do not have "+number_with_commas(arr[1].to_f)+" "+arr[2]+" "+event.message.author.mention+"."
         return
     end
 
@@ -59,7 +59,7 @@ def command_sell(bot, event, mongo)
     updateMarketPrice(mongo, market, arr[2].singularize, arr[1].to_f, false)
 
     # respond
-    event.respond event.message.author.mention+" sold "+number_with_commas(arr[1].to_f).to_s+" "+arr[2].singularize+" for "+number_with_commas(gold.round(2)).to_s+" gold."
+    event.respond event.message.author.mention+" sold "+number_with_commas(arr[1].to_f)+" "+arr[2].singularize+" for "+number_with_commas(gold.round(2))+" gold."
 end
 
 

@@ -145,6 +145,7 @@ def updateMarketPrice(mongo, resourceObject, type, quantity, isBuy)
 end
 
 
+# returns a string with commas
 def number_with_commas(number)
     if number == nil
         return 0
