@@ -45,29 +45,27 @@ def doAttack(bot, mongo, army)
 
     # get winnings
     winnings = {:gold => 0.0} # for winner
-    inc = {:gold => 0.0}  # for loser
+    set = {}
 
     if attackingArmy[:isWinner] && attackingArmy[:numLoses] < attackingArmy[:numSoldiers]
         winnings[:gold] = defendingArmy[:gold] * $settings[:battleWinnings]
-        inc[:gold] = winnings[:gold] * -1.0
+        set[:gold] = [defendingArmy[:gold]  - winnings[:gold], 0.0].max
     end
 
     $settings[:resourceTypes].each do |resourceType|
         if attackingArmy[:isWinner] && attackingArmy[:numLoses] < attackingArmy[:numSoldiers]
             winnings[resourceType.to_sym] = (defendingArmy[resourceType.to_sym].to_f * $settings[:battleWinnings]).floor
-            inc[resourceType.to_sym] = winnings[resourceType.to_sym] * -1.0
+            set[resourceType.to_sym] = [defendingArmy[resourceType.to_sym] - winnings[resourceType.to_sym], 0.0].max
         else
             winnings[resourceType.to_sym] = 0.0
-            inc[resourceType.to_sym] = 0.0
         end
     end
 
     # save defendingArmy
-    set = {}
     $settings[:soldierTypes].each do |soldierType|
-        set[soldierType.pluralize.to_sym] = defendingArmy[soldierType.pluralize.to_sym].to_i - defendingArmy[:loses][soldierType.to_sym]
+        set[soldierType.pluralize.to_sym] = [defendingArmy[soldierType.pluralize.to_sym].to_i - defendingArmy[:loses][soldierType.to_sym], 0].max
     end
-    mongo[:users].update_one({_id: defendingArmy[:_id]}, {"$set": set, "$inc": inc})
+    mongo[:users].update_one({_id: defendingArmy[:_id]}, {"$set": set})
     validateUser(mongo, defendingArmy[:discordId])
     updateNetworthFor(mongo, defendingArmy[:discordId])
 
@@ -150,20 +148,20 @@ def returnToRealm(bot, mongo, army)
     sendPM(bot, user[:pmChannelId], str)
 
     # add army back to user
-    inc = {}
+    set = {}
     $settings[:soldierTypes].each do |soldierType|
-      inc[soldierType.pluralize.to_sym] = army[soldierType.pluralize.to_sym].to_i
+      set[soldierType.pluralize.to_sym] = [user[soldierType.pluralize.to_sym] + army[soldierType.pluralize.to_sym].to_i, 0].max
     end
 
     if army[:winnings]
-      inc[:gold] = army[:winnings][:gold].to_f
+      set[:gold] = [user[:gold] + army[:winnings][:gold].to_f, 0.0].max
 
       $settings[:resourceTypes].each do |resourceType|
-          inc[resourceType.to_sym] = army[:winnings][resourceType.to_sym].to_f
+        set[resourceType.to_sym] = [user[resourceType.to_sym] + army[:winnings][resourceType.to_sym].to_f, 0.0].max
       end
     end
 
-    mongo[:users].update_one({:_id => army[:userId]}, {'$inc' => inc})
+    mongo[:users].update_one({:_id => army[:userId]}, {'$set' => set})
     validateUser(mongo, army[:discordId])
 
     updateNetworthFor(mongo, user[:discordId])

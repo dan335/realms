@@ -83,11 +83,11 @@ def command_build(bot, event, mongo)
         end
 
         # take away cost from user
-        inc = {}
+        set = {}
         $settings[:buildings][type.to_sym][:cost].each do |cost|
-            inc[cost[:type].to_sym] = cost[:num] * -1.0
+            set[cost[:type].to_sym] = [user[cost[:type].to_sym] - cost[:num], 0.0].max
         end
-        mongo[:users].update_one({_id: user[:_id]}, {"$inc": inc})
+        mongo[:users].update_one({_id: user[:_id]}, {"$set": set})
         validateUser(mongo, user[:discordId])
     end
 

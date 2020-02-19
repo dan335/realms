@@ -117,20 +117,20 @@ def command_hire(bot, event, mongo)
     end
 
     # add soldiers to user and take away cost
-    inc = {}
+    set = {}
 
     # resources
     $settings[:resourceTypes].each do |resourceType|
         if cost.key?(resourceType.to_sym) && cost[resourceType.to_sym] > 0.0
-            inc[resourceType.to_sym] = cost[resourceType.to_sym] * -1.0
+            set[resourceType.to_sym] = [user[resourceType.to_sym] - cost[resourceType.to_sym], 0.0].max
         end
     end
 
     # soldiers
-    inc[arr[2].pluralize.downcase.to_sym] = arr[1].to_i
+    set[arr[2].pluralize.downcase.to_sym] = [user[arr[2].pluralize.downcase.to_sym] + arr[1].to_i, 0].max
 
     # udpate db
-    mongo[:users].update_one({_id: user[:_id]}, {"$inc" => inc})
+    mongo[:users].update_one({_id: user[:_id]}, {"$set" => set})
     validateUser(mongo, user[:discordId])
 
     if arr[1].to_i == 1

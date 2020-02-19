@@ -155,17 +155,17 @@ def command_attack(bot, event, mongo)
     mongo[:armies].insert_one(army)
 
     # remove soldiers and resources from user
-    inc = {}
+    set = {}
     $settings[:soldierTypes].each do |soldierType|
-      inc[soldierType.pluralize.to_sym] = army[soldierType.pluralize.to_sym] * -1
+      set[soldierType.pluralize.to_sym] = [user[soldierType.pluralize.to_sym] - army[soldierType.pluralize.to_sym], 0].max
     end
     $settings[:resourceTypes].each do |resourceType|
         if cost[resourceType.to_sym] > 0.0
-            inc[resourceType.to_sym] = cost[resourceType.to_sym] * -1.0
+            set[resourceType.to_sym] = [user[resourceType.to_sym] - cost[resourceType.to_sym], 0.0].max
         end
     end
 
-    mongo[:users].update_one({_id: user[:_id]}, {"$inc" => inc})
+    mongo[:users].update_one({_id: user[:_id]}, {"$set" => set})
     validateUser(mongo, user[:discordId])
 
     updateNetworthFor(mongo, event.message.author.id)

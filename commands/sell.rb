@@ -49,7 +49,11 @@ def command_sell(bot, event, mongo)
     gold = totalOfSell(market[:value], arr[1].to_f)
 
     # update user
-    mongo[:users].update_one({:_id => user[:_id]}, {"$inc" => {:gold => gold, arr[2].singularize.to_sym => arr[1].to_f * -1.0}})
+    set = {
+        :gold => [user[:gold] + gold, 0.0].max,
+        arr[2].singularize.to_sym => [user[arr[2].singularize.to_sym] - arr[1].to_f, 0.0].max
+    }
+    mongo[:users].update_one({:_id => user[:_id]}, {"$set" => set})
     validateUser(mongo, user[:discordId])
 
     # update market

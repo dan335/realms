@@ -179,13 +179,15 @@ end
 
 def giveResources(mongo)
     mongo[:farms].find().each do |farm|
-        inc = {}
+        set = {}
+
+        user = mongo[:users].find(:_id => farm[:userId]).first
 
         $settings[:resourceTypes].each do |resourceType|
-            inc[resourceType.to_sym] = farm[resourceType.to_sym]
+            set[resourceType.to_sym] = [user[resourceType.to_sym] + farm[resourceType.to_sym], 0.0].max
         end
 
-        mongo[:users].update_one({:discordId => farm[:discordId]}, {"$inc" => inc})
+        mongo[:users].update_one({:discordId => farm[:discordId]}, {"$set" => set})
         validateUser(mongo, farm[:discordId])
     end
 end
@@ -195,18 +197,7 @@ end
 def feedArmies(bot, mongo)
     mongo[:users].find().each do |user|
 
-        inc = {}
-
-        # zero out
-        $settings[:soldierTypes].each do |soldierType|
-            inc [soldierType.pluralize.to_sym] = 0
-        end
-
-        # zero out
-        $settings[:resourceTypes].each do |resourceType|
-            inc[resourceType.to_sym] = 0.0
-        end
-
+        set = {}
 
         $settings[:soldierTypes].each do |soldierType|
             cost = {}
@@ -229,14 +220,13 @@ def feedArmies(bot, mongo)
                 end
             end
 
-            if enough
-                # remove from user
-                $settings[:resourceTypes].each do |resourceType|
-                    inc[resourceType.to_sym] += cost[resourceType.to_sym] * -1.0
-                end
-            else
-                # destroy some soldiers
+            # remove from user
+            $settings[:resourceTypes].each do |resourceType|
+                set[resourceType.to_sym] = [user[resourceType.to_sym] - cost[resourceType.to_sym], 0.0].max
+            end
 
+            # destroy some soldiers
+            if !enough
                 # get lowest percentage
                 percentage = 1.0
                 $settings[:resourceTypes].each do |resourceType|
@@ -249,15 +239,15 @@ def feedArmies(bot, mongo)
                 end
 
                 # clamp
-                killPercentage = [1.0 - percentage, 0.01].max
+                killPercentage = [[percentage, 0.95].min, 1.0].max
 
-                inc[soldierType.pluralize.to_sym] = (user[soldierType.pluralize.to_sym].to_f * killPercentage).round.to_i * -1
+                set[soldierType.pluralize.to_sym] = (user[soldierType.pluralize.to_sym].to_f * killPercentage).round.to_i
 
                 sendPM(bot, user[:pmChannelId], "Your soldiers are dying from starvation.")
             end
         end
 
-        mongo[:users].update_one({:_id => user[:_id]}, {"$inc" => inc})
+        mongo[:users].update_one({:_id => user[:_id]}, {"$set" => set})
         validateUser(mongo, user[:discordId])
     end
 end

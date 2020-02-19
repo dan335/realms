@@ -1,8 +1,5 @@
 $settings = {
-    :maxFarms => 5,
     :maxArmiesPerPlayer => 8,
-    :farmBuildSeconds => 60*10,
-    :farmMaxResourcesPerInterval => 10,
     :resourceTypes => [
         "wood",
         "ore",
