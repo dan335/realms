@@ -88,7 +88,6 @@ def command_build(bot, event, mongo)
             set[cost[:type].to_sym] = [user[cost[:type].to_sym] - cost[:num], 0.0].max
         end
         mongo[:users].update_one({_id: user[:_id]}, {"$set": set})
-        validateUser(mongo, user[:discordId])
     end
 
     # create order to build farm in the future

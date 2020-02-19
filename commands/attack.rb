@@ -166,7 +166,6 @@ def command_attack(bot, event, mongo)
     end
 
     mongo[:users].update_one({_id: user[:_id]}, {"$set" => set})
-    validateUser(mongo, user[:discordId])
 
     updateNetworthFor(mongo, event.message.author.id)
 

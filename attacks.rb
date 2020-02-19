@@ -66,7 +66,6 @@ def doAttack(bot, mongo, army)
         set[soldierType.pluralize.to_sym] = [defendingArmy[soldierType.pluralize.to_sym].to_i - defendingArmy[:loses][soldierType.to_sym], 0].max
     end
     mongo[:users].update_one({_id: defendingArmy[:_id]}, {"$set": set})
-    validateUser(mongo, defendingArmy[:discordId])
     updateNetworthFor(mongo, defendingArmy[:discordId])
 
     sendAttackReport(bot, attackingArmy, defendingArmy, winnings)
@@ -162,7 +161,6 @@ def returnToRealm(bot, mongo, army)
     end
 
     mongo[:users].update_one({:_id => army[:userId]}, {'$set' => set})
-    validateUser(mongo, army[:discordId])
 
     updateNetworthFor(mongo, user[:discordId])
 end

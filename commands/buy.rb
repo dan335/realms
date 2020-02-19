@@ -53,7 +53,6 @@ def command_buy(bot, event, mongo)
         arr[2].singularize.to_sym => [user[arr[2].singularize.to_sym] + arr[1].to_f, 0.0].max
     }
     mongo[:users].update_one({:_id => user[:_id]}, {"$set" => set})
-    validateUser(mongo, user[:discordId])
 
     # update market
     updateMarketPrice(mongo, market, arr[2].singularize, arr[1].to_f, true)
