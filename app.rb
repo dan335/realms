@@ -29,6 +29,7 @@ Mongo::Logger.logger.level = Logger::FATAL
 bot = Discordrb::Bot.new token: ENV['DISCORD_TOKEN']
 mongo = Mongo::Client.new([ ENV['MONGO_URL'] ], :database => ENV['MONGO_DB'])
 
+# create mongodb indexes
 mongo[:users].indexes.create_one({:discordId => 1}, unique: true )
 mongo[:users].indexes.create_one({:networth => -1})
 mongo[:armies].indexes.create_one({:arriveAt => 1})
@@ -62,6 +63,7 @@ mongo[:market].indexes.create_one({:type => 1})
 
 validateMarket(mongo)
 
+# make sure soldiers are never 0
 mongo[:users].find().each do |user|
   $settings[:soldierTypes].each do |soldierType|
     if user[soldierType.pluralize.to_sym] < 0
@@ -70,6 +72,7 @@ mongo[:users].find().each do |user|
   end
 end
 
+puts "-] REALMS [-"
 
 # handle incoming messages
 bot.message(start_with: '%') do |event|
@@ -89,11 +92,12 @@ end
 
 bot.run true
 
+# game loop
 loopNum = 1
 updateNetworth(mongo)
 while true do
     loopStart = Time.now.to_i
-
+ 
     ordersInterval(bot, mongo)
 
     # 10 minutes

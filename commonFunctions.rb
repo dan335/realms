@@ -180,7 +180,7 @@ def giveResources(mongo)
     mongo[:farms].find().each do |farm|
         set = {}
 
-        user = mongo[:users].find(:_id => farm[:userId]).first
+        user = mongo[:users].find(:discordId => farm[:discordId]).first
 
         $settings[:resourceTypes].each do |resourceType|
             set[resourceType.to_sym] = [user[resourceType.to_sym] + farm[resourceType.to_sym], 0.0].max
