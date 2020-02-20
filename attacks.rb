@@ -47,7 +47,7 @@ def doAttack(bot, mongo, army)
     winnings = {:gold => 0.0} # for winner
     set = {}
     markets = mongo[:market].find()
-    canCarryInGold = defendingArmy[:numSoldiers] * $settings[:winningsSoldierCanCarry]
+    canCarryInGold = (attackingArmy[:numSoldiers] - attackingArmy[:numLoses]) * $settings[:winningsSoldierCanCarry]
 
     if attackingArmy[:isWinner] && attackingArmy[:numLoses] < attackingArmy[:numSoldiers]
         winnings[:gold] = [defendingArmy[:gold] * $settings[:battleWinnings], canCarryInGold].min
