@@ -46,15 +46,24 @@ def doAttack(bot, mongo, army)
     # get winnings
     winnings = {:gold => 0.0} # for winner
     set = {}
+    markets = mongo[:market].find()
+    canCarryInGold = defendingArmy[:numSoldiers] * $settings[:winningsSoldierCanCarry]
 
     if attackingArmy[:isWinner] && attackingArmy[:numLoses] < attackingArmy[:numSoldiers]
-        winnings[:gold] = defendingArmy[:gold] * $settings[:battleWinnings]
+        winnings[:gold] = [defendingArmy[:gold] * $settings[:battleWinnings], canCarryInGold].min
         set[:gold] = [defendingArmy[:gold]  - winnings[:gold], 0.0].max
+        canCarryInGold -= winnings[:gold]
     end
 
     $settings[:resourceTypes].each do |resourceType|
         if attackingArmy[:isWinner] && attackingArmy[:numLoses] < attackingArmy[:numSoldiers]
-            winnings[resourceType.to_sym] = (defendingArmy[resourceType.to_sym].to_f * $settings[:battleWinnings]).floor
+            resourceWorth = resourceToGold(markets, resourceType, 1.0)
+
+            steal = defendingArmy[resourceType.to_sym] * $settings[:battleWinnings]
+            steal = [canCarryInGold / resourceWorth, steal].min
+            canCarryInGold -= [steal * resourceWorth, 0.0].max
+
+            winnings[resourceType.to_sym] = steal
             set[resourceType.to_sym] = [defendingArmy[resourceType.to_sym] - winnings[resourceType.to_sym], 0.0].max
         else
             winnings[resourceType.to_sym] = 0.0

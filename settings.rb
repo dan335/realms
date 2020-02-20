@@ -1,6 +1,7 @@
 $settings = {
     :maxArmiesPerPlayer => 8,
     :farmMaxResourcesPerInterval => 10,
+    :winningsSoldierCanCarry => 5.0,    # amount in gold that a soldier can carry
     :resourceTypes => [
         "wood",
         "ore",

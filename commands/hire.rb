@@ -19,7 +19,8 @@ def command_hire(bot, event, mongo)
 
         str = "-] HIRE SOLDIERS [-\n\n"
 
-        str += "example: **%hire 2 footman**\n\n"
+        str += "example: **%hire 2 footman**\n"
+        str += "Each soldier can carry "+$settings[:winningsSoldierCanCarry].to_s+" gold worth of resources.\n\n"
 
         $settings[:soldierTypes].each do |type|
             str += "__**"+$settings[:soldiers][type.to_sym][:name]+"**__\n"
