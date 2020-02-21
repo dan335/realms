@@ -125,6 +125,6 @@ $settings = {
     :marketIncrement => 0.00003,    # how much the market goes up or down
     :marketTax => 0.05,
     :battleBonusMultiplier => 2.0,
-    :battleWinnings => 0.05,    # how much does winner of battle get from loser
+    :battleWinnings => 0.1,    # how much does winner of battle get from loser
     :armyTravelDistance => 200.0      # higher number makes army travel times longer
 }

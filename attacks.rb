@@ -44,32 +44,12 @@ def doAttack(bot, mongo, army)
     getLoses(defendingArmy)
 
     # get winnings
-    winnings = {:gold => 0.0} # for winner
-    set = {}
-    markets = mongo[:market].find()
-    canCarryInGold = (attackingArmy[:numSoldiers] - attackingArmy[:numLoses]) * $settings[:winningsSoldierCanCarry]
-
-    if attackingArmy[:isWinner] && attackingArmy[:numLoses] < attackingArmy[:numSoldiers]
-        winnings[:gold] = [defendingArmy[:gold] * $settings[:battleWinnings], canCarryInGold].min
-        set[:gold] = [defendingArmy[:gold]  - winnings[:gold], 0.0].max
-        canCarryInGold -= winnings[:gold]
-    end
-
+    winnings = getWinnings(attackingArmy, defendingArmy, mongo[:market].find())
+    set = {:gold => [defendingArmy[:gold] - winnings[:gold], 0.0].max}
     $settings[:resourceTypes].each do |resourceType|
-        if attackingArmy[:isWinner] && attackingArmy[:numLoses] < attackingArmy[:numSoldiers]
-            resourceWorth = resourceToGold(markets, resourceType, 1.0)
-
-            steal = defendingArmy[resourceType.to_sym] * $settings[:battleWinnings]
-            steal = [canCarryInGold / resourceWorth, steal].min
-            canCarryInGold -= [steal * resourceWorth, 0.0].max
-
-            winnings[resourceType.to_sym] = steal
-            set[resourceType.to_sym] = [defendingArmy[resourceType.to_sym] - winnings[resourceType.to_sym], 0.0].max
-        else
-            winnings[resourceType.to_sym] = 0.0
-        end
+        set[resourceType.to_sym] = [defendingArmy[resourceType.to_sym] - winnings[resourceType.to_sym], 0.0].max
     end
-
+    
     # save defendingArmy
     $settings[:soldierTypes].each do |soldierType|
         set[soldierType.pluralize.to_sym] = [defendingArmy[soldierType.pluralize.to_sym].to_i - defendingArmy[:loses][soldierType.to_sym], 0].max
@@ -102,6 +82,34 @@ def doAttack(bot, mongo, army)
     durationSeconds = $settings[:armyTravelDistance] / slowest.to_f * 60.0
 
     sendArmyToRealm(mongo, attackingArmy, winnings, durationSeconds)
+end
+
+
+
+def getWinnings(attackingArmy, defendingArmy, markets)
+    winnings = {:gold => 0.0} # for winner
+    canCarryInGold = (attackingArmy[:numSoldiers] - attackingArmy[:numLoses]) * $settings[:winningsSoldierCanCarry]
+
+    if attackingArmy[:isWinner] && attackingArmy[:numLoses] < attackingArmy[:numSoldiers]
+        winnings[:gold] = [defendingArmy[:gold] * $settings[:battleWinnings], canCarryInGold].min
+        canCarryInGold -= winnings[:gold]
+    end
+
+    $settings[:resourceTypes].each do |resourceType|
+        if attackingArmy[:isWinner] && attackingArmy[:numLoses] < attackingArmy[:numSoldiers]
+            resourceWorth = resourceToGold(markets, resourceType, 1.0)
+
+            steal = defendingArmy[resourceType.to_sym].to_f * $settings[:battleWinnings]
+            steal = [canCarryInGold / resourceWorth, steal].min
+            canCarryInGold -= [steal * resourceWorth, 0.0].max
+
+            winnings[resourceType.to_sym] = steal
+        else
+            winnings[resourceType.to_sym] = 0.0
+        end
+    end
+
+    return winnings
 end
 
 
@@ -285,7 +293,7 @@ end
 def getPowerToLose(attackingArmy, defendingArmy)
   if attackingArmy[:isWinner]
       attackingArmy[:powerToLose] = defendingArmy[:totalPower] * 0.1
-      defendingArmy[:powerToLose] = defendingArmy[:totalPower] * 0.05
+      defendingArmy[:powerToLose] = defendingArmy[:totalPower] * 0.1
   else
       attackingArmy[:powerToLose] = [attackingArmy[:totalPower] * 0.5, defendingArmy[:totalPower] * 0.25].max
       defendingArmy[:powerToLose] = [attackingArmy[:totalPower] * 0.01, defendingArmy[:totalPower] * 0.01].min
