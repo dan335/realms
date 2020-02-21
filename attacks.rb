@@ -239,13 +239,13 @@ def getBonus(attackingArmy, defendingArmy)
           if defendingArmy[bonusAgainst.pluralize.to_sym] == 0
             attackBonus = 0.0
           else
-            attackBonus = attackingArmy[soldierType.pluralize.to_sym].to_f * [attackingArmy[soldierType.pluralize.to_sym].to_f / defendingArmy[bonusAgainst.pluralize.to_sym].to_f, $settings[:battleBonusMultiplier]].min
+            attackBonus = attackingArmy[:power][soldierType.to_sym] * defendingArmy[:percentage][bonusAgainst.to_sym] * $settings[:battleBonusMultiplier]
           end
 
           if attackingArmy[bonusAgainst.pluralize.to_sym] == 0
             defendBonus = 0.0
           else
-            defendBonus = defendingArmy[soldierType.pluralize.to_sym].to_f * [defendingArmy[soldierType.pluralize.to_sym].to_f / attackingArmy[bonusAgainst.pluralize.to_sym].to_f, $settings[:battleBonusMultiplier]].min
+            defendBonus = defendingArmy[:power][soldierType.to_sym] * attackingArmy[:percentage][bonusAgainst.to_sym] * $settings[:battleBonusMultiplier]
           end
 
           attackingArmy[:bonus][soldierType.to_sym] += attackBonus
