@@ -21,6 +21,23 @@ def doAttack(bot, mongo, army)
     attackingArmy = user.merge army
     defendingArmy = mongo[:users].find(:_id => army[:otherUserId]).first
 
+    if !defendingArmy
+        # get attackingArmy travel time
+        slowest = 99999.0
+        $settings[:soldierTypes].each do |soldierType|
+            if attackingArmy[soldierType.pluralize.to_sym].to_i > 0
+                s = $settings[:soldiers][soldierType.to_sym][:speed]
+                if s < slowest
+                    slowest = s
+                end
+            end
+        end
+        durationSeconds = $settings[:armyTravelDistance] / slowest.to_f * 60.0
+
+        sendArmyToRealm(mongo, attackingArmy, nil, durationSeconds)
+        return
+    end
+
     # attack
     getNumberOfSoldiers(attackingArmy)
     getNumberOfSoldiers(defendingArmy)
