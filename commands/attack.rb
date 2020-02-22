@@ -42,11 +42,15 @@ def command_attack(bot, event, mongo)
     # may contain spaces
     wordNum = 1
     name = ""
-    while wordNum < words.length && words[wordNum].to_i == 0
-        if wordNum > 1
-            name += " "
+    if otherUser == nil
+        while wordNum < words.length && words[wordNum].to_i == 0
+            if wordNum > 1
+                name += " "
+            end
+            name += words[wordNum]
+            wordNum += 1
         end
-        name += words[wordNum]
+    else
         wordNum += 1
     end
 

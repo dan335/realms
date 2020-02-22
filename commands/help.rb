@@ -17,7 +17,7 @@ def command_help(bot, event, mongo)
     str += "**%cancelAttack 1** - Return attacking army to your realm.*\n"
     str += "\n"
     str += "**%market** - See market prices.\n"
-    str += "**%buy 3 wood** - Buy 3 wood.\n"
-    str += "**%sell 3 wood** - Sell 3 wood.\n"
+    str += "**%buy 3 wood** - Buy 3 wood.  Number can be 'max'\n"
+    str += "**%sell 3 wood** - Sell 3 wood.  Number can be 'max'\n"
     event.respond str
 end
