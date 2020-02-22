@@ -297,14 +297,15 @@ end
 
 
 def getNewPopulation(previousPopulation, happiness)
-    population = (previousPopulation.to_f * (happiness * 0.25 + 0.75 + 0.125)).round.to_i
+    range = 0.25    # higher number makes population grow quicker
+    population = (previousPopulation.to_f * (happiness * range + (1.0 - range) + (range / 2))).round.to_i
     [population, 0].max
 end
 
 
 
 def collectTaxes(mongo)
-    spendingPerPerson = 0.5
+    spendingPerPerson = 0.1 # higher increases tax collected from population
 
     mongo[:users].find().each do |user|
         set = {}
@@ -322,16 +323,50 @@ def collectTaxes(mongo)
 end
 
 
+
 def getNewHappiness(happiness, tax)
-    amount = 0.25   # smaller number to make it go up and down less
-    min = $settings[:medianTaxRate] - (1.0 - $settings[:medianTaxRate])
-    max = 1.0
-    scale = 1.0 - (tax - min) / (max - min)   # scale to 0 - 1 and reverse
-    multiplier = (scale * amount + (1.0 - amount / 2))  # shring from 0 - 1 to size of amount
-    happiness * multiplier
+    # find target happiness
+    targetHappiness = 1.0 - slopeInterpolate(tax, 0.0, 1.0, 0.0, 1.0, 0.9)    # 0.33 is about even tax with 0.9 slope
+
+    # slowly adjust towards targetHappiness
+    lerp(happiness, targetHappiness, 0.1)
+end
+
+
+# linear interpolate by amount
+# amount is 0.0 - 1.0
+def lerp(from, to, amount)
+    from + (to - from) * amount
+end
+
+
+# maps a linear range to a curved range
+# used for tax
+# value - value to be interpolated
+# s1 - source range min
+# s2 - source range max
+# t1 - target range min
+# t2 - target range max
+# slope - Weight of the curve (0.5 = linear, 0.1 = weighted near target start, 0.9 = weighted near target end)
+def slopeInterpolate(value, s1, s2, t1, t2, slope)
+    # Reverse the value, to make it correspond to the target range (this is a side-effect of the bezier calculation)
+    value = s2 - value
+
+    # Find out how far the value is on the curve
+    percent = value / (s2 - s1)
+
+    c2y = t1 + slope.abs * (t2 - t1)
+    b3 = (1 - percent) * (1 - percent)
+
+    return t1 * (percent * percent) + c2y * (2 * percent * (1 - percent)) + t2 * b3
 end
 
 
 def is_number? string
     true if Float(string) rescue false
+end
+
+
+def getGoldInterest(gold)
+    [gold * $settings[:goldInterestRate], 0.0].max
 end

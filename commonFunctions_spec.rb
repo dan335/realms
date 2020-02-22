@@ -22,9 +22,15 @@ RSpec.describe "commonFunctions" do
     end
 
 
-    it "gets new tax rate" do
-        expect(getNewHappiness(0.5, $settings[:medianTaxRate])).to eq(0.5)
-        expect(getNewHappiness(0.5, $settings[:medianTaxRate] + 0.1)).to be < (0.5)
-        expect(getNewHappiness(0.5, $settings[:medianTaxRate] - 0.1)).to be > (0.5)
+    it "gets new happiness" do
+        expect(getNewHappiness(0.5, 0.325)).to be_between(0.499, 0.501)
+        expect(getNewHappiness(0.5, 0.4)).to be < (0.5)
+        expect(getNewHappiness(0.5, 0.2)).to be > (0.5)
+    end
+
+    it "slopeInterpolate works for tax rage" do
+        expect(slopeInterpolate(0.325, 0.0, 1.0, 0.0, 1.0, 0.9)).to be_between(0.499, 0.501)
+        expect(slopeInterpolate(0.0, 0.0, 1.0, 0.0, 1.0, 0.9)).to eq(0.0)
+        expect(slopeInterpolate(1.0, 0.0, 1.0, 0.0, 1.0, 0.9)).to eq(1.0)
     end
 end

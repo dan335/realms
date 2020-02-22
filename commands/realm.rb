@@ -34,7 +34,7 @@ def command_realm(bot, event, mongo)
 
     str += "Shrines: "+numShrines.to_s+"  "
     str += "Population: "+user[:population].to_s+"  "
-    str += "Happiness: "+(user[:happiness] * 100).to_s+"%  "
+    str += "Happiness: "+(user[:happiness] * 100).round(1).to_s+"%  "
     str += "Tax: "+(user[:tax] * 100).to_s+"%  "
     str += "Collected From Tax: "+(user[:taxCollected].round(1)).to_s+"  "
 

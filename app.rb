@@ -110,20 +110,21 @@ while true do
     ordersInterval(bot, mongo)
 
     # 10 minutes
-    #if loopNum % 10 == 0
+    if loopNum % 10 == 0
         giveResources(mongo)
         feedArmies(bot, mongo)
 
         mongo[:users].find().each do |user|
           mongo[:users].update_one({:_id => user[:_id]}, {"$set" => {
             :population => getNewPopulation(user[:population], user[:happiness]),
-            :happiness => getNewHappiness(user[:happiness], user[:tax])
+            :happiness => getNewHappiness(user[:happiness], user[:tax]),
+            :gold => getGoldInterest(user[:gold])
             }})
         end
 
         collectTaxes(mongo)
         updateNetworth(mongo)
-    #end
+    end
 
     attackInterval(bot, mongo)
 
