@@ -42,7 +42,7 @@ def command_cancelattack(bot, event, mongo)
     if army[:isAttacking]
       sendArmyToRealm(mongo, army, nil, Time.now - army[:createdAt])
       mongo[:armies].find(:_id => army[:_id]).delete_one
-      event.respond "Your army has is returning to your realm "+event.message.author.mention+"."
+      event.respond "Your army is returning to your realm "+event.message.author.mention+"."
     else
       event.respond "Army "+num.to_s+" is already returning "+event.message.author.mention+"."
     end
