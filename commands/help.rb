@@ -12,6 +12,7 @@ def command_help(bot, event, mongo)
     str += "**%destroy farm 1** - Destroy farm number 1.\n"
     str += "**%hire** - Hiring help.\n"
     str += "**%hire <number> footman** - Hire a footman\n"
+    str += "**%setTax <number>** - Set tax rate.  Number from 0 - 100.  Affects happiness.\n"
     str += "\n"
     str += "**%attack Danimal 3 footman 2 archers** - Attack Danimal with 3 footman and 2 archers.  Name can be @name, %realms number or name.\n"
     str += "**%cancelAttack 1** - Return attacking army to your realm.*\n"

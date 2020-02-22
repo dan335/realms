@@ -126,5 +126,6 @@ $settings = {
     :marketTax => 0.25,
     :battleBonusMultiplier => 2.0,
     :battleWinnings => 0.1,    # how much does winner of battle get from loser
-    :armyTravelDistance => 200.0      # higher number makes army travel times longer
+    :armyTravelDistance => 200.0,      # higher number makes army travel times longer
+    :medianTaxRate => 0.15     # rate at which happiness from taxes stays the same
 }

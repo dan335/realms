@@ -32,7 +32,11 @@ def command_joingame(bot, event, mongo)
         :serverName => event.server.name,
         :gold => 0.0,
         :createdAt => Time.now,
-        :networth => 0.0
+        :networth => 0.0,
+        :population => 100,
+        :happiness => 0.5,
+        :tax => 0.05,
+        :taxCollected => 0.0
     }
 
     $settings[:resourceTypes].each do |resourceType|

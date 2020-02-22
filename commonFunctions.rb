@@ -293,3 +293,45 @@ def ordersInterval(bot, mongo)
         mongo[:orders].delete_one(:_id => order[:_id])
     end
 end
+
+
+
+def getNewPopulation(previousPopulation, happiness)
+    population = (previousPopulation.to_f * (happiness * 0.25 + 0.75 + 0.125)).round.to_i
+    [population, 0].max
+end
+
+
+
+def collectTaxes(mongo)
+    spendingPerPerson = 0.5
+
+    mongo[:users].find().each do |user|
+        set = {}
+
+        taxCollected = 0.0
+        $settings[:resourceTypes].each do |resourceType|
+            collected = user[:population].to_f * spendingPerPerson * user[:tax]
+            taxCollected += collected
+            set[resourceType.to_sym] = [user[resourceType.to_sym] + collected, 0.0].max
+        end
+
+        set[:taxCollected] = taxCollected
+        mongo[:users].update_one({:_id => user[:_id]}, {"$set" => set})
+    end
+end
+
+
+def getNewHappiness(happiness, tax)
+    amount = 0.25   # smaller number to make it go up and down less
+    min = $settings[:medianTaxRate] - (1.0 - $settings[:medianTaxRate])
+    max = 1.0
+    scale = 1.0 - (tax - min) / (max - min)   # scale to 0 - 1 and reverse
+    multiplier = (scale * amount + (1.0 - amount / 2))  # shring from 0 - 1 to size of amount
+    happiness * multiplier
+end
+
+
+def is_number? string
+    true if Float(string) rescue false
+end

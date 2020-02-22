@@ -21,6 +21,7 @@ require './commands/cancelAttack.rb'
 require './commands/market.rb'
 require './commands/buy.rb'
 require './commands/sell.rb'
+require './commands/setTax.rb'
 
 require './attacks.rb'
 
@@ -60,6 +61,14 @@ mongo[:shrines].indexes.create_many([
   {:key => {:createdAt => 1}}
 ])
 mongo[:market].indexes.create_one({:type => 1})
+
+
+# temp - remove next game
+mongo[:users].update_many({:population => {"$exists" => false}}, {"$set" => {:population => 100}})
+mongo[:users].update_many({:happiness => {"$exists" => false}}, {"$set" => {:happiness => 0.5}})
+mongo[:users].update_many({:tax => {"$exists" => false}}, {"$set" => {:tax => 0.05}})
+mongo[:users].update_many({:taxCollected => {"$exists" => false}}, {"$set" => {:taxCollected => 0.0}})
+
 
 validateMarket(mongo)
 
@@ -101,11 +110,20 @@ while true do
     ordersInterval(bot, mongo)
 
     # 10 minutes
-    if loopNum % 10 == 0
+    #if loopNum % 10 == 0
         giveResources(mongo)
         feedArmies(bot, mongo)
+
+        mongo[:users].find().each do |user|
+          mongo[:users].update_one({:_id => user[:_id]}, {"$set" => {
+            :population => getNewPopulation(user[:population], user[:happiness]),
+            :happiness => getNewHappiness(user[:happiness], user[:tax])
+            }})
+        end
+
+        collectTaxes(mongo)
         updateNetworth(mongo)
-    end
+    #end
 
     attackInterval(bot, mongo)
 

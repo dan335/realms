@@ -1,9 +1,30 @@
+require 'dotenv/load'
+require 'mongo'
 require './commonFunctions.rb'
+
+Mongo::Logger.logger.level = Logger::FATAL
+mongo = Mongo::Client.new([ ENV['MONGO_URL'] ], :database => ENV['MONGO_DB'])
+
 
 
 RSpec.describe "commonFunctions" do
     it "adds commas" do
         expect(number_with_commas(1000)).to eq("1,000")
         expect(number_with_commas(1000.00)).to eq("1,000.0")
+    end
+
+
+    it "grows population" do
+        range = 0.25
+        expect(getNewPopulation(100, 0.5)).to eq(100)
+        expect(getNewPopulation(100, 1)).to eq((100.0 * (1.0 + (range / 2))).round.to_i)
+        expect(getNewPopulation(100, 0)).to eq((100.0 * (1.0 - (range / 2))).round.to_i)
+    end
+
+
+    it "gets new tax rate" do
+        expect(getNewHappiness(0.5, $settings[:medianTaxRate])).to eq(0.5)
+        expect(getNewHappiness(0.5, $settings[:medianTaxRate] + 0.1)).to be < (0.5)
+        expect(getNewHappiness(0.5, $settings[:medianTaxRate] - 0.1)).to be > (0.5)
     end
 end
