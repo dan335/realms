@@ -13,6 +13,7 @@ def command_settax(bot, event, mongo)
     msg = event.message.content
     msg.slice!(0)
     arr = msg.split
+    arr[1] = arr[1].gsub('%','')
 
     # check for wrong number of arguments
     if arr.length != 2
