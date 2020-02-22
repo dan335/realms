@@ -19,47 +19,55 @@ def command_sell(bot, event, mongo)
         return
     end
 
-    # make sure number is a number
-    if arr[1].to_f <= 0.0
-        output_sell_error_message(event)
-        return
-    end
-
     # make sure resource type is valid
-    if !$settings[:resourceTypes].include?(arr[2].singularize)
-        output_sell_error_message(event)
+    type = arr[2].singularize
+    if !$settings[:resourceTypes].include?(type)
+        output_buy_error_message(event)
         return
     end
 
-    # get user
+    # get user and market
     user = mongo[:users].find(:discordId => event.message.author.id).first
 
-    # does user have enough
-    if user[arr[2].singularize.to_sym] < arr[1].to_f
-        event.respond "You do not have "+number_with_commas(arr[1].to_f)+" "+arr[2]+" "+event.message.author.mention+"."
-        return
-    end
-
-    # get gold amount from sell
-    market = mongo[:market].find(:type => arr[2].singularize).first
+    market = mongo[:market].find(:type => type).first
     if !market
         output_sell_error_message(event)
         return
     end
-    gold = totalOfSell(market[:value], arr[1].to_f)
+
+    # make sure number is a number
+    num = arr[1].to_f
+    if num <= 0.0
+        if arr[1] == "max"
+            num = user[type.to_sym]
+        else
+            output_buy_error_message(event)
+            return
+        end
+    end
+
+    # does user have enough
+    # compare with delta for floating point errors
+    if (user[type.to_sym] - num).abs > 0.000001
+        event.respond "You do not have "+number_with_commas(num)+" "+arr[2]+" "+event.message.author.mention+"."
+        return
+    end
+
+    # get gold amount from sell
+    gold = totalOfSell(market[:value], num)
 
     # update user
     set = {
         :gold => [user[:gold] + gold, 0.0].max,
-        arr[2].singularize.to_sym => [user[arr[2].singularize.to_sym] - arr[1].to_f, 0.0].max
+        type.to_sym => [user[type.to_sym] - num, 0.0].max
     }
     mongo[:users].update_one({:_id => user[:_id]}, {"$set" => set})
 
     # update market
-    updateMarketPrice(mongo, market, arr[2].singularize, arr[1].to_f, false)
+    updateMarketPrice(mongo, market, type, num, false)
 
     # respond
-    event.respond event.message.author.mention+" sold "+number_with_commas(arr[1].to_f)+" "+arr[2].singularize+" for "+number_with_commas(gold.round(2))+" gold."
+    event.respond event.message.author.mention+" sold "+number_with_commas(num)+" "+type+" for "+number_with_commas(gold.round(2))+" gold."
 end
 
 

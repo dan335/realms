@@ -2,35 +2,18 @@ require './orders/buildFarm.rb'
 require './orders/buildShrine.rb'
 
 
-# def validateUser(mongo, discordId)
-#     user = mongo[:users].find(:discordId => discordId).first
-#     if user
-#         $settings[:soldierTypes].each do |soldierType|
-#             if user[soldierType.pluralize.to_sym] < 0
-#                 puts "---] REALMS ERROR [---"
-#                 puts "Soldiers in user are negative"
-#                 puts user
-#                 puts caller.inspect
-#             end
-#         end
-
-#         $settings[:resourceTypes].each do |resourceType|
-#             if user[resourceType.to_sym] < 0.0
-#                 puts "---] REALMS ERROR [---"
-#                 puts "Resource in user is negative"
-#                 puts user
-#                 puts caller.inspect
-#             end
-#         end
-
-#         if user[:gold] < 0.0
-#             puts "---] REALMS ERROR [---"
-#             puts "Gold in user is negative"
-#             puts user
-#             puts caller.inspect
-#         end
-#     end
-# end
+def armyTravelTime(army)
+    slowest = 99999
+    $settings[:soldierTypes].each do |soldierType|
+      if army[soldierType.pluralize.to_sym].to_i > 0
+        s = $settings[:soldiers][soldierType.to_sym][:speed]
+        if s < slowest
+            slowest = s
+        end
+      end
+    end
+    return $settings[:armyTravelDistance] / slowest.to_f * 60.0
+end
 
 
 # called when someone wins the game
@@ -163,6 +146,13 @@ end
 
 def totalOfBuy(marketValue, quantity)
     marketValue * (1.0 + $settings[:marketTax]) / $settings[:marketIncrement] * ((($settings[:marketIncrement] + 1.0) ** quantity.to_f) - 1.0)
+end
+
+
+def maxBuy(gold, price)
+    base = Math.log($settings[:marketIncrement] + 1)
+    log = Math.log(gold * $settings[:marketIncrement] / (price * (1 + $settings[:marketTax])) + 1)
+    return log / base
 end
 
 

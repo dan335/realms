@@ -1,7 +1,6 @@
 ## todo
 
 - allow short soldier names
-- send gold to someone
 - change all commands to lowercase and allow any case
 - fire soldiers
 - hire max

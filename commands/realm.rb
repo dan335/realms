@@ -21,9 +21,14 @@ def command_realm(bot, event, mongo)
     str = "-] **"+user[:display_name]+"'s REALM** [-\n"
 
     # resources
-    str += "Gold: "+number_with_commas(user[:gold].to_f.round(2))+"  "
+    str += "Gold: "+number_with_commas(user[:gold].to_f.round(2))+",  "
+    num = 0
     $settings[:resourceTypes].each do |resourceType|
-        str += resourceType.camelize+": "+number_with_commas(user[resourceType.to_sym].to_f.round(2))+"  "
+        str += resourceType.camelize+": "+number_with_commas(user[resourceType.to_sym].to_f.round(2))
+        if num < $settings[:resourceTypes].length - 1
+            str += ",  "
+        end
+        num += 1
     end
     str += "\n"
 
@@ -32,9 +37,14 @@ def command_realm(bot, event, mongo)
     str += "\n\n"
 
     #soldiers
+    num = 0
     $settings[:soldierTypes].each do |soldierType|
         str += $settings[:soldiers][soldierType.to_sym][:name].pluralize+": "
-        str += number_with_commas(user[soldierType.pluralize.to_sym])+"  "
+        str += number_with_commas(user[soldierType.pluralize.to_sym])
+        if num < $settings[:soldierTypes].length - 1
+            str += ",  "
+        end
+        num += 1
     end
     str += "\n"
 
@@ -81,10 +91,17 @@ def command_realm(bot, event, mongo)
         count = 1
         farms.each do |farm|
             str += count.to_s+".  "
+            total = 0
+            num = 0
             $settings[:resourceTypes].each do |resourceType|
-                str += resourceType.camelize+": "+farm[resourceType.to_sym].round.to_s+"  "
+                str += resourceType.camelize+": "+farm[resourceType.to_sym].round.to_s
+                if num < $settings[:resourceTypes].length - 1
+                    str += ",  "
+                end
+                total += farm[resourceType.to_sym].round.to_i
+                num += 1
             end
-            str += "\n"
+            str += "   *sum: "+total.to_s+"*\n"
             count += 1
         end
 

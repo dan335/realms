@@ -18,9 +18,9 @@ def command_attack(bot, event, mongo)
 
     msg = event.message.content
     msg.slice!(0)
-    arr = msg.split
+    words = msg.split
 
-    if arr.length == 1
+    if words.length == 1
         # show help
         return
     end
@@ -28,28 +28,40 @@ def command_attack(bot, event, mongo)
     otherUser = nil
 
     # search by #
-    if arr[1].to_i != 0
-        otherUser = mongo[:users].find().sort(:networth => -1).skip(arr[1].to_i - 1).limit(1).first
+    if words[1].to_i != 0
+        otherUser = mongo[:users].find().sort(:networth => -1).skip(words[1].to_i - 1).limit(1).first
     end
 
     # search by mention
     if otherUser == nil
-        discordId = arr[1].gsub('<','').gsub('>','').gsub('@','').gsub('!','').to_i
+        discordId = words[1].gsub('<','').gsub('>','').gsub('@','').gsub('!','').to_i
         otherUser = mongo[:users].find(:discordId => discordId).first
+    end
+
+    # get name
+    # may contain spaces
+    wordNum = 1
+    name = ""
+    while wordNum < words.length && words[wordNum].to_i == 0
+        if wordNum > 1
+            name += " "
+        end
+        name += words[wordNum]
+        wordNum += 1
     end
 
     # search by username
     if otherUser == nil
-        otherUser = mongo[:users].find(:username => arr[1]).first
+        otherUser = mongo[:users].find(:username => name).first
     end
 
     # search by display_name
     if otherUser == nil
-        otherUser = mongo[:users].find(:display_name => arr[1]).first
+        otherUser = mongo[:users].find(:display_name => name).first
     end
 
     if otherUser == nil
-        event.respond "Could not find user "+arr[1]+" "+event.message.author.mention+"."
+        event.respond "Could not find user "+name+" "+event.message.author.mention+"."
         return
     end
 
@@ -70,49 +82,36 @@ def command_attack(bot, event, mongo)
       army[soldierType.pluralize.to_sym] = 0
     end
 
-    i = 2
-    while i < arr.length do
+    while wordNum < words.length do
 
         # check for correct number of parameters
-        if arr.length < i + 2
+        if words.length < wordNum + 2
             output_attack_syntax_message(event)
             return
         end
 
         # make sure number is a number
-        if arr[i].to_i <= 0
+        if words[wordNum].to_i <= 0
             output_attack_syntax_message(event)
             return
         end
 
         # make sure soldier type is valid
-        if !$settings[:soldierTypes].include?(arr[i+1].singularize)
+        if !$settings[:soldierTypes].include?(words[wordNum+1].singularize)
             output_attack_syntax_message(event)
             return
         end
 
         # make sure user has enough soldiers
-        if user[arr[i+1].pluralize.to_sym] < arr[i].to_i
-            event.respond "You do not have enough "+arr[i+1].pluralize+" "+event.message.author.mention
+        if user[words[wordNum+1].pluralize.to_sym] < words[wordNum].to_i
+            event.respond "You do not have enough "+words[wordNum+1].pluralize+" "+event.message.author.mention
             return
         end
 
-        army[arr[i+1].pluralize.to_sym] = arr[i].to_i
+        army[words[wordNum+1].pluralize.to_sym] = words[wordNum].to_i
 
-        i += 2
+        wordNum += 2
     end
-
-    # get army travel time
-    slowest = 99999
-    $settings[:soldierTypes].each do |soldierType|
-      if army[soldierType.pluralize.to_sym].to_i > 0
-        s = $settings[:soldiers][soldierType.to_sym][:speed]
-        if s < slowest
-            slowest = s
-        end
-      end
-    end
-    durationSeconds = $settings[:armyTravelDistance] / slowest.to_f * 60.0
 
     # get resources to feed army
     cost = {}
@@ -121,7 +120,7 @@ def command_attack(bot, event, mongo)
     end
     $settings[:soldierTypes].each do |soldierType|
         $settings[:soldiers][soldierType.to_sym][:consumes].each do |c|
-            cost[c[:type].to_sym] += c[:num] * army[soldierType.pluralize.to_sym].to_f * durationSeconds / (60 * 10)
+            cost[c[:type].to_sym] += c[:num] * army[soldierType.pluralize.to_sym].to_f * armyTravelTime(army) / (60 * 10)
         end
     end
 
@@ -147,7 +146,7 @@ def command_attack(bot, event, mongo)
     army[:discordId] = user[:discordId]
     army[:userId] = user[:_id]
     army[:createdAt] = Time.now
-    army[:arriveAt] = Time.now + durationSeconds
+    army[:arriveAt] = Time.now + armyTravelTime(army)
     army[:otherDiscordId] = otherUser[:discordId]
     army[:otherUserId] = otherUser[:_id]
     army[:isAttacking] = true
