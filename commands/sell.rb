@@ -48,10 +48,18 @@ def command_sell(bot, event, mongo)
 
     # does user have enough
     # compare with delta for floating point errors
-    if (user[type.to_sym] - num).abs > 0.000001
-        event.respond "You do not have "+number_with_commas(num)+" "+arr[2]+" "+event.message.author.mention+"."
-        return
+    if arr[1] == "max"
+        if (user[type.to_sym] - num).abs > 0.000001
+            event.respond "You do not have "+number_with_commas(num)+" "+arr[2]+" "+event.message.author.mention+"."
+            return
+        end
+    else
+        if user[type.to_sym] < num
+            event.respond "You do not have "+number_with_commas(num)+" "+arr[2]+" "+event.message.author.mention+"."
+            return
+        end
     end
+    
 
     # get gold amount from sell
     gold = totalOfSell(market[:value], num)
