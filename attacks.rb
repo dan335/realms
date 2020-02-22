@@ -138,7 +138,15 @@ def returnToRealm(bot, mongo, army)
     str += "__Soldiers:__ "
     $settings[:soldierTypes].each do |soldierType|
       if army[soldierType.pluralize.to_sym].to_i > 0
-        str += number_with_commas(army[soldierType.pluralize.to_sym].to_i)+ " "+soldierType.pluralize+"  "
+        str += number_with_commas(army[soldierType.pluralize.to_sym].to_i)+ " "
+
+        if army[soldierType.pluralize.to_sym].to_i == 1
+            soldierType
+        else
+            soldierType.pluralize
+        end
+
+        str += "  "
       end
     end
     str += "\n"
