@@ -18,7 +18,7 @@ def command_realm(bot, event, mongo)
     attackers = mongo[:armies].find({:otherDiscordId => event.message.author.id, :isAttacking => true}).sort(:createdAt => 1)
     numShrines = mongo[:shrines].find(:discordId => event.message.author.id).count
 
-    str = "-] **"+user[:display_name]+"'s REALM** [-\n"
+    str = "-] **"+user[:display_name].upcase+"'S REALM** [-\n"
 
     # resources
     str += "Gold: **"+number_with_commas(user[:gold].to_f.round(2))+"**,  "
