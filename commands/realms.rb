@@ -35,7 +35,15 @@ def command_realms(bot, event, mongo)
 
         str += counter.to_s+". **"+user[:display_name]+"** - networth: **"+number_with_commas(user[:networth].round(2))+"**,  "
 
-        str += "shrines: **"+numShrines.to_s+"**,  "
+        hasShrine = false
+        numShrines.times do
+            str += ":shinto_shrine:"
+            hasShrine = true
+        end
+
+        if hasShrine
+            str += "  "
+        end
 
         num = 0
         $settings[:soldierTypes].each do |soldierType|
