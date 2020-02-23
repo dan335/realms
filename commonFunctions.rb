@@ -297,7 +297,7 @@ end
 
 
 def getNewPopulation(previousPopulation, happiness)
-    range = 0.25    # higher number makes population grow quicker
+    range = 0.2    # higher number makes population grow quicker
     population = (previousPopulation.to_f * (happiness * range + (1.0 - range) + (range / 2))).round.to_i
     [population, 0].max
 end
