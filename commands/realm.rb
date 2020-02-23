@@ -32,10 +32,16 @@ def command_realm(bot, event, mongo)
     end
     str += "\n"
 
-    str += "Shrines: **"+numShrines.to_s+"**,  "
-    str += "Population: **"+user[:population].to_s+"**,  "
-    str += "Happiness: **"+(user[:happiness] * 100).round(1).to_s+"%**,  "
-    str += "Tax: **"+(user[:tax] * 100).to_s+"%**,  "
+    str += ":shinto_shrine: Shrines: **"+numShrines.to_s+"**,  "
+    str += ":house_with_garden: Population: **"+user[:population].to_s+"**,  "
+    
+    if user[:happiness] >= 0.5
+        str += ":smile:"
+    else
+        str += ":frowning2:"
+    end
+    str += " Happiness: **"+(user[:happiness] * 100).round(1).to_s+"%**,  "
+    str += ":moneybag: Tax: **"+(user[:tax] * 100).to_s+"%**,  "
     str += "\n"
 
     str += "Collected From Tax:  "
