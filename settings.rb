@@ -136,5 +136,6 @@ $settings = {
     :goldInterestRate => 0.003,
     :startingPopulation => 100,
     :populationMaxGrowth => 40,
-    :maxReputationPercentage => 0.5
+    :maxReputationPercentage => 0.5,
+    :losingBattleAffectsHappinessFor => 60 * 60 * 4
 }
