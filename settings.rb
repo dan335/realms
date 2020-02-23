@@ -134,5 +134,6 @@ $settings = {
     :armyTravelDistance => 200.0,      # higher number makes army travel times longer
     :medianTaxRate => 0.75,     # rate at which happiness from taxes stays the same
     :goldInterestRate => 0.003,
-    :startingPopulation => 100
+    :startingPopulation => 100,
+    :populationMaxGrowth => 250
 }

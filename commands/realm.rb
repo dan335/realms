@@ -33,7 +33,7 @@ def command_realm(bot, event, mongo)
     str += "\n"
 
     str += ":shinto_shrine: Shrines: **"+numShrines.to_s+"**,  "
-    str += ":house_with_garden: Population: **"+user[:population].to_s+"**,  "
+    str += ":house_with_garden: Population: **"+number_with_commas(user[:population])+"**,  "
     
     if user[:happiness] >= 0.5
         str += ":smile:"
@@ -171,7 +171,11 @@ def command_realm(bot, event, mongo)
 
             if army[:isAttacking]
                 otherUser = mongo[:users].find(:_id => army[:otherUserId]).first
-                str += "attacking "+otherUser[:display_name]+".  "
+                if otherUser
+                    str += "attacking "+otherUser[:display_name]+".  "
+                else
+                    str += "attacking unknown user.  "
+                end
             else
                 str += "returning.  "
             end

@@ -297,8 +297,7 @@ end
 
 
 def getNewPopulation(previousPopulation, happiness)
-    range = 0.2    # higher number makes population grow quicker
-    population = (previousPopulation.to_f * (happiness * range + (1.0 - range) + (range / 2))).round.to_i
+    population = previousPopulation + slopeInterpolate(happiness, 0.0, 1.0, $settings[:populationMaxGrowth].to_f * -1.0, $settings[:populationMaxGrowth].to_f, 0.5).round.to_i
     [population, 0].max
 end
 
