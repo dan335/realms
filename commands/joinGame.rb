@@ -33,7 +33,7 @@ def command_joingame(bot, event, mongo)
         :gold => 0.0,
         :createdAt => Time.now,
         :networth => 0.0,
-        :population => 100,
+        :population => $settings[:startingPopulation],
         :happiness => 0.5,
         :tax => 0.05,
         :taxCollected => nil
@@ -52,5 +52,5 @@ def command_joingame(bot, event, mongo)
 
     users.insert_one(user)
 
-    event.respond "Welcome to REALMS " + event.message.author.mention+". Type **%realm** to view your realm."
+    event.respond "I found a nice plot of land for you "+ event.message.author.mention+".  Type **%realm** to check it out.  Welcome to REALMS."
 end

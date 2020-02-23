@@ -63,11 +63,11 @@ mongo[:shrines].indexes.create_many([
 mongo[:market].indexes.create_one({:type => 1})
 
 
-# temp - remove next game
-mongo[:users].update_many({:population => {"$exists" => false}}, {"$set" => {:population => 100}})
-mongo[:users].update_many({:happiness => {"$exists" => false}}, {"$set" => {:happiness => 0.5}})
-mongo[:users].update_many({:tax => {"$exists" => false}}, {"$set" => {:tax => 0.05}})
-mongo[:users].update_many({:taxCollected => {"$exists" => false}}, {"$set" => {:taxCollected => nil}})
+# # temp - remove next game
+# mongo[:users].update_many({:population => {"$exists" => false}}, {"$set" => {:population => 100}})
+# mongo[:users].update_many({:happiness => {"$exists" => false}}, {"$set" => {:happiness => 0.5}})
+# mongo[:users].update_many({:tax => {"$exists" => false}}, {"$set" => {:tax => 0.05}})
+# mongo[:users].update_many({:taxCollected => {"$exists" => false}}, {"$set" => {:taxCollected => nil}})
 
 
 validateMarket(mongo)

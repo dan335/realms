@@ -75,7 +75,7 @@ def command_sell(bot, event, mongo)
     updateMarketPrice(mongo, market, type, num, false)
 
     # respond
-    event.respond event.message.author.mention+" sold "+number_with_commas(num)+" "+type+" for "+number_with_commas(gold.round(2))+" gold."
+    event.respond event.message.author.mention+" sold "+number_with_commas(num.round(2))+" "+type+" for "+number_with_commas(gold.round(2))+" gold."
 end
 
 
