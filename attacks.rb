@@ -301,9 +301,9 @@ end
 def getPowerToLose(attackingArmy, defendingArmy)
   if attackingArmy[:isWinner]
       attackingArmy[:powerToLose] = defendingArmy[:totalPower] * 0.1
-      defendingArmy[:powerToLose] = defendingArmy[:totalPower] * 0.1
+      defendingArmy[:powerToLose] = defendingArmy[:totalPower] * 0.25
   else
-      attackingArmy[:powerToLose] = [attackingArmy[:totalPower] * 0.5, defendingArmy[:totalPower] * 0.25].max
+      attackingArmy[:powerToLose] = [attackingArmy[:totalPower] * 0.6, defendingArmy[:totalPower] * 0.25].max
       defendingArmy[:powerToLose] = [attackingArmy[:totalPower] * 0.01, defendingArmy[:totalPower] * 0.01].min
   end
 end

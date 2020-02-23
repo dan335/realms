@@ -4,7 +4,6 @@
 - change all commands to lowercase and allow any case
 - fire soldiers
 - hire max
-- hiring takes away from population
 
 
 ## ideas
@@ -16,6 +15,7 @@
 
 ## done
 
+- hiring takes away from population
 - reputation.  stop people from attacking small realms.  lowers happiness
 - fill out %help
 - if you attack and lose then happiness goes down.
