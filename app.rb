@@ -126,5 +126,5 @@ while true do
     attackInterval(bot, mongo)
 
     # sleep until next minute
-    sleep 60 - Time.now.sec
+    sleep 61 - Time.now.sec
 end

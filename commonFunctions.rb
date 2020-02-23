@@ -396,5 +396,5 @@ end
 
 
 def getGoldInterest(gold)
-    [gold * $settings[:goldInterestRate], 0.0].max
+    [gold * (1.0 + $settings[:goldInterestRate]), 0.0].max
 end

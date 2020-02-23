@@ -33,4 +33,8 @@ RSpec.describe "commonFunctions" do
         expect(slopeInterpolate(0.0, 0.0, 1.0, 0.0, 1.0, 0.9)).to eq(0.0)
         expect(slopeInterpolate(1.0, 0.0, 1.0, 0.0, 1.0, 0.9)).to eq(1.0)
     end
+
+    it "gold collects interest" do
+        expect( getGoldInterest(100) ).to be_between(100 + 100 * $settings[:goldInterestRate] - 0.00001, 100 + 100 * $settings[:goldInterestRate] + 0.00001)
+    end
 end
