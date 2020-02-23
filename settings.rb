@@ -43,6 +43,7 @@ $settings = {
     :soldiers => {
         :footman => {
             :name => "Footman",
+            :shortName => "footman",
             :cost => [
                 {:type => "ore", :num => 1.0},
                 {:type => "grain", :num => 0.1}
@@ -57,6 +58,7 @@ $settings = {
         },
         :archer => {
             :name => "Archer",
+            :shortName => "archer",
             :cost => [
                 {:type => "wood", :num => 1.0},
                 {:type => "grain", :num => 0.1}
@@ -74,6 +76,7 @@ $settings = {
         },
         :pikeman => {
             :name => "Pikeman",
+            :shortName => "pike",
             :cost => [
                 {:type => "clay", :num => 2.0},
                 {:type => "grain", :num => 0.1}
@@ -90,6 +93,7 @@ $settings = {
         },
         :knight => {
             :name => "Knight",
+            :shortName => "knight",
             :cost => [
                 {:type => "ore", :num => 1.0},
                 {:type => "wool", :num => 2.0},
@@ -108,6 +112,7 @@ $settings = {
         },
         :catapult => {
             :name => "Catapult",
+            :shortName => "cat",
             :cost => [
                 {:type => "wood", :num => 10.0},
                 {:type => "grain", :num => 0.1}

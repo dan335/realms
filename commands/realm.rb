@@ -21,10 +21,10 @@ def command_realm(bot, event, mongo)
     str = "-] **"+user[:display_name]+"'s REALM** [-\n"
 
     # resources
-    str += "Gold: "+number_with_commas(user[:gold].to_f.round(2))+",  "
+    str += "Gold: **"+number_with_commas(user[:gold].to_f.round(2))+"**,  "
     num = 0
     $settings[:resourceTypes].each do |resourceType|
-        str += resourceType.camelize+": "+number_with_commas(user[resourceType.to_sym].to_f.round(2))
+        str += resourceType.camelize+": **"+number_with_commas(user[resourceType.to_sym].to_f.round(2))+"**"
         if num < $settings[:resourceTypes].length - 1
             str += ",  "
         end
@@ -32,10 +32,10 @@ def command_realm(bot, event, mongo)
     end
     str += "\n"
 
-    str += "Shrines: "+numShrines.to_s+",  "
-    str += "Population: "+user[:population].to_s+",  "
-    str += "Happiness: "+(user[:happiness] * 100).round(1).to_s+"%,  "
-    str += "Tax: "+(user[:tax] * 100).to_s+"%,  "
+    str += "Shrines: **"+numShrines.to_s+"**,  "
+    str += "Population: **"+user[:population].to_s+"**,  "
+    str += "Happiness: **"+(user[:happiness] * 100).round(1).to_s+"%**,  "
+    str += "Tax: **"+(user[:tax] * 100).to_s+"%**,  "
     str += "\n"
 
     str += "Collected From Tax:  "
@@ -45,7 +45,7 @@ def command_realm(bot, event, mongo)
     else
         num = 0
         $settings[:resourceTypes].each do |resourceType|
-            str += number_with_commas(user[:taxCollected][resourceType.to_sym].round(1))+" "+resourceType.camelize
+            str += "**"+number_with_commas(user[:taxCollected][resourceType.to_sym].round(1))+"** "+resourceType.camelize
             if num < $settings[:soldierTypes].length - 1
                 str += ",  "
             end
@@ -58,8 +58,8 @@ def command_realm(bot, event, mongo)
     #soldiers
     num = 0
     $settings[:soldierTypes].each do |soldierType|
-        str += $settings[:soldiers][soldierType.to_sym][:name].pluralize+": "
-        str += number_with_commas(user[soldierType.pluralize.to_sym])
+        str += $settings[:soldiers][soldierType.to_sym][:name].pluralize+": **"
+        str += number_with_commas(user[soldierType.pluralize.to_sym])+"**"
         if num < $settings[:soldierTypes].length - 1
             str += ",  "
         end
@@ -91,7 +91,7 @@ def command_realm(bot, event, mongo)
         str += "Soldiers consuming "
         counter = 1
         cost.each do |c|
-            str += c[:num].round(2).to_s+" "+c[:type]
+            str += "**"+c[:num].round(2).to_s+"** "+c[:type]
             if counter < cost.length
                 str += ","
             end
@@ -113,7 +113,7 @@ def command_realm(bot, event, mongo)
             total = 0
             num = 0
             $settings[:resourceTypes].each do |resourceType|
-                str += resourceType.camelize+": "+farm[resourceType.to_sym].round.to_s
+                str += resourceType.camelize+": **"+farm[resourceType.to_sym].round.to_s+"**"
                 if num < $settings[:resourceTypes].length - 1
                     str += ",  "
                 end
