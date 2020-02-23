@@ -95,7 +95,7 @@ def getWinnings(attackingArmy, defendingArmy, markets)
         canCarryInGold -= winnings[:gold]
     end
 
-    $settings[:resourceTypes].each do |resourceType|
+    $settings[:resourceTypes].shuffle.each do |resourceType|
         if attackingArmy[:isWinner] && attackingArmy[:numLoses] < attackingArmy[:numSoldiers]
             resourceWorth = resourceToGold(markets, resourceType, 1.0)
 
