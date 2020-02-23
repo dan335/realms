@@ -13,6 +13,7 @@
 - if you attack and lose then happiness goes down.  record time of last lost battle
 - reputation.  stop people from attacking small realms.  lowers happiness
 - record winner of game in db.  show with %winners
+- must build shrines one at a time
 
 
 ## done

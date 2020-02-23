@@ -351,9 +351,16 @@ end
 
 
 
-def getNewHappiness(happiness, tax)
-    # find target happiness
+def getNewHappiness(happiness, tax, lastLostBattle)
+    # find target happiness from tax
     targetHappiness = 1.0 - slopeInterpolate(tax, 0.0, 1.0, 0.0, 1.0, 0.9)    # 0.33 is about even tax with 0.9 slope
+
+    # find target happiness form losing a battle
+    if lastLostBattle != nil
+        maxValue = 60 * 60  # 1 hour
+        value = [[Time.now - lastLostBattle, 0].max, maxValue].min  # 0 - max, 0 means recent
+        targetHappiness = slopeInterpolate(value.to_f, 0.0, maxValue.to_f, 0.0, targetHappiness, 0.5)
+    end
 
     # slowly adjust towards targetHappiness
     lerp(happiness, targetHappiness, 0.1)

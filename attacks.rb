@@ -48,6 +48,11 @@ def doAttack(bot, mongo, army)
     getLoses(attackingArmy)
     getLoses(defendingArmy)
 
+    # save last lost battle
+    if !attackingArmy[:isWinner]
+        mongo[:users].update_one({:_id => attackingArmy[:userId]}, {"$set" => {:lastLostBattle => Time.now}})
+    end
+
     # get winnings
     winnings = getWinnings(attackingArmy, defendingArmy, mongo[:market].find())
     set = {:gold => [defendingArmy[:gold] - winnings[:gold], 0.0].max}
