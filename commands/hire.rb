@@ -117,8 +117,17 @@ def command_hire(bot, event, mongo)
         end
     end
 
+    # does user have enough population
+    if arr[1].to_i > user[:population]
+        event.respond "You do not have enough population to hire "+number_with_commas(arr[1].to_i)+" "+arr[2].pluralize+" "+event.message.author.mention+"."
+        return
+    end
+
     # add soldiers to user and take away cost
     set = {}
+
+    # take away population
+    set[:population] = [user[:population] - arr[1].to_i, 0].max
 
     # resources
     $settings[:resourceTypes].each do |resourceType|

@@ -5,18 +5,18 @@
 - fire soldiers
 - hire max
 - hiring takes away from population
-- reputation.  stop people from attacking small realms.  lowers happiness
 
 
 ## ideas
 
-
 - record winner of game in db.  show with %winners
 - must build shrines one at a time
+- a way to destroy other people's shrines.  catapults?  while building?  shrines have hitpoints?
 
 
 ## done
 
+- reputation.  stop people from attacking small realms.  lowers happiness
 - fill out %help
 - if you attack and lose then happiness goes down.
 - population, happiness and taxes.  another source of income
