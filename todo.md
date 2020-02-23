@@ -10,7 +10,6 @@
 ## ideas
 
 - hiring takes away from population
-- if you attack and lose then happiness goes down.  record time of last lost battle
 - reputation.  stop people from attacking small realms.  lowers happiness
 - record winner of game in db.  show with %winners
 - must build shrines one at a time
@@ -18,6 +17,7 @@
 
 ## done
 
+- if you attack and lose then happiness goes down.
 - population, happiness and taxes.  another source of income
 - shrines
 - mongo indexes
