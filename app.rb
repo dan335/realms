@@ -100,17 +100,14 @@ bot.message(start_with: '%') do |event|
 end
 
 bot.run true
-collectTaxes(mongo)
+
 # game loop
-loopNum = 1
 updateNetworth(mongo)
 while true do
-    loopStart = Time.now.to_i
- 
     ordersInterval(bot, mongo)
 
     # 10 minutes
-    if loopNum % 10 == 0
+    if Time.now.min % 10 == 0
         giveResources(mongo)
         feedArmies(bot, mongo)
 
@@ -128,14 +125,6 @@ while true do
 
     attackInterval(bot, mongo)
 
-    loopEnd = Time.now.to_i
-    sleepFor = loopStart + 60 - loopEnd
-
-    if sleepFor < 20
-        sleepFor = 60
-    end
-
-    loopNum += 1
-
-    sleep sleepFor
+    # sleep until next minute
+    sleep 60 - Time.now.sec
 end
