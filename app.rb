@@ -69,8 +69,6 @@ mongo[:users].update_many({:happiness => {"$exists" => false}}, {"$set" => {:hap
 mongo[:users].update_many({:tax => {"$exists" => false}}, {"$set" => {:tax => 0.05}})
 mongo[:users].update_many({:taxCollected => {"$exists" => false}}, {"$set" => {:taxCollected => nil}})
 
-mongo[:users].update_many({}, {"$set" => {:taxCollected => nil}})
-
 
 validateMarket(mongo)
 
