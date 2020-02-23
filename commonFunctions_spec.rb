@@ -22,12 +22,19 @@ RSpec.describe "commonFunctions" do
 
 
     it "gets new happiness" do
-        expect(getNewHappiness(0.5, 0.325, nil)).to be_between(0.499, 0.501)
-        expect(getNewHappiness(0.5, 0.4, nil)).to be < 0.5
-        expect(getNewHappiness(0.5, 0.2, nil)).to be > 0.5
+        # test tax
+        expect(getNewHappiness(0.5, 0.325, nil, 1.0)).to be_between(0.499, 0.501)
+        expect(getNewHappiness(0.5, 0.4, nil, 1.0)).to be < 0.5
+        expect(getNewHappiness(0.5, 0.2, nil, 1.0)).to be > 0.5
 
-        expect(getNewHappiness(0.5, 0.325, Time.now)).to be < 0.5
-        expect(getNewHappiness(0.5, 0.325, Time.now - 60 * 60)).to be_between(0.499, 0.501)
+        # test last lost battle
+        expect(getNewHappiness(0.5, 0.325, Time.now, 1.0)).to be < 0.5
+        expect(getNewHappiness(0.5, 0.325, Time.now - 60 * 60, 1.0)).to be_between(0.499, 0.501)
+
+        #test reputation
+        expect(getNewHappiness(0.5, 0.325, nil, 1.0)).to be_between(0.499, 0.501)
+        expect(getNewHappiness(0.5, 0.325, nil, 0.5)).to be < 0.5
+        expect(getNewHappiness(0.5, 0.325, nil, 0.0)).to eq 0.45
     end
 
     it "slopeInterpolate works for tax rage" do
@@ -38,5 +45,12 @@ RSpec.describe "commonFunctions" do
 
     it "gold collects interest" do
         expect( getGoldInterest(100) ).to be_between(100 + 100 * $settings[:goldInterestRate] - 0.00001, 100 + 100 * $settings[:goldInterestRate] + 0.00001)
+    end
+
+
+    it "gets new reputation" do
+        expect( getReputationFromAttack(1000, 1000, 1.0) ).to eq(1.0)
+        expect( getReputationFromAttack(1000, 1000, 0.5) ).to eq(0.5)
+        expect( getReputationFromAttack(1000, 0, 1.0) ).to eq(0.0)
     end
 end

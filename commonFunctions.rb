@@ -52,7 +52,7 @@ def updateNetworth(mongo)
     mongo[:users].find().each do |user|
         bulk << {:update_one => {
             :filter => {:_id => user[:_id]},
-            :update => {'$set' => {:networth => calculateNetworthForUser(markets, user)}}
+            :update => {'$set' => {:networth => calculateNetworthForUser(mongo, markets, user)}}
         }}
     end
 
@@ -65,12 +65,12 @@ def updateNetworthFor(mongo, discordId)
     markets = mongo[:market].find()
 
     if user
-        mongo[:users].update_one({:_id => user[:_id]}, {'$set' => {:networth => calculateNetworthForUser(markets, user)}})
+        mongo[:users].update_one({:_id => user[:_id]}, {'$set' => {:networth => calculateNetworthForUser(mongo, markets, user)}})
     end
 end
 
 
-def calculateNetworthForUser(markets, user)
+def calculateNetworthForUser(mongo, markets, user)
     net = user[:gold]
 
     # resources
@@ -88,7 +88,31 @@ def calculateNetworthForUser(markets, user)
             gold = resourceToGold(markets, cost[:type], cost[:num])
 
             if gold != nil
-                net += user[soldierType.pluralize.to_sym].to_i * gold
+                net += user[soldierType.pluralize.to_sym].to_f * gold
+            end
+        end
+    end
+
+    # armies
+    mongo[:armies].find({:userId => user[:_id]}).each do |army|
+        $settings[:soldierTypes].each do |soldierType|
+            $settings[:soldiers][soldierType.to_sym][:cost].each do |cost|
+                gold = resourceToGold(markets, cost[:type], cost[:num])
+    
+                if gold != nil
+                    net += army[soldierType.pluralize.to_sym].to_f * gold
+                end
+            end
+        end
+    end
+
+    # shrines
+    mongo[:shrines].find({:discordId => user[:discordId]}).each do |shrine|
+        $settings[:buildings][:shrine][:cost].each do |cost|
+            gold = resourceToGold(markets, cost[:type], cost[:num])
+
+            if gold != nil
+                net += gold
             end
         end
     end
@@ -351,7 +375,7 @@ end
 
 
 
-def getNewHappiness(happiness, tax, lastLostBattle)
+def getNewHappiness(happiness, tax, lastLostBattle, reputation)
     # find target happiness from tax
     targetHappiness = 1.0 - slopeInterpolate(tax, 0.0, 1.0, 0.0, 1.0, 0.9)    # 0.33 is about even tax with 0.9 slope
 
@@ -362,8 +386,28 @@ def getNewHappiness(happiness, tax, lastLostBattle)
         targetHappiness = slopeInterpolate(value.to_f, 0.0, maxValue.to_f, 0.0, targetHappiness, 0.5)
     end
 
+    # reputation
+    targetHappiness = slopeInterpolate(reputation, 0.0, 1.0, 0.0, targetHappiness, 0.5)
+
     # slowly adjust towards targetHappiness
     lerp(happiness, targetHappiness, 0.1)
+end
+
+
+# called at 10 min interval
+def getNewReputation(reputation)
+    # grow
+    reputation = reputation + 0.02
+
+    [[reputation, 0.0].max, 1.0].min
+end
+
+
+# called with someone attacks
+def getReputationFromAttack(attackerNetworth, defenderNetworth, attackerReputation)
+    percentSmaller = [defenderNetworth / (attackerNetworth * 0.66), 1.0].min
+    rep = slopeInterpolate(percentSmaller, 0.0, 1.0, 0.0, attackerReputation, 0.5)
+    [rep, 0.0].max
 end
 
 

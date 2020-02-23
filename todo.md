@@ -4,19 +4,20 @@
 - change all commands to lowercase and allow any case
 - fire soldiers
 - hire max
-- fill out %help
+- hiring takes away from population
+- reputation.  stop people from attacking small realms.  lowers happiness
 
 
 ## ideas
 
-- hiring takes away from population
-- reputation.  stop people from attacking small realms.  lowers happiness
+
 - record winner of game in db.  show with %winners
 - must build shrines one at a time
 
 
 ## done
 
+- fill out %help
 - if you attack and lose then happiness goes down.
 - population, happiness and taxes.  another source of income
 - shrines

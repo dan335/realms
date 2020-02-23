@@ -146,6 +146,9 @@ def command_attack(bot, event, mongo)
         return
     end
 
+    # reputation
+    mongo[:users].update_one({:_id => user[:_id]}, {"$set" => {:reputation => getReputationFromAttack(user[:networth], otherUser[:networth], user[:reputation])}})
+
     # create army
     army[:discordId] = user[:discordId]
     army[:userId] = user[:_id]

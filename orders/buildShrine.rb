@@ -28,5 +28,6 @@ def order_buildShrine(bot, order, mongo)
         resetGame(mongo)
     else
         sendPM(bot, user[:pmChannelId], "Your shrine has finished building.  View your realm with **%realm**.")
+        updateNetworthFor(mongo, user[:discordId])
     end
 end

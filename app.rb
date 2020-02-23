@@ -68,7 +68,6 @@ mongo[:market].indexes.create_one({:type => 1})
 # mongo[:users].update_many({:happiness => {"$exists" => false}}, {"$set" => {:happiness => 0.5}})
 # mongo[:users].update_many({:tax => {"$exists" => false}}, {"$set" => {:tax => 0.05}})
 # mongo[:users].update_many({:taxCollected => {"$exists" => false}}, {"$set" => {:taxCollected => nil}})
-mongo[:users].update_many({:lastLostBattle => {"$exists" => false}}, {"$set" => {:lastLostBattle => nil}})
 
 
 validateMarket(mongo)
@@ -115,7 +114,8 @@ while true do
         mongo[:users].find().each do |user|
           mongo[:users].update_one({:_id => user[:_id]}, {"$set" => {
             :population => getNewPopulation(user[:population], user[:happiness]),
-            :happiness => getNewHappiness(user[:happiness], user[:tax], user[:lastLostBattle]),
+            :reputation => getNewReputation(user[:reputation]),
+            :happiness => getNewHappiness(user[:happiness], user[:tax], user[:lastLostBattle], user[:reputation]),
             :gold => getGoldInterest(user[:gold])
             }})
         end

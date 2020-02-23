@@ -99,4 +99,6 @@ def command_build(bot, event, mongo)
     })
 
     event.respond "I'm building you a "+type+" " + event.message.author.mention + ".  Check its progress with **%realm**."
+
+    updateNetworthFor(mongo, event.message.author.id)
 end

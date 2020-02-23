@@ -71,6 +71,7 @@ def doAttack(bot, mongo, army)
 
     # check if army is dead
     if attackingArmy[:numLoses] == attackingArmy[:numSoldiers]
+        updateNetworthFor(mongo, attackingArmy[:discordId])
         return
     end
 
@@ -80,6 +81,7 @@ def doAttack(bot, mongo, army)
     end
 
     sendArmyToRealm(mongo, attackingArmy, winnings, armyTravelTime(attackingArmy))
+    updateNetworthFor(mongo, attackingArmy[:discordId])
 end
 
 

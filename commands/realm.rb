@@ -41,6 +41,13 @@ def command_realm(bot, event, mongo)
         str += ":frowning2:"
     end
     str += " Happiness: **"+(user[:happiness] * 100).round(1).to_s+"%**,  "
+
+    if user[:reputation] < 0.5
+        str += ":smiling_imp:"
+    else
+        str += ":sunglasses:"
+    end
+    str += " Reputation: **"+(user[:reputation] * 100).round(1).to_s+"%**,  "
     str += ":moneybag: Tax: **"+(user[:tax] * 100).to_s+"%**,  "
     str += "\n"
 
