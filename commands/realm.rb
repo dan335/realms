@@ -37,7 +37,21 @@ def command_realm(bot, event, mongo)
     str += "Happiness: "+(user[:happiness] * 100).round(1).to_s+"%,  "
     str += "Tax: "+(user[:tax] * 100).to_s+"%,  "
     str += "\n"
-    str += "Resources Collected From Tax: "+(user[:taxCollected].round(1)).to_s+"  "
+
+    str += "Collected From Tax:  "
+
+    if user[:taxCollected] == nil
+        str += "None"
+    else
+        num = 0
+        $settings[:resourceTypes].each do |resourceType|
+            str += number_with_commas(user[:taxCollected][resourceType.to_sym].round(1))+" "+resourceType.camelize
+            if num < $settings[:soldierTypes].length - 1
+                str += ",  "
+            end
+            num += 1
+        end
+    end
 
     str += "\n\n"
 

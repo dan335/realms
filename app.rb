@@ -67,7 +67,9 @@ mongo[:market].indexes.create_one({:type => 1})
 mongo[:users].update_many({:population => {"$exists" => false}}, {"$set" => {:population => 100}})
 mongo[:users].update_many({:happiness => {"$exists" => false}}, {"$set" => {:happiness => 0.5}})
 mongo[:users].update_many({:tax => {"$exists" => false}}, {"$set" => {:tax => 0.05}})
-mongo[:users].update_many({:taxCollected => {"$exists" => false}}, {"$set" => {:taxCollected => 0.0}})
+mongo[:users].update_many({:taxCollected => {"$exists" => false}}, {"$set" => {:taxCollected => nil}})
+
+mongo[:users].update_many({}, {"$set" => {:taxCollected => nil}})
 
 
 validateMarket(mongo)
@@ -100,7 +102,7 @@ bot.message(start_with: '%') do |event|
 end
 
 bot.run true
-
+collectTaxes(mongo)
 # game loop
 loopNum = 1
 updateNetworth(mongo)

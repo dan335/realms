@@ -36,7 +36,7 @@ def command_joingame(bot, event, mongo)
         :population => 100,
         :happiness => 0.5,
         :tax => 0.05,
-        :taxCollected => 0.0
+        :taxCollected => nil
     }
 
     $settings[:resourceTypes].each do |resourceType|

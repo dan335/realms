@@ -308,12 +308,40 @@ def collectTaxes(mongo)
     spendingPerPerson = 0.1 # higher increases tax collected from population
 
     mongo[:users].find().each do |user|
-        set = {}
-
-        taxCollected = 0.0
+        
+        
+        # find how many resources are collected by farms
+        # zero out
+        res = {}
         $settings[:resourceTypes].each do |resourceType|
-            collected = user[:population].to_f * spendingPerPerson * user[:tax]
-            taxCollected += collected
+            res[resourceType.to_sym] = 0.0
+        end
+
+        # get numbers from farms
+        sum = 0.0
+        mongo[:farms].find({:discordId => user[:discordId]}).each do |farm|
+            $settings[:resourceTypes].each do |resourceType|
+                res[resourceType.to_sym] += farm[resourceType.to_sym]
+                sum += farm[resourceType.to_sym]
+            end
+        end
+
+        # get percentages
+        percentages = {}
+        $settings[:resourceTypes].each do |resourceType|
+            if sum == 0.0
+                percentages[resourceType.to_sym] = 0.0
+            else
+                percentages[resourceType.to_sym] = res[resourceType.to_sym] / sum
+            end
+        end
+
+        set = {}
+        taxCollected = {}
+
+        $settings[:resourceTypes].each do |resourceType|
+            collected = user[:population].to_f * spendingPerPerson * user[:tax] * percentages[resourceType.to_sym]
+            taxCollected[resourceType.to_sym] = collected
             set[resourceType.to_sym] = [user[resourceType.to_sym] + collected, 0.0].max
         end
 
