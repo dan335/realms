@@ -117,6 +117,17 @@ def calculateNetworthForUser(mongo, markets, user)
         end
     end
 
+    # shrines being built
+    mongo[:orders].find({:discordId => user[:discordId], :type => "buildShrine"}).each do |shrine|
+        $settings[:buildings][:shrine][:cost].each do |cost|
+            gold = resourceToGold(markets, cost[:type], cost[:num])
+
+            if gold != nil
+                net += gold
+            end
+        end
+    end
+
     net
 end
 
@@ -405,7 +416,7 @@ end
 
 # called with someone attacks
 def getReputationFromAttack(attackerNetworth, defenderNetworth, attackerReputation)
-    percentSmaller = [defenderNetworth / (attackerNetworth * 0.66), 1.0].min
+    percentSmaller = [defenderNetworth / (attackerNetworth * $settings[:maxReputationPercentage]), 1.0].min
     rep = slopeInterpolate(percentSmaller, 0.0, 1.0, 0.0, attackerReputation, 0.5)
     [rep, 0.0].max
 end

@@ -47,7 +47,7 @@ def command_realms(bot, event, mongo)
 
         num = 0
         $settings[:soldierTypes].each do |soldierType|
-            str += $settings[:soldiers][soldierType.to_sym][:shortName].pluralize+": **"+number_with_commas(user[soldierType.pluralize.to_sym])+"**"
+            str += $settings[:soldiers][soldierType.to_sym][:name].pluralize+": **"+number_with_commas(user[soldierType.pluralize.to_sym])+"**"
             if num < $settings[:soldierTypes].length - 1
                 str += ",  "
             end

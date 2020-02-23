@@ -135,5 +135,6 @@ $settings = {
     :medianTaxRate => 0.75,     # rate at which happiness from taxes stays the same
     :goldInterestRate => 0.003,
     :startingPopulation => 100,
-    :populationMaxGrowth => 40
+    :populationMaxGrowth => 40,
+    :maxReputationPercentage => 0.5
 }
