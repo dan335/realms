@@ -66,6 +66,12 @@ def command_realm(bot, event, mongo)
         end
     end
 
+    if user[:lastLostBattle] != nil
+        if user[:lastLostBattle] + $settings[:losingBattleAffectsHappinessFor] > Time.now
+            str += "\n*Happiness affected by lost battle for "+(($settings[:losingBattleAffectsHappinessFor] - (Time.now - user[:lastLostBattle])) / 60).round(1).to_s+" more minutes.*"
+        end
+    end
+
     str += "\n\n"
 
     #soldiers
