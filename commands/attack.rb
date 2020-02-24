@@ -122,9 +122,10 @@ def command_attack(bot, event, mongo)
     $settings[:resourceTypes].each do |resourceType|
         cost[resourceType.to_sym] = 0.0
     end
+    travelTime = armyTravelTime(army) * 2
     $settings[:soldierTypes].each do |soldierType|
         $settings[:soldiers][soldierType.to_sym][:consumes].each do |c|
-            cost[c[:type].to_sym] += c[:num] * army[soldierType.pluralize.to_sym].to_f * armyTravelTime(army) / (60 * 10)
+            cost[c[:type].to_sym] += c[:num] * army[soldierType.pluralize.to_sym].to_f * travelTime.to_f / (60.0 * 10.0)
         end
     end
 

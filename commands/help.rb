@@ -9,7 +9,7 @@ def command_help(bot, event, mongo)
 
     str += "__COLLECTING RESOURCES__ - There are two different ways to collect resources.  Farms and taxes.\n"
 
-    str += "**FARMS** - Use **%build farm** to build a farm.  Farms take 10 minutes to build.  The resources each farm produce are random.  If you are not happy with the amount of resources a farm collects use **%destroy farm 1** to destroy your first farm then build another.  You can have up to "+$settings[:buildings][:farm][:max].to_s+" farms.\n"
+    str += "**FARMS** - Use **%build farm** to build a farm.  Farms take 10 minutes to build.  The resources each farm produce are random.  If you are not happy with the amount of resources a farm collects use **%destroy farm 1** to destroy your first farm then build another.  You can have up to "+$settings[:buildings][:farm][:max].to_s+" farms.  All farms can be built at the same time.\n"
     str += "\n"
     str += "**TAXES** - Taxes are collected from the citizens of your realm.  Everyone starts the game with "+$settings[:startingPopulation].to_s+" population.  If your happiness is above 50% then your population will grow.  If it falls below 50% then poppulation goes down.  Taxes, reputation and how long ago you lost an attack all affect happiness.  Happiness goes up if your taxes are low.  32.5% tax rate is about 50% happiness.  A reputation below 100% makes happiness go down.  Reputation goes down if you attack a realm much smaller than yours.  Reputation slowly increases back to 100%.  If you attack someone and lose then happiness will go down for "+($settings[:losingBattleAffectsHappinessFor].to_f / 60.0 / 60.0).round(1).to_s+" hours.\n"
     

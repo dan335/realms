@@ -48,7 +48,7 @@ def command_realm(bot, event, mongo)
         str += ":sunglasses:"
     end
     str += " Reputation: **"+(user[:reputation] * 100).round(1).to_s+"%**,  "
-    str += ":moneybag: Tax: **"+(user[:tax] * 100).to_s+"%**,  "
+    str += ":moneybag: Tax: **"+(user[:tax] * 100).round(1).to_s+"%**,  "
     str += "\n"
 
     str += "Collected From Tax:  "
