@@ -353,7 +353,9 @@ def collectTaxes(mongo)
 
         # get numbers from farms
         sum = 0.0
+        hasFarm = false
         mongo[:farms].find({:discordId => user[:discordId]}).each do |farm|
+            hasFarm = true
             $settings[:resourceTypes].each do |resourceType|
                 res[resourceType.to_sym] += farm[resourceType.to_sym]
                 sum += farm[resourceType.to_sym]
@@ -367,6 +369,13 @@ def collectTaxes(mongo)
                 percentages[resourceType.to_sym] = 0.0
             else
                 percentages[resourceType.to_sym] = res[resourceType.to_sym] / sum
+            end
+        end
+
+        # what if no farms
+        if !hasFarm
+            $settings[:resourceTypes].each do |resourceType|
+                percentages[resourceType.to_sym] = 100.0 / $settings[:resourceTypes].length
             end
         end
 
