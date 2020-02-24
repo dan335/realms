@@ -26,7 +26,7 @@ def command_realms(bot, event, mongo)
 
     str += "page "+(page+1).to_s+" of "+(numUsers.to_f / $settings[:perPage].to_f).ceil.to_s+"\n"
 
-    str += "*Attacking soldiers are not included.*\n\n"
+    str += "\n"
 
     # get users
     counter = page * $settings[:perPage] + 1
