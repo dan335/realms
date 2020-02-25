@@ -19,7 +19,7 @@ def command_help(bot, event, mongo)
 
     str += "\n"
     str += "__OTHER INFO__\n"
-    str += "The game updates every 10 minutes.
+    str += "The game updates every 10 minutes."
     event.respond str
 end
 
