@@ -28,8 +28,8 @@ RSpec.describe "commonFunctions" do
         expect(getNewHappiness(0.5, 0.2, nil, 1.0)).to be > 0.5
 
         # test last lost battle
-        expect(getNewHappiness(0.5, 0.325, Time.now, 1.0)).to be < 0.5
-        expect(getNewHappiness(0.5, 0.325, Time.now - 60 * 60, 1.0)).to be_between(0.499, 0.501)
+        expect(getNewHappiness(0.5, 0.325, Time.now, 1.0)).to be < 0.4751
+        expect(getNewHappiness(0.5, 0.325, Time.now - 60 * 60 * 4, 1.0)).to be_between(0.499, 0.501)
 
         #test reputation
         expect(getNewHappiness(0.5, 0.325, nil, 1.0)).to be_between(0.499, 0.501)

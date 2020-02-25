@@ -402,7 +402,8 @@ def getNewHappiness(happiness, tax, lastLostBattle, reputation)
     # find target happiness form losing a battle
     if lastLostBattle != nil
         value = [[Time.now - lastLostBattle, 0].max, $settings[:losingBattleAffectsHappinessFor]].min  # 0 - max, 0 means recent
-        targetHappiness = slopeInterpolate(value.to_f, 0.0, $settings[:losingBattleAffectsHappinessFor].to_f, 0.0, targetHappiness, 0.5)
+        target = slopeInterpolate(value.to_f, 0.0, $settings[:losingBattleAffectsHappinessFor].to_f, 0.0, targetHappiness, 0.5)
+        targetHappiness = (target + targetHappiness) / 2.0
     end
 
     # reputation
