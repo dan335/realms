@@ -463,8 +463,3 @@ end
 def is_number? string
     true if Float(string) rescue false
 end
-
-
-def getGoldInterest(gold)
-    [gold * (1.0 + $settings[:goldInterestRate]), 0.0].max
-end
