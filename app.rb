@@ -22,6 +22,7 @@ require './commands/market.rb'
 require './commands/buy.rb'
 require './commands/sell.rb'
 require './commands/setTax.rb'
+require './commands/fire.rb'
 
 require './attacks.rb'
 
