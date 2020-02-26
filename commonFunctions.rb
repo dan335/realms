@@ -265,7 +265,9 @@ def feedArmies(bot, mongo)
             # clamp
             killPercentage = [[percentage, 0.95].min, 1.0].max
 
-            set[soldierType.pluralize.to_sym] = (user[soldierType.pluralize.to_sym].to_f * killPercentage).round.to_i
+            $settings[:soldierTypes].each do |soldierType|
+                set[soldierType.pluralize.to_sym] = [user[soldierType.pluralize.to_sym].to_f * killPercentage, 0.0].max.round.to_i
+            end
 
             sendPM(bot, user[:pmChannelId], "Your soldiers are dying from starvation.")
         end
