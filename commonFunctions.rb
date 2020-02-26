@@ -222,53 +222,52 @@ def feedArmies(bot, mongo)
     mongo[:users].find().each do |user|
 
         set = {}
+        cost = {}
 
+        # zero out
+        $settings[:resourceTypes].each do |resourceType|
+            cost[resourceType.to_sym] = 0.0
+        end
+
+        # get cost
         $settings[:soldierTypes].each do |soldierType|
-            cost = {}
-
-            # zero out
-            $settings[:resourceTypes].each do |resourceType|
-                cost[resourceType.to_sym] = 0.0
-            end
-
-            # get cost
             $settings[:soldiers][soldierType.to_sym][:consumes].each do |consume|
                 cost[consume[:type].to_sym] += consume[:num] * user[soldierType.pluralize.to_sym].to_f
             end
+        end
 
-            # have enough?
-            enough = true
-            $settings[:resourceTypes].each do |resourceType|
-                if cost[resourceType.to_sym] > user[resourceType.to_sym]
-                    enough = false
-                end
+        # have enough?
+        enough = true
+        $settings[:resourceTypes].each do |resourceType|
+            if cost[resourceType.to_sym] > user[resourceType.to_sym]
+                enough = false
             end
+        end
 
-            # remove from user
+        # remove from user
+        $settings[:resourceTypes].each do |resourceType|
+            set[resourceType.to_sym] = [user[resourceType.to_sym] - cost[resourceType.to_sym], 0.0].max
+        end
+
+        # destroy some soldiers
+        if !enough
+            # get lowest percentage
+            percentage = 1.0
             $settings[:resourceTypes].each do |resourceType|
-                set[resourceType.to_sym] = [user[resourceType.to_sym] - cost[resourceType.to_sym], 0.0].max
-            end
-
-            # destroy some soldiers
-            if !enough
-                # get lowest percentage
-                percentage = 1.0
-                $settings[:resourceTypes].each do |resourceType|
-                    if cost[resourceType.to_sym] > 0.0
-                        p = user[resourceType.to_sym] / cost[resourceType.to_sym]
-                        if p < percentage
-                            percentage = p
-                        end
+                if cost[resourceType.to_sym] > 0.0
+                    p = user[resourceType.to_sym] / cost[resourceType.to_sym]
+                    if p < percentage
+                        percentage = p
                     end
                 end
-
-                # clamp
-                killPercentage = [[percentage, 0.95].min, 1.0].max
-
-                set[soldierType.pluralize.to_sym] = (user[soldierType.pluralize.to_sym].to_f * killPercentage).round.to_i
-
-                sendPM(bot, user[:pmChannelId], "Your soldiers are dying from starvation.")
             end
+
+            # clamp
+            killPercentage = [[percentage, 0.95].min, 1.0].max
+
+            set[soldierType.pluralize.to_sym] = (user[soldierType.pluralize.to_sym].to_f * killPercentage).round.to_i
+
+            sendPM(bot, user[:pmChannelId], "Your soldiers are dying from starvation.")
         end
 
         mongo[:users].update_one({:_id => user[:_id]}, {"$set" => set})
