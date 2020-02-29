@@ -25,7 +25,7 @@ def order_buildShrine(bot, order, mongo)
         mongo[:users].find().each do |u|
             sendPM(bot, u[:pmChannelId], user[:display_name]+" wins.  Congrats!  REALMS has been reset.  Type **%joinGame** to join the new game.")
         end
-        resetGame(mongo)
+        resetGame(mongo, user)
     else
         sendPM(bot, user[:pmChannelId], "Your shrine has finished building.  View your realm with **%realm**.")
         updateNetworthFor(mongo, user[:discordId])

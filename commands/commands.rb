@@ -6,6 +6,7 @@ def command_commands(bot, event, mongo)
     str += "**%about** - About REALMS.\n"
     str += "**%help**\n"
     str += "**%commands**\n"
+    str += "**%winners**\n"
     str += "\n"
     str += "**%realm** - View your realm.\n"
     str += "**%realms <page number>** - View all of the realms in the land.  Page number is optional\n"

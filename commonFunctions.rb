@@ -17,7 +17,27 @@ end
 
 
 # called when someone wins the game
-def resetGame(mongo)
+def resetGame(mongo, winningUser)
+
+    # save winner
+    winner = {
+        :startedAt => winningUser[:createdAt],
+        :endedAt => Time.now,
+        :userId => winningUser[:_id],
+        :discordId => winningUser[:discordId],
+        :display_name => winningUser[:display_name],
+        :avatar_url => winningUser[:avatar_url],
+        :mention => winningUser[:mention],
+        :distinct => winningUser[:distinct],
+        :discriminator => winningUser[:discriminator],
+        :pmChannelId => winningUser[:pmChannelId],
+        :serverId => winningUser[:serverId],
+        :serverName => winningUser[:serverName],
+        :networth => winningUser[:networth],
+        :population => winningUser[:population],
+    }
+
+    mongo[:winners].insert_one(winner);
 
     # drop buildings
     $settings[:buildingTypes].each do |buildingType|

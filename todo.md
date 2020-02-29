@@ -4,6 +4,7 @@
 - change all commands to lowercase and allow any case
 - fire soldiers
 - hire max
+- bug: fix market exploit
 
 
 ## ideas

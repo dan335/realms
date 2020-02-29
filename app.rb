@@ -23,6 +23,7 @@ require './commands/buy.rb'
 require './commands/sell.rb'
 require './commands/setTax.rb'
 require './commands/fire.rb'
+require './commands/winners.rb'
 
 require './attacks.rb'
 
@@ -34,6 +35,7 @@ mongo = Mongo::Client.new([ ENV['MONGO_URL'] ], :database => ENV['MONGO_DB'])
 # create mongodb indexes
 mongo[:users].indexes.create_one({:discordId => 1}, unique: true )
 mongo[:users].indexes.create_one({:networth => -1})
+mongo[:winners].indexes.create_one({:endedAt => -1})
 mongo[:armies].indexes.create_one({:arriveAt => 1})
 mongo[:armies].indexes.create_one({:discordId => 1})
 mongo[:armies].indexes.create_many([
@@ -62,13 +64,6 @@ mongo[:shrines].indexes.create_many([
   {:key => {:createdAt => 1}}
 ])
 mongo[:market].indexes.create_one({:type => 1})
-
-
-# # temp - remove next game
-# mongo[:users].update_many({:population => {"$exists" => false}}, {"$set" => {:population => 100}})
-# mongo[:users].update_many({:happiness => {"$exists" => false}}, {"$set" => {:happiness => 0.5}})
-# mongo[:users].update_many({:tax => {"$exists" => false}}, {"$set" => {:tax => 0.05}})
-# mongo[:users].update_many({:taxCollected => {"$exists" => false}}, {"$set" => {:taxCollected => nil}})
 
 
 validateMarket(mongo)
