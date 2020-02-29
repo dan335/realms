@@ -4,18 +4,17 @@
 - change all commands to lowercase and allow any case
 - fire soldiers
 - hire max
-- bug: fix market exploit
-
 
 ## ideas
 
-- record winner of game in db.  show with %winners
 - must build shrines one at a time
 - a way to destroy other people's shrines.  catapults?  while building?  shrines have hitpoints?
 
 
 ## done
 
+- bug: fix market exploit
+- record winner of game in db.  show with %winners
 - hiring takes away from population
 - reputation.  stop people from attacking small realms.  lowers happiness
 - fill out %help

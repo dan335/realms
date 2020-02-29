@@ -29,6 +29,13 @@ def command_sell(bot, event, mongo)
     # get user and market
     user = mongo[:users].find(:discordId => event.message.author.id).first
 
+    # stop user from selling within first hour of joining game to prevent joining, selling, leaving, joining, selling, leaving exploit
+    timePast = Time.now - user[:createdAt]
+    if timePast < 60 * 60
+        event.respond "You cannot use this command within one hour of joining the game "+event.message.author.mention+".  Try again later."
+        return
+    end
+
     market = mongo[:market].find(:type => type).first
     if !market
         output_sell_error_message(event)
