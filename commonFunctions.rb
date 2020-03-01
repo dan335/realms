@@ -360,8 +360,6 @@ end
 
 
 def collectTaxes(mongo)
-    spendingPerPerson = 0.1 # higher increases tax collected from population
-
     mongo[:users].find().each do |user|
         
         
@@ -404,7 +402,7 @@ def collectTaxes(mongo)
         taxCollected = {}
 
         $settings[:resourceTypes].each do |resourceType|
-            collected = user[:population].to_f * spendingPerPerson * user[:tax] * percentages[resourceType.to_sym]
+            collected = user[:population].to_f * $settings[:spendingPerPerson] * user[:tax] * percentages[resourceType.to_sym]
             taxCollected[resourceType.to_sym] = collected
             set[resourceType.to_sym] = [user[resourceType.to_sym] + collected, 0.0].max
         end

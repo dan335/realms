@@ -80,6 +80,12 @@ def doAttack(bot, mongo, army)
       attackingArmy[soldierType.pluralize.to_sym] = attackingArmy[soldierType.pluralize.to_sym].to_i - attackingArmy[:loses][soldierType.singularize.to_sym].to_i
     end
 
+    # check if shrine being built needs to be destroyed
+    # if attacking army won and has a catapult destroy shrines being built
+    if attackingArmy[:catapults] > 0
+        mongo[:orders].find({:discordId => defendingArmy[:discordId], :type => "buildShrine"}).delete_many
+    end
+
     sendArmyToRealm(mongo, attackingArmy, winnings, armyTravelTime(attackingArmy))
     updateNetworthFor(mongo, attackingArmy[:discordId])
 end

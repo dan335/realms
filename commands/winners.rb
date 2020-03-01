@@ -33,12 +33,14 @@ def command_winners(bot, event, mongo)
     mongo[:winners].find().sort(:endedAt => -1).skip(page * $settings[:perPage]).limit($settings[:perPage]).each do |user|
         str += counter.to_s+". **"+user[:display_name]+"** -"
 
+        str += user[:endedAt].to_formatted_s(:long)+",  "
+
         hours = ((user[:endedAt] - user[:startedAt]) / 60 / 60).round(1)
         str += " "+hours.to_s+" hours,"
 
-        str += " "+user[:networth].round.to_s+" networth,"
+        str += " "+number_with_commas(user[:networth].round)+" networth,"
 
-        str += " "+user[:population].to_s+" population"
+        str += " "+number_with_commas(user[:population])+" population"
 
         str += "\n"
     end
