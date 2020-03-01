@@ -65,9 +65,6 @@ mongo[:shrines].indexes.create_many([
 ])
 mongo[:market].indexes.create_one({:type => 1})
 
-mongo[:winners].find().update_many("$set" => {:numShrinesBuilt => 5})
-mongo[:users].find().update_many("$set" => {:numShrinesBuilt => 0})
-
 validateMarket(mongo)
 
 # make sure soldiers are never 0

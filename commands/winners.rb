@@ -40,7 +40,9 @@ def command_winners(bot, event, mongo)
 
         str += " "+number_with_commas(user[:networth].round)+"  networth,"
 
-        str += " "+number_with_commas(user[:population])+"  population"
+        str += " "+number_with_commas(user[:population])+"  population,"
+
+        str += "  "+number_with_commas(user[:numShrinesBuilt])+" shrines built"
 
         str += "\n"
     end
