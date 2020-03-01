@@ -35,6 +35,7 @@ def resetGame(mongo, winningUser)
         :serverName => winningUser[:serverName],
         :networth => winningUser[:networth],
         :population => winningUser[:population],
+        :numShrinesBuilt => winningUser[:numShrinesBuilt]
     }
 
     mongo[:winners].insert_one(winner);
