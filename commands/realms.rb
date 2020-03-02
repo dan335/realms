@@ -34,7 +34,7 @@ def command_realms(bot, event, mongo)
         numShrines = mongo[:shrines].find(:userId => user[:_id]).count
         numShrinesBeingBuilt = mongo[:orders].find({:discordId => user[:discordId], :type => "buildShrine"}).count
 
-        str += counter.to_s+". **"+user[:display_name]+"** - networth: **"+number_with_commas(user[:networth].round(2))+"**,  "
+        str += counter.to_s+". **"+user[:display_name]+"** - networth: **"+number_with_commas(user[:networth].round)+"**,  "
 
         hasShrine = false
         numShrines.times do
