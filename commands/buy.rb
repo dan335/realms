@@ -52,12 +52,12 @@ def command_buy(bot, event, mongo)
     # compare with delta for floating point errors
     if arr[1] == "max"
         if (user[:gold] - gold).abs > 0.000001
-            event.respond "You do not have "+number_with_commas(gold)+" gold to buy "+number_with_commas(num)+" "+type+" "+event.message.author.mention+"."
+            event.respond "You do not have "+number_with_commas(gold.round(2))+" gold to buy "+number_with_commas(num)+" "+type+" "+event.message.author.mention+"."
             return
         end
     else
         if user[:gold] < gold
-            event.respond "You do not have "+number_with_commas(gold)+" gold to buy "+number_with_commas(num)+" "+type+" "+event.message.author.mention+"."
+            event.respond "You do not have "+number_with_commas(gold.round(2))+" gold to buy "+number_with_commas(num)+" "+type+" "+event.message.author.mention+"."
             return
         end
     end
