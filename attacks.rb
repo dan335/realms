@@ -82,7 +82,7 @@ def doAttack(bot, mongo, army)
 
     # check if shrine being built needs to be destroyed
     # if attacking army won and has a catapult destroy shrines being built
-    if attackingArmy[:catapults] > 0
+    if attackingArmy[:catapults] > 0 && attackingArmy[:isWinner]
         mongo[:orders].find({:discordId => defendingArmy[:discordId], :type => "buildShrine"}).delete_many
     end
 
