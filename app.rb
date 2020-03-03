@@ -24,6 +24,7 @@ require './commands/sell.rb'
 require './commands/setTax.rb'
 require './commands/fire.rb'
 require './commands/winners.rb'
+require './commands/guilds.rb'
 
 require './attacks.rb'
 
