@@ -134,8 +134,8 @@ $settings = {
     :armyTravelDistance => 200.0,      # higher number makes army travel times longer
     :medianTaxRate => 0.75,     # rate at which happiness from taxes stays the same
     :startingPopulation => 100,
-    :spendingPerPerson => 0.08,  # each person spends this much per interval then this is taxed,  higher increases tax collected from population
-    :populationMaxGrowth => 40,
+    :spendingPerPerson => 0.07,  # each person spends this much per interval then this is taxed,  higher increases tax collected from population
+    :populationMaxGrowth => 50,
     :maxReputationPercentage => 0.5,
     :losingBattleAffectsHappinessFor => 60 * 60 * 4
 }
