@@ -17,12 +17,20 @@ def command_hire(bot, event, mongo)
     # print help message
     if arr.length == 1
 
+        markets = mongo[:market].find()
+
         str = "-] HIRE SOLDIERS [-\n\n"
 
         str += "example: **%hire 2 footman**\n"
         str += "Each soldier can carry "+$settings[:winningsSoldierCanCarry].to_s+" gold worth of resources.\n\n"
 
         $settings[:soldierTypes].each do |type|
+            # get worth of soldier in gold
+            gold = 0
+            $settings[:soldiers][type.to_sym][:cost].each do |cost|
+                gold += resourceToGold(markets, cost[:type], cost[:num])
+            end
+
             str += "__**"+$settings[:soldiers][type.to_sym][:name]+"**__\n"
             str += "    cost: "
 
@@ -72,6 +80,8 @@ def command_hire(bot, event, mongo)
             end
 
             str += "\n"
+
+            str += "    worth "+number_with_commas(gold.round(1))+" gold\n"
         end
 
         event.respond str
