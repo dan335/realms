@@ -181,6 +181,9 @@ def updateMarketPrice(mongo, resourceObject, type, quantity, isBuy)
     value = value * (($settings[:marketIncrement] + 1.0) ** quantity)
 
     mongo[:market].update_one({:_id => resourceObject[:_id]}, {"$set" => {value:value}})
+
+    # redo networth for everyone
+    updateNetworth(mongo)
 end
 
 

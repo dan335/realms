@@ -97,8 +97,9 @@ end
 
 bot.run true
 
-# game loop
 updateNetworth(mongo)
+
+# game loop
 while true do
     ordersInterval(bot, mongo)
 
