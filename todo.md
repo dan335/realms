@@ -2,7 +2,7 @@
 
 - allow short soldier names
 - hire max
-- show how many troops starved
+
 
 ## ideas
 
@@ -11,6 +11,7 @@
 
 ## done
 
+- show how many troops starved
 - a way to destroy other people's shrines.  catapults?  while building?  shrines have hitpoints?
 - fire soldiers
 - bug: fix market exploit
