@@ -45,7 +45,7 @@ $settings = {
             :name => "Footman",
             :shortName => "footman",
             :cost => [
-                {:type => "ore", :num => 1.0},
+                {:type => "ore", :num => 3.0},
                 {:type => "grain", :num => 0.1}
             ],
             :bonusAgainst => [
@@ -62,7 +62,7 @@ $settings = {
             :name => "Archer",
             :shortName => "archer",
             :cost => [
-                {:type => "wood", :num => 1.0},
+                {:type => "wood", :num => 3.0},
                 {:type => "grain", :num => 0.1}
             ],
             :bonusAgainst => [
@@ -80,7 +80,7 @@ $settings = {
             :name => "Pikeman",
             :shortName => "pike",
             :cost => [
-                {:type => "clay", :num => 2.0},
+                {:type => "clay", :num => 6.0},
                 {:type => "grain", :num => 0.1}
             ],
             :bonusAgainst => [
@@ -97,8 +97,8 @@ $settings = {
             :name => "Knight",
             :shortName => "knight",
             :cost => [
-                {:type => "ore", :num => 1.0},
-                {:type => "wool", :num => 2.0},
+                {:type => "ore", :num => 3.0},
+                {:type => "wool", :num => 6.0},
                 {:type => "grain", :num => 0.1}
             ],
             :bonusAgainst => [
@@ -116,7 +116,7 @@ $settings = {
             :name => "Catapult",
             :shortName => "cat",
             :cost => [
-                {:type => "wood", :num => 10.0},
+                {:type => "wood", :num => 30.0},
                 {:type => "grain", :num => 0.1}
             ],
             :bonusAgainst => [],
