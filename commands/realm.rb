@@ -17,6 +17,7 @@ def command_realm(bot, event, mongo)
     armies = mongo[:armies].find(:discordId => event.message.author.id).sort(:createdAt => 1)
     attackers = mongo[:armies].find({:otherDiscordId => event.message.author.id, :isAttacking => true}).sort(:createdAt => 1)
     numShrines = mongo[:shrines].find(:discordId => event.message.author.id).count
+    markets = mongo[:market].find()
 
     str = "-] **"+user[:display_name].upcase+"'S REALM** [-\n"
 
@@ -131,6 +132,7 @@ def command_realm(bot, event, mongo)
             str += count.to_s+".  "
             total = 0
             num = 0
+            gold = 0.0    # worth
             $settings[:resourceTypes].each do |resourceType|
                 str += resourceType.camelize+": **"+farm[resourceType.to_sym].round.to_s+"**"
                 if num < $settings[:resourceTypes].length - 1
@@ -138,8 +140,9 @@ def command_realm(bot, event, mongo)
                 end
                 total += farm[resourceType.to_sym].round.to_i
                 num += 1
+                gold += resourceToGold(markets, resourceType, farm[resourceType.to_sym])
             end
-            str += "   *sum: "+total.to_s+"*\n"
+            str += "   *sum: "+total.to_s+",  worth "+number_with_commas(gold.round)+" gold*\n"
             count += 1
         end
 
