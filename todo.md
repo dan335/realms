@@ -6,7 +6,7 @@
 
 ## ideas
 
-
+fortifications - anyone can put up fortifications at any time.  When fortifications are up everything in your realm pauses.  Only exception is attacking armies still attack.  Your realm goes to sleep.  You can take them down anytime.
 
 
 ## done

@@ -48,7 +48,9 @@ $settings = {
                 {:type => "ore", :num => 1.0},
                 {:type => "grain", :num => 0.1}
             ],
-            :bonusAgainst => [],
+            :bonusAgainst => [
+                "pikemen"
+            ],
             :attack => 6.0,
             :defense => 6.0,
             :speed => 8.0,
@@ -67,7 +69,7 @@ $settings = {
                 "footman",
                 "pikeman"
             ],
-            :attack => 3.0,
+            :attack => 2.0,
             :defense => 7.0,
             :speed => 8.0,
             :consumes => [
@@ -120,7 +122,7 @@ $settings = {
             :bonusAgainst => [],
             :attack => 50.0,
             :defense => 0.0,
-            :speed => 1.0,
+            :speed => 0.9,
             :consumes => [
                 {:type => "wood", :num => 0.05}
             ]
@@ -137,5 +139,6 @@ $settings = {
     :spendingPerPerson => 0.065,  # each person spends this much per interval then this is taxed,  higher increases tax collected from population
     :populationMaxGrowth => 50,
     :maxReputationPercentage => 0.5,
-    :losingBattleAffectsHappinessFor => 60 * 60 * 4
+    :losingBattleAffectsHappinessFor => 60 * 60 * 4,
+    :starvingSoldierDeathRate => 0.03
 }

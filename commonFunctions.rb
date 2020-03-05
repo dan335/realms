@@ -287,7 +287,7 @@ def feedArmies(bot, mongo)
             end
 
             # clamp, 0.95 - 1.0, max 5% of soldiers
-            killPercentage = 1.0 - [[percentage, 0.95].max, 1.0].min
+            killPercentage = 1.0 - [[percentage, 1.0 - $settings[:starvingSoldierDeathRate]].max, 1.0].min
 
             # get total number of soldiers
             numSoldiers = 0
@@ -331,6 +331,7 @@ def feedArmies(bot, mongo)
         end
 
         mongo[:users].update_one({:_id => user[:_id]}, {"$set" => set})
+        updateNetworthFor(mongo, user[:discordId])
     end
 end
 
