@@ -286,14 +286,48 @@ def feedArmies(bot, mongo)
                 end
             end
 
-            # clamp
-            killPercentage = [[percentage, 0.95].min, 1.0].max
+            # clamp, 0.95 - 1.0, max 5% of soldiers
+            killPercentage = 1.0 - [[percentage, 0.95].min, 1.0].max
 
+            # get total number of soldiers
+            numSoldiers = 0
+            toKill = {} # for later
             $settings[:soldierTypes].each do |soldierType|
-                set[soldierType.pluralize.to_sym] = [user[soldierType.pluralize.to_sym].to_f * killPercentage, 0.0].max.round.to_i
+                numSoldiers += user[soldierType.pluralize.to_sym]
+                toKill[soldierType.pluralize.to_sym] = 0    # set to 0 for later
             end
 
-            sendPM(bot, user[:pmChannelId], "Your soldiers are dying from starvation.")
+            # how many should we fire
+            numToKill = (numSoldiers.to_f * killPercentage).ceil.to_i
+            fails = 20  # just in case
+            while numSoldiers > 0 && numToKill > 0 && fails > 0 do
+                $settings[:soldierTypes].shuffle.each do |soldierType|
+                    numUserHas = user[soldierType.pluralize.to_sym] - toKill[soldierType.pluralize.to_sym]
+                    if numUserHas > 0
+                        toKill[soldierType.pluralize.to_sym] += 1
+                        numSoldiers -= 1
+                        numToKill -= 1
+                    else
+                        fails -= 1
+                    end
+                end
+            end
+
+            # save to set
+            $settings[:soldierTypes].each do |soldierType|
+                set[soldierType.pluralize.to_sym] = [user[soldierType.pluralize.to_sym] - toKill[soldierType.pluralize.to_sym], 0].max
+            end
+
+            # send message
+            str = "Some of your soldiers died from starvation.  "
+
+            $settings[:soldierTypes].each do |soldierType|
+                if toKill[soldierType.pluralize.to_sym] > 0
+                    str += toKill[soldierType.pluralize.to_sym].to_s+" "+soldierType.pluralize+"  "
+                end
+            end
+
+            sendPM(bot, user[:pmChannelId], str)
         end
 
         mongo[:users].update_one({:_id => user[:_id]}, {"$set" => set})

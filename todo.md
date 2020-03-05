@@ -1,18 +1,18 @@
 ## todo
 
 - allow short soldier names
-- change all commands to lowercase and allow any case
-- fire soldiers
 - hire max
+- show how many troops starved
 
 ## ideas
 
-- must build shrines one at a time
-- a way to destroy other people's shrines.  catapults?  while building?  shrines have hitpoints?
+
 
 
 ## done
 
+- a way to destroy other people's shrines.  catapults?  while building?  shrines have hitpoints?
+- fire soldiers
 - bug: fix market exploit
 - record winner of game in db.  show with %winners
 - hiring takes away from population
