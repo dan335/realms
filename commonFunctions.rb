@@ -287,7 +287,7 @@ def feedArmies(bot, mongo)
             end
 
             # clamp, 0.95 - 1.0, max 5% of soldiers
-            killPercentage = 1.0 - [[percentage, 0.95].min, 1.0].max
+            killPercentage = 1.0 - [[percentage, 0.95].max, 1.0].min
 
             # get total number of soldiers
             numSoldiers = 0
