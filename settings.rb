@@ -23,10 +23,10 @@ $settings = {
       },
       :shrine => {
         :cost => [
-          {:type => "wood", :num => 4000},
-          {:type => "ore", :num => 4000},
-          {:type => "clay", :num => 4000},
-          {:type => "wool", :num => 4000},
+          {:type => "wood", :num => 5000},
+          {:type => "ore", :num => 5000},
+          {:type => "clay", :num => 5000},
+          {:type => "wool", :num => 5000},
         ],
         :max => 5,
         :description => "A large structure for people to gather.  Build 5 to win the game.",
