@@ -2,11 +2,14 @@
 
 - allow short soldier names
 - hire max
+- notification when someone builds their 5th shrine
 
 
 ## ideas
 
 fortifications - anyone can put up fortifications at any time.  When fortifications are up everything in your realm pauses.  Only exception is attacking armies still attack.  Your realm goes to sleep.  You can take them down anytime.
+
+ raiding increases population.  reputation is normally at 50% instead of 100%.  and above 50% makes population grow faster.  and reputation goes up if you successfully attack
 
 
 ## done

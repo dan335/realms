@@ -229,17 +229,17 @@ def getPercentage(army)
   army[:percentage] = {}
 
   # count soldiers
-  numSoldiers = 0.0
+  numSoldiers = 0
   $settings[:soldierTypes].each do |soldierType|
-    numSoldiers += army[soldierType.pluralize.to_sym].to_f
+    numSoldiers += army[soldierType.pluralize.to_sym]
   end
 
   $settings[:soldierTypes].each do |soldierType|
       #prevent divide by 0
-      if numSoldiers == 0.0
+      if numSoldiers == 0
           army[:percentage][soldierType.to_sym] = 0.0
       else
-          army[:percentage][soldierType.to_sym] = army[soldierType.pluralize.to_sym].to_f / numSoldiers
+          army[:percentage][soldierType.to_sym] = army[soldierType.pluralize.to_sym].to_f / numSoldiers.to_f
       end
   end
 end
@@ -261,13 +261,13 @@ def getBonus(attackingArmy, defendingArmy)
           if defendingArmy[bonusAgainst.pluralize.to_sym] == 0
             attackBonus = 0.0
           else
-            attackBonus = attackingArmy[:power][soldierType.to_sym] * defendingArmy[:percentage][bonusAgainst.to_sym] * $settings[:battleBonusMultiplier]
+            attackBonus = attackingArmy[:power][soldierType.to_sym].to_f * defendingArmy[:percentage][bonusAgainst.to_sym].to_f * $settings[:battleBonusMultiplier]
           end
 
           if attackingArmy[bonusAgainst.pluralize.to_sym] == 0
             defendBonus = 0.0
           else
-            defendBonus = defendingArmy[:power][soldierType.to_sym] * attackingArmy[:percentage][bonusAgainst.to_sym] * $settings[:battleBonusMultiplier]
+            defendBonus = defendingArmy[:power][soldierType.to_sym].to_f * attackingArmy[:percentage][bonusAgainst.to_sym].to_f * $settings[:battleBonusMultiplier]
           end
 
           attackingArmy[:bonus][soldierType.to_sym] += attackBonus
