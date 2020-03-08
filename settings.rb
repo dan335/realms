@@ -45,7 +45,7 @@ $settings = {
             :name => "Footman",
             :shortName => "footman",
             :cost => [
-                {:type => "ore", :num => 3.0},
+                {:type => "ore", :num => 2.0},
                 {:type => "grain", :num => 0.1}
             ],
             :bonusAgainst => [
@@ -62,7 +62,7 @@ $settings = {
             :name => "Archer",
             :shortName => "archer",
             :cost => [
-                {:type => "wood", :num => 3.0},
+                {:type => "wood", :num => 2.0},
                 {:type => "grain", :num => 0.1}
             ],
             :bonusAgainst => [
@@ -80,7 +80,7 @@ $settings = {
             :name => "Pikeman",
             :shortName => "pike",
             :cost => [
-                {:type => "clay", :num => 6.0},
+                {:type => "clay", :num => 4.0},
                 {:type => "grain", :num => 0.1}
             ],
             :bonusAgainst => [
@@ -97,8 +97,8 @@ $settings = {
             :name => "Knight",
             :shortName => "knight",
             :cost => [
-                {:type => "ore", :num => 3.0},
-                {:type => "wool", :num => 6.0},
+                {:type => "ore", :num => 2.0},
+                {:type => "wool", :num => 4.0},
                 {:type => "grain", :num => 0.1}
             ],
             :bonusAgainst => [
@@ -116,7 +116,7 @@ $settings = {
             :name => "Catapult",
             :shortName => "cat",
             :cost => [
-                {:type => "wood", :num => 30.0},
+                {:type => "wood", :num => 20.0},
                 {:type => "grain", :num => 0.1}
             ],
             :bonusAgainst => [],
@@ -136,8 +136,8 @@ $settings = {
     :armyTravelDistance => 200.0,      # higher number makes army travel times longer
     :medianTaxRate => 0.75,     # rate at which happiness from taxes stays the same
     :startingPopulation => 100,
-    :spendingPerPerson => 0.065,  # each person spends this much per interval then this is taxed,  higher increases tax collected from population
-    :populationMaxGrowth => 50,
+    :spendingPerPerson => 0.06,  # each person spends this much per interval then this is taxed,  higher increases tax collected from population
+    :populationMaxGrowth => 45,
     :maxReputationPercentage => 0.5,
     :losingBattleAffectsHappinessFor => 60 * 60 * 4,
     :starvingSoldierDeathRate => 0.03

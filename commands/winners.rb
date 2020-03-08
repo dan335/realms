@@ -44,7 +44,8 @@ def command_winners(bot, event, mongo)
 
         str += "  "+number_with_commas(user[:numShrinesBuilt])+" shrines built"
 
-        str += "\n"
+        str += "\n" 
+        counter += 1
     end
 
     event.respond str
