@@ -3,6 +3,7 @@
 - allow short soldier names
 - hire max
 - notification when someone builds their 5th shrine
+- build farms - build all farms
 
 
 ## ideas
