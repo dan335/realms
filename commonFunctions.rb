@@ -433,7 +433,7 @@ def collectTaxes(mongo)
         # what if no farms
         if !hasFarm
             $settings[:resourceTypes].each do |resourceType|
-                percentages[resourceType.to_sym] = 100.0 / $settings[:resourceTypes].length
+                percentages[resourceType.to_sym] = 1.0 / $settings[:resourceTypes].length
             end
         end
 
