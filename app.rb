@@ -104,21 +104,21 @@ while true do
     ordersInterval(bot, mongo)
 
     # 10 minutes
-    if Time.now.min % 10 == 0
+    #if Time.now.min % 10 == 0
         giveResources(mongo)
         feedArmies(bot, mongo)
 
         mongo[:users].find().each do |user|
           mongo[:users].update_one({:_id => user[:_id]}, {"$set" => {
-            :population => getNewPopulation(user[:population], user[:happiness]),
-            :reputation => getNewReputation(user[:reputation]),
+            :population => getNewPopulation(user[:population], user[:happiness], user[:reputation]),
+            :reputation => getNewReputation(user[:reputation], user[:lastWonBattle]),
             :happiness => getNewHappiness(user[:happiness], user[:tax], user[:lastLostBattle], user[:reputation])
             }})
         end
 
         collectTaxes(mongo)
         updateNetworth(mongo)
-    end
+    #end
 
     attackInterval(bot, mongo)
 

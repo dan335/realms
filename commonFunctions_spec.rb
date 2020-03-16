@@ -15,9 +15,9 @@ RSpec.describe "commonFunctions" do
 
 
     it "grows population" do
-        expect(getNewPopulation(100, 0.5)).to eq(100)
-        expect(getNewPopulation(100, 1.0)).to be > (100)
-        expect(getNewPopulation(100, 0.0)).to be < (100)
+        expect(getNewPopulation(100, 0.5, 0.5)).to eq(100)
+        expect(getNewPopulation(100, 1.0, 0.5)).to be > (100)
+        expect(getNewPopulation(100, 0.0, 0.5)).to be < (100)
     end
 
 
@@ -41,10 +41,6 @@ RSpec.describe "commonFunctions" do
         expect(slopeInterpolate(0.325, 0.0, 1.0, 0.0, 1.0, 0.9)).to be_between(0.499, 0.501)
         expect(slopeInterpolate(0.0, 0.0, 1.0, 0.0, 1.0, 0.9)).to eq(0.0)
         expect(slopeInterpolate(1.0, 0.0, 1.0, 0.0, 1.0, 0.9)).to eq(1.0)
-    end
-
-    it "gold collects interest" do
-        expect( getGoldInterest(100) ).to be_between(100 + 100 * $settings[:goldInterestRate] - 0.00001, 100 + 100 * $settings[:goldInterestRate] + 0.00001)
     end
 
 

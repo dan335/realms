@@ -117,6 +117,19 @@ def command_attack(bot, event, mongo)
         wordNum += 2
     end
 
+    # make sure ary has soildiers
+    hasSoldiers = false;
+    $settings[:soldierTypes].each do |soldierType|
+        if army[soldierType.pluralize.to_sym] > 0
+            hasSoldiers = true;
+        end
+    end
+
+    if !hasSoldiers
+        output_attack_syntax_message(event)
+        return
+    end
+
     # get resources to feed army
     cost = {}
     $settings[:resourceTypes].each do |resourceType|

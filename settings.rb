@@ -122,7 +122,7 @@ $settings = {
             :bonusAgainst => [],
             :attack => 50.0,
             :defense => 0.0,
-            :speed => 0.9,
+            :speed => 1.2,
             :consumes => [
                 {:type => "wood", :num => 0.05}
             ]
@@ -140,5 +140,6 @@ $settings = {
     :populationMaxGrowth => 45,
     :maxReputationPercentage => 0.5,
     :losingBattleAffectsHappinessFor => 60 * 60 * 4,
+    :winningBattleAffectsReputationFor => 60 * 60 * 4,
     :starvingSoldierDeathRate => 0.03
 }

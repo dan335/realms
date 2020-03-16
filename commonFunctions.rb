@@ -391,9 +391,18 @@ end
 
 
 
-def getNewPopulation(previousPopulation, happiness)
+def getNewPopulation(previousPopulation, happiness, reputation)
+    # happiness
     population = previousPopulation + slopeInterpolate(happiness, 0.0, 1.0, $settings[:populationMaxGrowth].to_f * -1.0, $settings[:populationMaxGrowth].to_f, 0.5).round.to_i
-    [population, 0].max
+
+    # make it go down faster if low happiness
+    multiplier = (1.0 - [happiness * 2.0, 1.0].min) * 0.05
+    population -= (population * multiplier)
+
+    # increase from reputation
+    population = population + slopeInterpolate([[reputation * 2.0 - 1.0, 0.0].max].min, 0.0, 1.0, 0.0, $settings[:populationMaxGrowth].to_f, 0.5).round.to_i
+   
+    [population, 0].max.round.to_i
 end
 
 
@@ -465,7 +474,9 @@ def getNewHappiness(happiness, tax, lastLostBattle, reputation)
     end
 
     # reputation
-    targetHappiness = slopeInterpolate(reputation, 0.0, 1.0, 0.0, targetHappiness, 0.5)
+    if reputation < 0.5
+        targetHappiness = slopeInterpolate(reputation, 0.0, 0.5, 0.0, targetHappiness, 0.5)
+    end
 
     # slowly adjust towards targetHappiness
     lerp(happiness, targetHappiness, 0.1)
@@ -473,11 +484,37 @@ end
 
 
 # called at 10 min interval
-def getNewReputation(reputation)
-    # grow
-    reputation = reputation + 0.02
+def getNewReputation(reputation, lastWonBattle)
+
+    if reputation < 0.5
+        reputation = reputation + 0.02
+    end
+
+    if lastWonBattle != nil
+        if Time.now - lastWonBattle < $settings[:winningBattleAffectsReputationFor]
+            reputation = reputation + 0.02
+        end
+    end
 
     [[reputation, 0.0].max, 1.0].min
+    
+
+
+    # # grow
+    # reputation += 0.02
+    
+    # # cap to 50%
+    # [[reputation, 0.0].max, 0.5].min
+
+    # # grow some more if recently won a battle
+    # if lastWonBattle != nil
+    #     if Time.now - lastWonBattle < $settings[:winningBattleAffectsReputationFor]
+    #         reputation += 0.02
+    #     end
+    # end
+
+    # # cap at 100%
+    # [[reputation, 0.0].max, 1.0].min
 end
 
 

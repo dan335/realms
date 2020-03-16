@@ -38,7 +38,8 @@ def command_joingame(bot, event, mongo)
         :tax => 0.05,
         :taxCollected => nil,
         :lastLostBattle => nil,
-        :reputation => 1.0,
+        :lastWonBattle => nil,
+        :reputation => 0.5,
         :numShrinesBuilt => 0
     }
 

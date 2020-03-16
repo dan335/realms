@@ -49,7 +49,9 @@ def doAttack(bot, mongo, army)
     getLoses(defendingArmy)
 
     # save last lost battle
-    if !attackingArmy[:isWinner]
+    if attackingArmy[:isWinner]
+        mongo[:users].update_one({:_id => attackingArmy[:userId]}, {"$set" => {:lastWonBattle => Time.now}})
+    else
         mongo[:users].update_one({:_id => attackingArmy[:userId]}, {"$set" => {:lastLostBattle => Time.now}})
     end
 
@@ -231,7 +233,7 @@ def getPercentage(army)
   # count soldiers
   numSoldiers = 0
   $settings[:soldierTypes].each do |soldierType|
-    numSoldiers += army[soldierType.pluralize.to_sym]
+    numSoldiers += army[soldierType.pluralize.to_sym].to_i
   end
 
   $settings[:soldierTypes].each do |soldierType|

@@ -11,7 +11,13 @@ def command_help(bot, event, mongo)
 
     str += "**FARMS** - Use **%build farm** to build a farm.  Farms take 10 minutes to build.  The resources each farm produce are random.  If you are not happy with the amount of resources a farm collects use **%destroy farm 1** to destroy your first farm then build another.  You can have up to "+$settings[:buildings][:farm][:max].to_s+" farms.  All farms can be built at the same time.\n"
     str += "\n"
-    str += "**TAXES** - Taxes are collected from the citizens of your realm.  Everyone starts the game with "+$settings[:startingPopulation].to_s+" population.  If your happiness is above 50% then your population will grow.  If it falls below 50% then population goes down.  Taxes, reputation and how long ago you lost an attack all affect happiness.  Happiness goes up if your taxes are low.  32.5% tax rate is about 50% happiness.  A reputation below 100% makes happiness go down.  Reputation goes down if you attack a realm much smaller than yours.  Reputation slowly increases back to 100%.  If you attack someone and lose then happiness will go down for "+($settings[:losingBattleAffectsHappinessFor].to_f / 60.0 / 60.0).round(1).to_s+" hours.\n"
+    str += "**TAXES** - Taxes are collected from the citizens of your realm.  The higher your population and tax rate the more taxes you will get.\n"
+    str += "\n"
+    str += "**POPULATION** - Everyone starts the game with "+$settings[:startingPopulation].to_s+" population.  If your happiness is above 50% then your population will grow.  If it falls below 50% then population goes down.  Reputation can also increase your population.\n"
+    str += "\n"
+    str += "**HAPPINESS** - Taxes, reputation and how long ago you lost an attack all affect happiness.  Happiness goes up if your taxes are low.  32.5% tax rate is about 50% happiness.  A reputation below 50% makes happiness go down.  If you attack someone and lose then happiness will go down for "+($settings[:losingBattleAffectsHappinessFor].to_f / 60.0 / 60.0).round(1).to_s+" hours.\n"
+    str += "\n"
+    str += "**REPUTATION** - Reputation goes down if you attack a realm much smaller than yours.  Reputation slowly increases back to 50%.  Attacking someone and winning increases your reputation.  If you recently won an attack then your reputation can go higher than 50% which makes your population increase.\n"
     
     str += "\n"
     str += "__ATTACKING__\n"
@@ -20,7 +26,12 @@ def command_help(bot, event, mongo)
     str += "\n"
     str += "__OTHER INFO__\n"
     str += "The game updates every 10 minutes."
-    event.respond str
+
+    msgs = Discordrb.split_message(str)
+
+    msgs.each do |msg|
+        event.respond msg
+    end
 end
 
 
