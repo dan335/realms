@@ -104,7 +104,7 @@ while true do
     ordersInterval(bot, mongo)
 
     # 10 minutes
-    #if Time.now.min % 10 == 0
+    if Time.now.min % 10 == 0
         giveResources(mongo)
         feedArmies(bot, mongo)
 
@@ -118,7 +118,7 @@ while true do
 
         collectTaxes(mongo)
         updateNetworth(mongo)
-    #end
+    end
 
     attackInterval(bot, mongo)
 
