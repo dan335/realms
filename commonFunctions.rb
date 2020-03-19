@@ -488,6 +488,8 @@ def getNewReputation(reputation, lastWonBattle)
 
     if reputation < 0.5
         reputation = reputation + 0.02
+    else
+        reputation = reputation - 0.02
     end
 
     if lastWonBattle != nil
