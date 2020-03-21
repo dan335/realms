@@ -49,7 +49,7 @@ $settings = {
                 {:type => "grain", :num => 0.1}
             ],
             :bonusAgainst => [
-                "pikemen"
+                "pikeman"
             ],
             :attack => 6.0,
             :defense => 6.0,
