@@ -488,35 +488,17 @@ def getNewReputation(reputation, lastWonBattle)
 
     if reputation < 0.5
         reputation = reputation + 0.02
-    else
+    elsif reputation > 0.5 
         reputation = reputation - 0.02
     end
 
     if lastWonBattle != nil
         if Time.now - lastWonBattle < $settings[:winningBattleAffectsReputationFor]
-            reputation = reputation + 0.02
+            reputation = reputation + 0.05
         end
     end
 
     [[reputation, 0.0].max, 1.0].min
-    
-
-
-    # # grow
-    # reputation += 0.02
-    
-    # # cap to 50%
-    # [[reputation, 0.0].max, 0.5].min
-
-    # # grow some more if recently won a battle
-    # if lastWonBattle != nil
-    #     if Time.now - lastWonBattle < $settings[:winningBattleAffectsReputationFor]
-    #         reputation += 0.02
-    #     end
-    # end
-
-    # # cap at 100%
-    # [[reputation, 0.0].max, 1.0].min
 end
 
 

@@ -51,4 +51,9 @@ RSpec.describe "commonFunctions" do
         expect( getReputationFromAttack(1000, 1000, 0.5) ).to eq(0.5)
         expect( getReputationFromAttack(1000, 0, 1.0) ).to eq(0.0)
     end
+
+
+    it "gets new rep" do
+        expect( getNewReputation(0.5, Time.now) ).to be > 0.5
+    end
 end
