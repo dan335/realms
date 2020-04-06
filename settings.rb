@@ -116,7 +116,8 @@ $settings = {
             :name => "Catapult",
             :shortName => "cat",
             :cost => [
-                {:type => "wood", :num => 20.0},
+                {:type => "wood", :num => 10.0},
+                {:type => "ore", :num => 10.0},
                 {:type => "grain", :num => 0.2}
             ],
             :bonusAgainst => [],
