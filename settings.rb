@@ -46,7 +46,7 @@ $settings = {
             :shortName => "footman",
             :cost => [
                 {:type => "ore", :num => 2.0},
-                {:type => "grain", :num => 0.1}
+                {:type => "grain", :num => 0.2}
             ],
             :bonusAgainst => [
                 "pikeman"
@@ -55,7 +55,7 @@ $settings = {
             :defense => 6.0,
             :speed => 8.0,
             :consumes => [
-                {:type => "grain", :num => 0.05},
+                {:type => "grain", :num => 0.1},
             ]
         },
         :archer => {
@@ -63,7 +63,7 @@ $settings = {
             :shortName => "archer",
             :cost => [
                 {:type => "wood", :num => 2.0},
-                {:type => "grain", :num => 0.1}
+                {:type => "grain", :num => 0.2}
             ],
             :bonusAgainst => [
                 "footman",
@@ -73,7 +73,7 @@ $settings = {
             :defense => 7.0,
             :speed => 8.0,
             :consumes => [
-                {:type => "grain", :num => 0.05}
+                {:type => "grain", :num => 0.1}
             ]
         },
         :pikeman => {
@@ -81,7 +81,7 @@ $settings = {
             :shortName => "pike",
             :cost => [
                 {:type => "clay", :num => 4.0},
-                {:type => "grain", :num => 0.1}
+                {:type => "grain", :num => 0.2}
             ],
             :bonusAgainst => [
                 "knight"
@@ -90,7 +90,7 @@ $settings = {
             :defense => 10.0,
             :speed => 5.0,
             :consumes => [
-                {:type => "grain", :num => 0.05}
+                {:type => "grain", :num => 0.1}
             ]
         },
         :knight => {
@@ -99,7 +99,7 @@ $settings = {
             :cost => [
                 {:type => "ore", :num => 2.0},
                 {:type => "wool", :num => 4.0},
-                {:type => "grain", :num => 0.1}
+                {:type => "grain", :num => 0.2}
             ],
             :bonusAgainst => [
                 "footman",
@@ -109,7 +109,7 @@ $settings = {
             :defense => 3.0,
             :speed => 20.0,
             :consumes => [
-                {:type => "grain", :num => 0.05}
+                {:type => "grain", :num => 0.1}
             ]
         },
         :catapult => {
@@ -117,14 +117,14 @@ $settings = {
             :shortName => "cat",
             :cost => [
                 {:type => "wood", :num => 20.0},
-                {:type => "grain", :num => 0.1}
+                {:type => "grain", :num => 0.2}
             ],
             :bonusAgainst => [],
             :attack => 50.0,
             :defense => 0.0,
             :speed => 1.2,
             :consumes => [
-                {:type => "wood", :num => 0.05}
+                {:type => "wood", :num => 0.1}
             ]
         }
     },
