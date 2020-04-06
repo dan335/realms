@@ -139,6 +139,7 @@ $settings = {
     :startingPopulation => 100,
     :spendingPerPerson => 0.06,  # each person spends this much per interval then this is taxed,  higher increases tax collected from population
     :populationMaxGrowth => 30,
+    :populationMaxGrowthFromReputation => 60,
     :maxReputationPercentage => 0.5,
     :losingBattleAffectsHappinessFor => 60 * 60 * 4,
     :winningBattleAffectsReputationFor => 60 * 60 * 4,

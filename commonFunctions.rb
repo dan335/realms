@@ -400,7 +400,7 @@ def getNewPopulation(previousPopulation, happiness, reputation)
     population -= (population * multiplier)
 
     # increase from reputation
-    population = population + slopeInterpolate([[reputation * 2.0 - 1.0, 0.0].max, 1.0].min, 0.0, 1.0, 0.0, $settings[:populationMaxGrowth].to_f, 0.5).round.to_i
+    population = population + slopeInterpolate([[reputation * 2.0 - 1.0, 0.0].max, 1.0].min, 0.0, 1.0, 0.0, $settings[:populationMaxGrowthFromReputation].to_f, 0.5).round.to_i
    
     [population, 0].max.round.to_i
 end
