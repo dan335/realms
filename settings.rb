@@ -122,7 +122,7 @@ $settings = {
             ],
             :bonusAgainst => [],
             :attack => 50.0,
-            :defense => 0.0,
+            :defense => 0.1,
             :speed => 1.2,
             :consumes => [
                 {:type => "wood", :num => 0.1}
