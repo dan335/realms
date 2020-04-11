@@ -30,7 +30,7 @@ $settings = {
         ],
         :max => 5,
         :description => "A large structure for people to gather.  Build 5 to win the game.",
-        :buildSeconds => 60 * 60 * 6
+        :buildSeconds => 60 * 60 * 12
       }
     },
     :soldierTypes => [
@@ -138,8 +138,8 @@ $settings = {
     :medianTaxRate => 0.75,     # rate at which happiness from taxes stays the same
     :startingPopulation => 100,
     :spendingPerPerson => 0.06,  # each person spends this much per interval then this is taxed,  higher increases tax collected from population
-    :populationMaxGrowth => 30,
-    :populationMaxGrowthFromReputation => 60,
+    :populationMaxGrowth => 20,
+    :populationMaxGrowthFromReputation => 40,
     :maxReputationPercentage => 0.5,
     :losingBattleAffectsHappinessFor => 60 * 60 * 4,
     :winningBattleAffectsReputationFor => 60 * 60 * 4,
