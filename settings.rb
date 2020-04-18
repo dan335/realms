@@ -125,7 +125,7 @@ $settings = {
             :defense => 0.1,
             :speed => 1.2,
             :consumes => [
-                {:type => "wood", :num => 0.1}
+                {:type => "wool", :num => 0.1}
             ]
         }
     },
