@@ -542,3 +542,27 @@ end
 def is_number? string
     true if Float(string) rescue false
 end
+
+
+def adjust_market mongo
+    market = mongo[:market].find()
+
+    sum = 0.0
+    target = 0.0
+
+    market.each do |res|
+        sum += res[:value]
+        target += 10.0
+    end
+
+
+    if sum < target - 2.0 
+        market.each do |res|
+            updateMarketPrice(mongo, res, res[:type], target-sum, true)
+        end
+    elsif sum > target + 2.0
+        market.each do |res|
+            updateMarketPrice(mongo, res, res[:type], sum-target, false)
+        end
+    end
+end

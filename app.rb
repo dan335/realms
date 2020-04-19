@@ -118,6 +118,7 @@ while true do
 
         collectTaxes(mongo)
         updateNetworth(mongo)
+        adjust_market(mongo)
     end
 
     attackInterval(bot, mongo)

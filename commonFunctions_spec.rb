@@ -56,4 +56,8 @@ RSpec.describe "commonFunctions" do
     it "gets new rep" do
         expect( getNewReputation(0.5, Time.now) ).to be > 0.5
     end
+
+    it "adjusts market" do
+        
+    end
 end
