@@ -21,14 +21,12 @@ def order_buildShrine(bot, order, mongo)
 
     numShrines = mongo[:shrines].find(:userId => user[:_id]).count
 
-    mongo[:users].update_one({:_id => user[:_id]}, {"$set" => {:numShrinesBuilt => user[:numShrinesBuilt] + 1}})
-
     if numShrines >= $settings[:buildings][:shrine][:max]
         # game over
         mongo[:users].find().each do |u|
             sendPM(bot, u[:pmChannelId], user[:display_name]+" wins.  Congrats!  REALMS has been reset.  Type **%joinGame** to join the new game.")
         end
-        user[:numShrinesBuilt] = user[:numShrinesBuilt] + 1
+        
         resetGame(mongo, user)
     else
         sendPM(bot, user[:pmChannelId], "Your shrine has finished building.  View your realm with **%realm**.")

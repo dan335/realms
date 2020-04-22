@@ -65,11 +65,11 @@ def command_build(bot, event, mongo)
         return
     end
 
+    # get user
+    user = mongo[:users].find(:discordId => event.message.author.id).first
+
     # check cost
     if $settings[:buildings][type.singularize.to_sym][:cost].length > 0
-        # get user
-        user = mongo[:users].find(:discordId => event.message.author.id).first
-
         enough = true
         $settings[:buildings][type.to_sym][:cost].each do |cost|
             if user[cost[:type].to_sym] < cost[:num]
@@ -97,6 +97,11 @@ def command_build(bot, event, mongo)
         :createdAt => Time.now,
         :finishedAt => Time.now + timeToBuild
     })
+
+    # if shrine increment num shrines built
+    if orderType == "shrine"
+        mongo[:users].update_one({:discordId => event.message.author.id}, {"$set" => {:numShrinesBuilt => user[:numShrinesBuilt] + 1}})
+    end
 
     event.respond "I'm building you a "+type+" " + event.message.author.mention + ".  Check its progress with **%realm**."
 

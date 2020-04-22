@@ -30,7 +30,7 @@ $settings = {
         ],
         :max => 5,
         :description => "A large structure for people to gather.  Build 5 to win the game.",
-        :buildSeconds => 60 * 60 * 12
+        :buildSeconds => 60 * 60 * 10
       }
     },
     :soldierTypes => [
