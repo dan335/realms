@@ -35,7 +35,7 @@ def command_winners(bot, event, mongo)
 
         str += " "+user[:endedAt].to_formatted_s(:long)+","
 
-        hours = ((user[:endedAt] - user[:startedAt]) / 60 / 60).round(1)
+        days = ((user[:endedAt] - user[:startedAt]) / 60 / 60 / 24).round(1)
         str += "  "+hours.to_s+" hours,"
 
         str += "  "+number_with_commas(user[:networth].round)+" networth,"
