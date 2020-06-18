@@ -129,7 +129,7 @@ $settings = {
             ]
         }
     },
-    :perPage => 15,
+    :perPage => 10,
     :marketIncrement => 0.000038,    # how much the market goes up or down
     :marketTax => 0.25,
     :battleBonusMultiplier => 2.0,

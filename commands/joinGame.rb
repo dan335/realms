@@ -20,8 +20,8 @@ def command_joingame(bot, event, mongo)
     # save user to db
     user = {
         :discordId => event.message.author.id,
-        :username => event.message.author.username,
-        :display_name => event.message.author.display_name,
+        :username => event.message.author.username.tr('`*-_', ''),
+        :display_name => event.message.author.display_name.tr('`*-_', ''),
         :isOwner => event.message.author.owner?,
         :avatar_url => event.message.author.avatar_url,
         :mention => event.message.author.mention,
