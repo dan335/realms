@@ -12,6 +12,10 @@ def command_realm(bot, event, mongo)
         return
     end
 
+    if user[:display_name] != event.message.author.display_name.gsub(/[`]/, '')
+        mongo[:users].update_one({:_id => user[:_id]}, {"$set" => {:display_name => event.message.author.display_name.gsub(/[`]/, '')}})
+    end
+
     farms = mongo[:farms].find(:discordId => event.message.author.id).sort(:createdAt => 1)
     orders = mongo[:orders].find(:discordId => event.message.author.id).sort(:createdAt => 1)
     armies = mongo[:armies].find(:discordId => event.message.author.id).sort(:createdAt => 1)
@@ -19,7 +23,7 @@ def command_realm(bot, event, mongo)
     numShrines = mongo[:shrines].find(:discordId => event.message.author.id).count
     markets = mongo[:market].find()
 
-    str = "-] **"+user[:display_name].upcase+"'S REALM** [-\n"
+    str = "-] **"+event.message.author.display_name.gsub(/[`]/, '').upcase+"'S REALM** [-\n"
 
     # resources
     str += "Gold: **"+number_with_commas(user[:gold].to_f.round(2))+"**,  "
