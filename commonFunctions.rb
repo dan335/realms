@@ -566,3 +566,8 @@ def adjust_market mongo
         end
     end
 end
+
+
+def getGoldInterest(gold)
+    [gold * (1.0 + $settings[:goldInterestRate]), 0.0].max
+end

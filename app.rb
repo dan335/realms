@@ -112,7 +112,8 @@ while true do
           mongo[:users].update_one({:_id => user[:_id]}, {"$set" => {
             :population => getNewPopulation(user[:population], user[:happiness], user[:reputation]),
             :reputation => getNewReputation(user[:reputation], user[:lastWonBattle]),
-            :happiness => getNewHappiness(user[:happiness], user[:tax], user[:lastLostBattle], user[:reputation])
+            :happiness => getNewHappiness(user[:happiness], user[:tax], user[:lastLostBattle], user[:reputation]),
+            :gold => getGoldInterest(user[:gold])
             }})
         end
 
