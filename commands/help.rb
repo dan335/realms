@@ -25,7 +25,7 @@ def command_help(bot, event, mongo)
 
     str += "\n"
     str += "__OTHER INFO__\n"
-    str += "The game updates every 10 minutes.  Gold collects "+(($settings[:goldInterestRate]*100.0).round(3)).to_s+"% interest."
+    str += "The game updates every 10 minutes.  Gold collects "+(($settings[:goldInterestRate]*100.0).round(4)).to_s+"% interest."
 
     msgs = Discordrb.split_message(str)
 

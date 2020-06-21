@@ -144,5 +144,5 @@ $settings = {
     :losingBattleAffectsHappinessFor => 60 * 60 * 4,
     :winningBattleAffectsReputationFor => 60 * 60 * 4,
     :starvingSoldierDeathRate => 0.03,
-    :goldInterestRate => 0.000693171204 # doubles gold after 1000 updates
+    :goldInterestRate => 0.0005 # doubles gold after 1000 updates
 }
