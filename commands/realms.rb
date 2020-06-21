@@ -26,9 +26,9 @@ def command_realms(bot, event, mongo)
 
     str += "page "+(page+1).to_s+" of "+(numUsers.to_f / $settings[:perPage].to_f).ceil.to_s+"\n"
 
-    str += "\n"
-
     str += "Gold interest added June 20th.  Check `%help`\n"
+
+    str += "\n"
 
     # get users
     counter = page * $settings[:perPage] + 1
