@@ -18,7 +18,7 @@ def command_commands(bot, event, mongo)
     str += "**%fire <number> footman** - Fire a footman.\n"
     str += "**%setTax <number>** - Set tax rate.  Number from 0 - 100.\n"
     str += "\n"
-    str += "**%attack Danimal 3 footman 2 archers** - Attack Danimal with 3 footman and 2 archers.  Name can be @name, %realms number or name.\n"
+    str += "**%attack Danimal 3 footman 2 archers** - Attack Danimal with 3 footman and 2 archers.  Name can be @name, name or use %realms to see ranking by networth and use their rank.\n"
     str += "**%cancelAttack 1** - Return attacking army to your realm.*\n"
     str += "\n"
     str += "**%market** - See market prices.\n"
