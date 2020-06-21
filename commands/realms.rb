@@ -28,6 +28,8 @@ def command_realms(bot, event, mongo)
 
     str += "\n"
 
+    str += "Gold interest added June 20th.  Check `%help`\n"
+
     # get users
     counter = page * $settings[:perPage] + 1
     mongo[:users].find().sort(:networth => -1).skip(page * $settings[:perPage]).limit($settings[:perPage]).each do |user|
