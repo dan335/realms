@@ -21,7 +21,7 @@ def command_help(bot, event, mongo)
     
     str += "\n"
     str += "__ATTACKING__\n"
-    str += "Hire soldiers with **%hire 5 footmen**.  Soldiers consume resources every 10 minutes.  Soldiers are hired from your population.  Attack another realm with **%attack Danimal 5 footmen**.  If your army defeats the other realm then they will steal "+($settings[:battleWinnings]*100).round.to_s+"% of their resources.  If you lose an attack it wil negatively affect happiness for "+($settings[:losingBattleAffectsHappinessFor] / 60 / 60).round(1).to_s+" hours.  If you attack someone who is building a shrine with at least one catapult and win then the shrine will be destroyed.\n"
+    str += "Hire soldiers with **%hire 5 footmen**.  Soldiers consume resources every 10 minutes.  Soldiers are hired from your population.  Attack another realm with **%attack Danimal 5 footmen** or use **%realms** to see the players ranking by networth and use their rank instead of their name for example **%attack 4 5 footmen**.  If your army defeats the other realm then they will steal "+($settings[:battleWinnings]*100).round.to_s+"% of their resources.  If you lose an attack it wil negatively affect happiness for "+($settings[:losingBattleAffectsHappinessFor] / 60 / 60).round(1).to_s+" hours.  If you attack someone who is building a shrine with at least one catapult and win then the shrine will be destroyed.\n"
 
     str += "\n"
     str += "__OTHER INFO__\n"
