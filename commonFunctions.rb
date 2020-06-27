@@ -558,11 +558,11 @@ def adjust_market mongo
 
     if sum < target - 2.0 
         market.each do |res|
-            updateMarketPrice(mongo, res, res[:type], (target-sum) * 4.0, true)
+            updateMarketPrice(mongo, res, res[:type], (target-sum) * 20.0, true)
         end
     elsif sum > target + 2.0
         market.each do |res|
-            updateMarketPrice(mongo, res, res[:type], (sum-target) * 4.0, false)
+            updateMarketPrice(mongo, res, res[:type], (sum-target) * 20.0, false)
         end
     end
 end
