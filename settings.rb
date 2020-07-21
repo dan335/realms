@@ -116,12 +116,12 @@ $settings = {
             :name => "Catapult",
             :shortName => "cat",
             :cost => [
-                {:type => "wood", :num => 10.0},
-                {:type => "ore", :num => 10.0},
+                {:type => "wood", :num => 8.0},
+                {:type => "ore", :num => 8.0},
                 {:type => "grain", :num => 0.2}
             ],
             :bonusAgainst => [],
-            :attack => 50.0,
+            :attack => 40.0,
             :defense => 0.1,
             :speed => 1.2,
             :consumes => [
@@ -130,7 +130,7 @@ $settings = {
         }
     },
     :perPage => 10,
-    :marketIncrement => 0.000038,    # how much the market goes up or down
+    :marketIncrement => 0.000035,    # how much the market goes up or down
     :marketTax => 0.25,
     :battleBonusMultiplier => 2.0,
     :battleWinnings => 0.1,    # max that winner of battle gets from loser
@@ -144,5 +144,5 @@ $settings = {
     :losingBattleAffectsHappinessFor => 60 * 60 * 4,
     :winningBattleAffectsReputationFor => 60 * 60 * 4,
     :starvingSoldierDeathRate => 0.03,
-    :goldInterestRate => 0.0005 # doubles gold after 1000 updates
+    :goldInterestRate => 0.00045 # doubles gold after 1000 updates
 }
