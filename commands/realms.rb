@@ -26,7 +26,7 @@ def command_realms(bot, event, mongo)
 
     str += "page "+(page+1).to_s+" of "+(numUsers.to_f / $settings[:perPage].to_f).ceil.to_s+"\n"
 
-    str += "July 20th: Catapult damage and cost lowered.\n"
+    str += "Sept 2nd: Each shrine causes your population to grow faster.\n"
 
     str += "\n"
 

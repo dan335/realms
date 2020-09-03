@@ -4,7 +4,6 @@ require './commonFunctions.rb'
 def order_buildShrine(bot, order, mongo)
     # make sure user doesn't already have max
     if mongo[:shrines].find(:discordId => order[:discordId]).count >= $settings[:buildings][:shrine][:max]
-
         return
     end
 

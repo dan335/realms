@@ -4,7 +4,7 @@ def command_help(bot, event, mongo)
     str += "**%commands** to see available commands.\n\n"
 
     str += "__OBJECTIVE__\n"
-    str += "Build "+$settings[:buildings][:shrine][:max].to_s+" shrines to win the game.  Shines have no other purpose.\n"
+    str += "Build "+$settings[:buildings][:shrine][:max].to_s+" shrines to win the game.\n"
     str += "\n"
 
     str += "__COLLECTING RESOURCES__ - There are two different ways to collect resources.  Farms and taxes.\n"
@@ -13,7 +13,7 @@ def command_help(bot, event, mongo)
     str += "\n"
     str += "**TAXES** - Taxes are collected from the citizens of your realm.  The higher your population and tax rate the more taxes you will get.\n"
     str += "\n"
-    str += "**POPULATION** - Everyone starts the game with "+$settings[:startingPopulation].to_s+" population.  If your happiness is above 50% then your population will grow.  If it falls below 50% then population goes down.  Reputation can also increase your population.\n"
+    str += "**POPULATION** - Everyone starts the game with "+$settings[:startingPopulation].to_s+" population.  If your happiness is above 50% then your population will grow.  If it falls below 50% then population goes down.  Reputation can also increase your population.  Each shrine you have built makes your population grow "+($settings[:popGrowthMultiplierPerShrine] * 100.0).round(2).to_s+"% faster every update.\n"
     str += "\n"
     str += "**HAPPINESS** - Taxes, reputation and how long ago you lost an attack all affect happiness.  Happiness goes up if your taxes are low.  32.5% tax rate is about 50% happiness.  A reputation below 50% makes happiness go down.  If you attack someone and lose then happiness will go down for "+($settings[:losingBattleAffectsHappinessFor].to_f / 60.0 / 60.0).round(1).to_s+" hours.\n"
     str += "\n"

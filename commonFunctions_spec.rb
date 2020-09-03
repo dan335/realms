@@ -15,11 +15,11 @@ RSpec.describe "commonFunctions" do
 
 
     it "grows population" do
-        expect(getNewPopulation(100, 0.5, 0.5)).to eq(100)
-        expect(getNewPopulation(100, 1.0, 0.5)).to be > (100)
-        expect(getNewPopulation(100, 0.0, 0.5)).to be < (100)
-        expect(getNewPopulation(100, 0.5, 1.0)).to be > (100)
-        expect(getNewPopulation(100, 0.5, 0.0)).to eq(100)
+        expect(getNewPopulation(100, 0.5, 0.5, 0)).to eq(100)
+        expect(getNewPopulation(100, 1.0, 0.5, 0)).to be > (100)
+        expect(getNewPopulation(100, 0.0, 0.5, 0)).to be < (100)
+        expect(getNewPopulation(100, 0.5, 1.0, 0)).to be > (100)
+        expect(getNewPopulation(100, 0.5, 0.0, 0)).to eq(100)
     end
 
 

@@ -29,7 +29,7 @@ $settings = {
           {:type => "wool", :num => 5000},
         ],
         :max => 5,
-        :description => "A large structure for people to gather.  Build 5 to win the game.",
+        :description => "A large structure for people to gather.  Build 5 to win the game.  Each shrine increases population growth.",
         :buildSeconds => 60 * 60 * 10
       }
     },
@@ -144,5 +144,6 @@ $settings = {
     :losingBattleAffectsHappinessFor => 60 * 60 * 4,
     :winningBattleAffectsReputationFor => 60 * 60 * 4,
     :starvingSoldierDeathRate => 0.03,
-    :goldInterestRate => 0.00045 # doubles gold after 1000 updates
+    :goldInterestRate => 0.00045, # doubles gold after 1000 updates,
+    :popGrowthMultiplierPerShrine => 0.05
 }

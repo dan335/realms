@@ -109,8 +109,10 @@ while true do
         feedArmies(bot, mongo)
 
         mongo[:users].find().each do |user|
+          numShrines = mongo[:shrines].find({:userId => user[:_id]}).count
+
           mongo[:users].update_one({:_id => user[:_id]}, {"$set" => {
-            :population => getNewPopulation(user[:population], user[:happiness], user[:reputation]),
+            :population => getNewPopulation(user[:population], user[:happiness], user[:reputation], numShrines),
             :reputation => getNewReputation(user[:reputation], user[:lastWonBattle]),
             :happiness => getNewHappiness(user[:happiness], user[:tax], user[:lastLostBattle], user[:reputation]),
             :gold => getGoldInterest(user[:gold])

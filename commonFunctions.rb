@@ -391,7 +391,7 @@ end
 
 
 
-def getNewPopulation(previousPopulation, happiness, reputation)
+def getNewPopulation(previousPopulation, happiness, reputation, numShrines)
     # happiness
     population = previousPopulation + slopeInterpolate(happiness, 0.0, 1.0, $settings[:populationMaxGrowth].to_f * -1.0, $settings[:populationMaxGrowth].to_f, 0.5).round.to_i
 
@@ -402,6 +402,12 @@ def getNewPopulation(previousPopulation, happiness, reputation)
     # increase from reputation
     population = population + slopeInterpolate([[reputation * 2.0 - 1.0, 0.0].max, 1.0].min, 0.0, 1.0, 0.0, $settings[:populationMaxGrowthFromReputation].to_f, 0.5).round.to_i
    
+    # increase from shrines
+    growth = population - previousPopulation
+    if growth > 0
+        population += growth * $settings[:popGrowthMultiplierPerShrine] * numShrines
+    end
+
     [population, 0].max.round.to_i
 end
 

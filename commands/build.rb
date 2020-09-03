@@ -99,7 +99,7 @@ def command_build(bot, event, mongo)
     })
 
     # if shrine increment num shrines built
-    if orderType == "shrine"
+    if orderType == "buildShrine"
         mongo[:users].update_one({:discordId => event.message.author.id}, {"$set" => {:numShrinesBuilt => user[:numShrinesBuilt] + 1}})
     end
 
