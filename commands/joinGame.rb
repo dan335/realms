@@ -1,11 +1,18 @@
 require './commonFunctions.rb'
 require 'active_support/core_ext/string'
+require 'bad_word_detector'
 
 
 def command_joingame(bot, event, mongo)
 
     if !event.server
         event.respond "Enter **%joinGame** in a guild channel not a private message to join the game."
+        return
+    end
+
+    finder = BadWordDetector.new
+    if finder.find(event.message.author.display_name)
+        event.respond "Your realm does not want to be called that.  Change your name."
         return
     end
 
@@ -20,8 +27,8 @@ def command_joingame(bot, event, mongo)
     # save user to db
     user = {
         :discordId => event.message.author.id,
-        :username => event.message.author.username.gsub(/[`]/, ''),
-        :display_name => event.message.author.display_name.gsub(/[`]/, ''),
+        :username => event.message.author.username.gsub(/[`@#:%]/, ''),
+        :display_name => event.message.author.display_name.gsub(/[`@#:%]/, ''),
         :isOwner => event.message.author.owner?,
         :avatar_url => event.message.author.avatar_url,
         :mention => event.message.author.mention,
