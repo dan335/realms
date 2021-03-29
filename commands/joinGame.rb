@@ -10,11 +10,11 @@ def command_joingame(bot, event, mongo)
         return
     end
 
-    finder = BadWordDetector.new
-    if finder.find(event.message.author.display_name)
-        event.respond "Your realm does not want to be called that.  Change your name."
-        return
-    end
+    # finder = BadWordDetector.new
+    # if finder.find(event.message.author.display_name)
+    #     event.respond "Your realm does not want to be called that.  Change your name."
+    #     return
+    # end
 
     users = mongo[:users]
 
