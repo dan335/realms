@@ -72,6 +72,13 @@ def command_attack(bot, event, mongo)
     # get user
     user = mongo[:users].find(:discordId => event.message.author.id).first
 
+    # can't attack multiple times
+    numArmies = mongo[:armies].find(:userId => user[:_id], :otherUserId => otherUser[:_id]).count
+    if numArmies > 0
+        event.respond "Cannot attack with multiple armies "+event.message.author.mention+"."
+        return
+    end
+
     # maker sure you're not attack yourself
     if ENV['MODE'] == 'production'
         if user[:_id] == otherUser[:_id]
@@ -117,7 +124,7 @@ def command_attack(bot, event, mongo)
         wordNum += 2
     end
 
-    # make sure ary has soildiers
+    # make sure army has soildiers
     hasSoldiers = false;
     $settings[:soldierTypes].each do |soldierType|
         if army[soldierType.pluralize.to_sym] > 0
